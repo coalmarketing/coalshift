@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/inter/Inter-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/inter/Inter-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/inter/Inter-Italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Lekton';
+  src: url('/fonts/lekton/Lekton-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Lekton';
+  src: url('/fonts/lekton/Lekton-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Lekton';
+  src: url('/fonts/lekton/Lekton-Italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+}
+
+
+body {
+  font-family: 'CustomFont', sans-serif;
+}
+
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.hero-background {
+  position: relative;
+  isolation: isolate;
+}
+
+.hero-background::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('./../public/landingImg.jpg') lightgray 50% / cover no-repeat;
+  opacity: 0.05;
+  z-index: -2;
+}
+
+.hero-background::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(50% 50% at 50% 50%, #00B5E2 0%, #008AAC 100%);
+  z-index: -1;
+  mix-blend-mode: multiply;
+}
