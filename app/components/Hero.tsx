@@ -19,12 +19,12 @@ export default function Hero() {
               className="w-auto h-[80px] sm:h-[100px] md:h-[150px] object-contain"
             />
           </div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-lekton font-bold w-full md:w-[80%] lg:w-[65%] mx-auto mb-4">
-            Chytré plánování směn řízené umělou inteligencí
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-lekton font-bold w-full md:w-[80%] lg:w-full mx-auto mb-8">
+              Plánujte směny chytře a&nbsp;efektivně!
+          </h1>
+          <h2 className="text-md sm:text-lg md:text-2xl font-inter w-full md:w-[70%] lg:w-[70%] mx-auto mb-8 md:mb-12">
+            Ušetřete až 50 % času stráveného plánováním směn. Automatizujte, zrychlete, digitalizujte.
           </h2>
-          <p className="text-lg sm:text-xl md:text-2xl font-inter w-full md:w-[70%] lg:w-[40%] mx-auto mb-8 md:mb-12">
-            Zjednodušte plánování, snižte náklady a&nbsp;zvyšte spokojenost zaměstnanců.
-          </p>
           <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center items-center">
             <Button href="https://app.coalshift.cz/" target="_blank" variant="primaryBila">
               Vyzkoušet zdarma!

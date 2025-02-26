@@ -1,5 +1,7 @@
 'use client';
 import { useState } from 'react';
+import Button from './Button';
+import ContactSection from './ContactSection';
 
 interface FAQItem {
   question: string;
@@ -16,8 +18,20 @@ const faqItems: FAQItem[] = [
     answer: 'Ano! Coalshift je navržen jak pro menší provozy s několika zaměstnanci, tak pro velké podniky s komplexním směnným provozem. Nabízíme flexibilní cenové plány, včetně bezplatné verze pro menší týmy.'
   },
   {
+    question: 'Je Coalshift vhodný pro moji firmu?',
+    answer: 'Ano! Coalshift využívají firmy od malých týmů po velké výrobní podniky.'
+  },
+  {
+    question: 'Mohu si Coalshift nejdříve vyzkoušet?',
+    answer: 'Ano! Nabízíme 14denní bezplatnou zkušební verzi.'
+  },
+  {
     question: 'Jak probíhá implementace a je složitá?',
     answer: 'Implementace je jednoduchá a intuitivní. Náš tým vám poskytne kompletní podporu při nastavení systému a zaškolení zaměstnanců.'
+  },
+  {
+    question: 'Jak probíhá integrace s naším systémem?',
+    answer: 'Coalshift se snadno napojuje na HELIOS, SAP, Alveno a další systémy.'
   }
 ];
 
@@ -30,7 +44,7 @@ export default function FAQ() {
 
   return (
     <section className="max-w-[1200px] mx-auto px-8 py-16 mb-8">
-       <h2 className="text-modra text-3xl sm:text-4xl md:text-5xl font-lekton font-bold mb-12">
+      <h2 className="text-modra text-3xl sm:text-4xl md:text-5xl font-lekton font-bold mb-12">
         Nejčastější dotazy
       </h2>
       

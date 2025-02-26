@@ -8,9 +8,12 @@ export default function Benefits() {
   return (
     <section id="benefits" className="flex flex-col lg:flex-row justify-between items-center max-w-[1200px] mx-auto px-8 py-16 gap-8 text-cerna">
       <div className="w-full lg:w-1/2 space-y-12 mt-0 lg:mt-[-150px]">
-        <h2 className="text-modra text-3xl sm:text-4xl md:text-5xl font-lekton font-bold mb-12">
+        <div>
+        <h2 className="text-modra text-3xl sm:text-4xl md:text-5xl font-lekton font-bold mb-6">
           Výhody aplikace
         </h2>
+        <p className="text-cerna font-inter text-sm">Plánování směn nikdy nebylo jednodušší! Coalshift je <strong>inteligentní systém pro plánování směn</strong>, který automatizuje procesy, zohledňuje <strong>preference zaměstnanců</strong>, dodržuje legislativu a <strong>umožňuje rychlé přesuny směn i přehledné reporty</strong>.</p>
+        </div>
 
         <div className="flex items-start gap-4">
           <Image
