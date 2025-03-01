@@ -10,19 +10,19 @@ interface FAQItem {
 
 const faqItems: FAQItem[] = [
   {
-    question: 'Jak mi Coalshift pomůže s plánováním směn?',
-    answer: 'Coalshift vám umožní efektivně plánovat směny, automaticky kontrolovat konflikty a spravovat dostupnost zaměstnanců. Systém také nabízí přehledné statistiky a reporty.'
+    question: 'Jak mi coalshift pomůže s plánováním směn?',
+    answer: 'coalshift vám umožní efektivně plánovat směny, automaticky kontrolovat konflikty a spravovat dostupnost zaměstnanců. Systém také nabízí přehledné statistiky a reporty.'
   },
   {
-    question: 'Je Coalshift vhodný i pro malé firmy?',
-    answer: 'Ano! Coalshift je navržen jak pro menší provozy s několika zaměstnanci, tak pro velké podniky s komplexním směnným provozem. Nabízíme flexibilní cenové plány, včetně bezplatné verze pro menší týmy.'
+    question: 'Je coalshift vhodný i pro malé firmy?',
+    answer: 'Ano! coalshift je navržen jak pro menší provozy s několika zaměstnanci, tak pro velké podniky s komplexním směnným provozem. Nabízíme flexibilní cenové plány, včetně bezplatné verze pro menší týmy.'
   },
   {
-    question: 'Je Coalshift vhodný pro moji firmu?',
-    answer: 'Ano! Coalshift využívají firmy od malých týmů po velké výrobní podniky.'
+    question: 'Je coalshift vhodný pro moji firmu?',
+    answer: 'Ano! coalshift využívají firmy od malých týmů po velké výrobní podniky.'
   },
   {
-    question: 'Mohu si Coalshift nejdříve vyzkoušet?',
+    question: 'Mohu si coalshift nejdříve vyzkoušet?',
     answer: 'Ano! Nabízíme 14denní bezplatnou zkušební verzi.'
   },
   {
@@ -31,7 +31,7 @@ const faqItems: FAQItem[] = [
   },
   {
     question: 'Jak probíhá integrace s naším systémem?',
-    answer: 'Coalshift se snadno napojuje na HELIOS, SAP, Alveno a další systémy.'
+    answer: 'coalshift se snadno napojuje na HELIOS, SAP, Alveno a další systémy.'
   }
 ];
 
