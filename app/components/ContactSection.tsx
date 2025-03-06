@@ -31,11 +31,11 @@ export default function ContactSection() {
                 width={24}
                 height={24}
               />
-              <a href="mailto:info@coalshift.cz" className="text-base sm:text-lg font-inter font-thin hover:text-primary transition-colors">info@coalshift.cz</a>
+              <a href="mailto:pavel.hajek@coalsoft.cz" className="text-base sm:text-lg font-inter font-thin hover:text-primary transition-colors">pavel.hajek@coalsoft.cz</a>
             </div>
           </div>
           
-          <a href="mailto:info@coalshift.cz">
+          <a href="mailto:pavel.hajek@coalsoft.cz">
             <Button variant="primaryModra" className="mt-6">
               Kontaktujte nás!
             </Button>

@@ -50,8 +50,8 @@ export default function RootLayout({
     <html lang="cs">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="icon" href="/logo/coalshift_logo_favicon-color.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/logo/coalshift_logo_favicon-color.svg" type="image/svg+xml" />
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#ffffff" />
         <meta name="format-detection" content="telephone=no" />

@@ -7,7 +7,7 @@ import Link from 'next/link';
 
 export default function Hero() {
     return (
-      <section className="min-h-[80vh] flex flex-col justify-center items-center text-center text-white hero-background px-4 py-12 pt-[100px]">
+      <section className="min-h-[80vh] flex flex-col justify-center items-center text-center text-white hero-background px-4 py-12">
         <div className="max-w-[min(90%,1200px)]">
           <div className="flex items-center justify-center mb-8 md:mb-20">
             <Image 

@@ -6,15 +6,20 @@
         fill: #00b5e1;
       }
 
-      .cls-1, .cls-2 {
+      .cls-1, .cls-2, .cls-3 {
         stroke-width: 0px;
       }
 
       .cls-2 {
         fill: #27251f;
       }
+      
+      .cls-3 {
+        fill: #ffffff;
+      }
     </style>
   </defs>
+  <rect class="cls-3" x="0" y="0" width="220" height="220"/>
   <path class="cls-1" d="M206.81,13.19v193.62H13.19V13.19h193.62M216.45,3.55H3.55v212.9h212.9V3.55h0Z"/>
   <rect class="cls-2" x="97.09" y="-19.08" width="25.82" height="141.99" transform="translate(161.92 -58.08) rotate(90)"/>
   <rect class="cls-2" x="58.38" y="58.36" width="25.82" height="64.56" transform="translate(161.92 19.35) rotate(90)"/>
