@@ -121,11 +121,8 @@ export default function WaitListRegistration() {
       </div>
 
       {/* Kontejner pro Onquanda formulář */}
-      <div className="bg-white rounded-xl p-8 border border-gray-200 mb-12">
-        <h2 className="text-2xl font-lekton font-bold text-modra text-center mb-6">
-          Chci být u toho první!
-        </h2>
-        <div style={{ display: "block" }} className="qndTrigger" data-key="2128f532d89ef03752d1b45d0eac06de" data-form-html-class="" data-static="true">&nbsp;</div>
+      <div className="bg-white rounded-xl p-0 border border-gray-200 mb-12">
+        <div style={{ display: "block" }} className="qndTrigger mx-auto" data-key="2128f532d89ef03752d1b45d0eac06de" data-form-html-class="" data-static="true">&nbsp;</div>
       </div>
     </section>
   );
