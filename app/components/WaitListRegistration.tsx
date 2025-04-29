@@ -63,7 +63,7 @@ export default function WaitListRegistration() {
 
   if (isRegistered) {
     return (
-      <section className="max-w-[1200px] mx-auto px-8 pt-16">
+      <section className="max-w-[1200px] w-full mx-auto px-8 pt-16">
         {/* Potvrzení registrace */}
         <div className="text-center mb-12">
           <div className="w-20 h-20 mx-auto mb-6 bg-emerald-100 rounded-full flex items-center justify-center">
