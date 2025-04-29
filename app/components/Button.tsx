@@ -33,6 +33,26 @@ export default function Button({
 
   if ('href' in props) {
     const { href, target, onClick, ...restProps } = props as ButtonAsLinkProps;
+    
+    // Pro /wait-list používáme standardní anchor tag místo Next.js Link
+    if (href === '/wait-list') {
+      return (
+        <a 
+          href="/wait-list"
+          className={buttonStyles}
+          target={target}
+          onClick={(e) => {
+            e.preventDefault();
+            window.location.href = '/wait-list';
+            if (onClick) onClick(e as any);
+          }}
+          {...restProps}
+        >
+          {children}
+        </a>
+      );
+    }
+    
     return (
       <Link 
         href={href as string} 
