@@ -4,19 +4,11 @@ import Button from './Button';
 import Image from 'next/image';
 import Script from 'next/script';
 
-// Definice typu pro window s Quant funkcí
-declare global {
-  interface Window {
-    qnInitTriggers?: () => void;
-  }
-}
-
 export default function WaitListRegistration() {
   const [email, setEmail] = useState('');
   const [company, setCompany] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isRegistered, setIsRegistered] = useState(false);
-  const [isQuantLoaded, setIsQuantLoaded] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,22 +20,6 @@ export default function WaitListRegistration() {
     setIsRegistered(true);
     setIsSubmitting(false);
   };
-
-  useEffect(() => {
-    // Inicializace Quant formuláře
-    const initQuant = () => {
-      if (window.qnInitTriggers && !isQuantLoaded) {
-        window.qnInitTriggers();
-        setIsQuantLoaded(true);
-      }
-    };
-
-    // Pokus o inicializaci po načtení stránky a poté znovu po 500ms
-    initQuant();
-    const timer = setTimeout(initQuant, 500);
-
-    return () => clearTimeout(timer);
-  }, [isQuantLoaded]);
 
   if (isRegistered) {
     return (
@@ -146,28 +122,8 @@ export default function WaitListRegistration() {
 
       {/* Kontejner pro Onquanda formulář */}
       <div className="bg-white rounded-xl p-0 border border-gray-200 mb-12 flex flex-col justify-center items-center">
-        <div
-          id="quantForm"
-          style={{ display: "block", minHeight: "300px" }}
-          className="qndTrigger mx-auto w-full" 
-          data-key="2128f532d89ef03752d1b45d0eac06de" 
-          data-form-html-class="" 
-          data-static="true"
-        ></div>
+        <div style={{ display: "block" }} className="qndTrigger mx-auto" data-key="2128f532d89ef03752d1b45d0eac06de" data-form-html-class="" data-static="true"></div>
       </div>
-
-      {/* Quant Script */}
-      <Script
-        id="quant-script"
-        src="https://quantcdn.io/js/trigger.js"
-        strategy="afterInteractive"
-        onLoad={() => {
-          if (window.qnInitTriggers) {
-            window.qnInitTriggers();
-            setIsQuantLoaded(true);
-          }
-        }}
-      />
     </section>
   );
 } 
