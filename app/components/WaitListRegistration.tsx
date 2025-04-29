@@ -3,12 +3,13 @@ import { useState, useEffect } from 'react';
 import Button from './Button';
 import Image from 'next/image';
 import Script from 'next/script';
+import { useRouter } from 'next/navigation';
 
 export default function WaitListRegistration() {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [company, setCompany] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isRegistered, setIsRegistered] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,65 +18,28 @@ export default function WaitListRegistration() {
     // TODO: Implementovat odeslání na API
     await new Promise(resolve => setTimeout(resolve, 1000));
     
-    setIsRegistered(true);
-    setIsSubmitting(false);
+    // Přesměrování na stránku thank-you
+    router.push('/wait-list/thank-you');
   };
 
-  if (isRegistered) {
-    return (
-      <section className="max-w-[1200px] mx-auto px-8 pt-16">
-        {/* Potvrzení registrace */}
-        <div className="text-center mb-12">
-          <div className="w-20 h-20 mx-auto mb-6 bg-emerald-100 rounded-full flex items-center justify-center">
-            <svg className="w-10 h-10 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-            </svg>
-          </div>
-          <h1 className="text-4xl sm:text-5xl font-lekton font-bold text-modra mb-6">
-            Jste na seznamu čekatelů
-          </h1>
-          <p className="text-xl font-inter text-gray-600 mb-4">
-            Jsme rádi, že jste s námi!
-          </p>
-          <p className="font-inter text-gray-600">
-            Coalshift spouštíme 1. 7. 2025. Jakmile bude vaše přihlášení aktivní, dáme vám vědět e-mailem i notifikací.
-          </p>
-        </div>
+  // Detekce a zpracování odeslání formuláře z iFrame
+  useEffect(() => {
+    // Funkce pro naslouchání zpráv z iFrame (Onquanda formulář)
+    const handleOnquandaMessage = (event: MessageEvent) => {
+      if (event.data && event.data.type === 'formSubmitted') {
+        // Přesměrování na stránku thank-you po odeslání formuláře
+        router.push('/wait-list/thank-you');
+      }
+    };
 
-        {/* Bonus pro čekající */}
-        <div className="bg-white rounded-xl p-8 mb-12 border border-gray-200">
-          <h2 className="text-2xl font-lekton font-bold text-modra mb-6">🧠 Učte se dřív než ostatní!</h2>
-          <p className="font-inter text-gray-600 mb-6">
-            Získejte přístup k tutoriálům a prvním tipům, jak co nejlépe nastavit plánování směn s Coalshiftem – už teď.
-          </p>
-          <Button variant="primaryModra" className="w-full">
-            Prozkoumat ukázky už teď
-          </Button>
-        </div>
+    // Přidání event listeneru pro zprávy z iFrame
+    window.addEventListener('message', handleOnquandaMessage);
 
-        {/* Co můžete očekávat */}
-        <div className="bg-white rounded-xl p-8 border border-gray-200">
-          <h2 className="text-2xl font-lekton font-bold text-modra mb-6 text-center">Co můžete očekávat dál</h2>
-          <div className="grid gap-6">
-            <div>
-              <h3 className="font-lekton font-bold text-lg mb-2">E-mail s potvrzením</h3>
-              <p className="font-inter text-gray-600">Obdržíte potvrzení registrace na váš e-mail</p>
-            </div>
-
-            <div>
-              <h3 className="font-lekton font-bold text-lg mb-2">Budoucí notifikace</h3>
-              <p className="font-inter text-gray-600">Budeme vás informovat o stavu přístupu</p>
-            </div>
-
-            <div>
-              <h3 className="font-lekton font-bold text-lg mb-2">Spuštění 1. července 2025</h3>
-              <p className="font-inter text-gray-600">Přístup bude aktivován automaticky</p>
-            </div>
-          </div>
-        </div>
-      </section>
-    );
-  }
+    return () => {
+      // Odstranění event listeneru při unmount komponenty
+      window.removeEventListener('message', handleOnquandaMessage);
+    };
+  }, [router]);
 
   return (
     <section className="max-w-[1200px] mx-auto px-8 pt-16">
@@ -121,8 +85,8 @@ export default function WaitListRegistration() {
       </div>
 
       {/* Kontejner pro Onquanda formulář */}
-      <div className="bg-white rounded-xl p-0 border border-gray-200 mb-12">
-        <div style={{ display: "block" }} className="qndTrigger mx-auto" data-key="2128f532d89ef03752d1b45d0eac06de" data-form-html-class="" data-static="true">&nbsp;</div>
+      <div className="bg-white rounded-xl p-0 border border-gray-200 mb-12 flex justify-center items-center">
+        <div style={{ display: "block" }} className="qndTrigger mx-auto" data-key="2128f532d89ef03752d1b45d0eac06de" data-form-html-class="" data-static="true" data-redirect="/wait-list/thank-you">&nbsp;</div>
       </div>
     </section>
   );
