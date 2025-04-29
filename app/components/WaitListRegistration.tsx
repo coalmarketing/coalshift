@@ -10,17 +10,19 @@ export default function WaitListRegistration() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isRegistered, setIsRegistered] = useState(false);
 
-  // Manuální načtení Onquanda skriptu
-  useEffect(() => {
-    const script = document.createElement('script');
-    script.src = 'https://webform.onquanda.com/static/js/webform/embedded.min.js';
-    script.async = true;
-    document.body.appendChild(script);
-
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
+  // Vykreslení Onquanda formuláře pomocí iframe
+  const OnquandaForm = () => {
+    return (
+      <div className="onquanda-container">
+        <iframe 
+          src="https://webform.onquanda.com/webform/2128f532d89ef03752d1b45d0eac06de/embed/?static=true" 
+          style={{width: '100%', height: '500px', border: 'none'}}
+          title="Onquanda Formulář"
+          loading="lazy"
+        />
+      </div>
+    );
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -137,55 +139,8 @@ export default function WaitListRegistration() {
         <h2 className="text-2xl font-lekton font-bold text-modra text-center mb-6">
           Chci být u toho první!
         </h2>
-        {/* Onquanda trigger s přesným formátem podle dokumentace */}
-        <div className="qndTrigger" data-key="2128f532d89ef03752d1b45d0eac06de" data-form-html-class="" data-static="true">&nbsp;</div>
+        <OnquandaForm />
       </div>
-
-      {/* Registrační formulář - původní, možná bude potřeba odstranit, pokud budete používat jen Onquanda
-      <div className="bg-white rounded-xl p-8 border border-gray-200">
-        <h2 className="text-2xl font-lekton font-bold text-modra text-center mb-6">
-          Chci být u toho první!
-        </h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label htmlFor="email" className="block text-sm font-inter font-medium text-gray-700 mb-1">
-              Firemní e-mail*
-            </label>
-            <input
-              type="email"
-              id="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-sm focus:ring-2 focus:ring-modra focus:border-modra font-inter"
-              placeholder="vas@email.cz"
-            />
-          </div>
-          <div>
-            <label htmlFor="company" className="block text-sm font-inter font-medium text-gray-700 mb-1">
-              Název firmy (nepovinné)
-            </label>
-            <input
-              type="text"
-              id="company"
-              value={company}
-              onChange={(e) => setCompany(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-sm focus:ring-2 focus:ring-modra focus:border-modra font-inter"
-              placeholder="Vaše společnost"
-            />
-          </div>
-          <Button
-            variant="primaryModra"
-            className="w-full mt-6"
-            type="submit"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? 'Registruji...' : 'Získat přístup jako první'}
-          </Button>
-        </form>
-
-         
-      </div> */}
     </section>
   );
 } 
