@@ -2,8 +2,29 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import logoSvg from '../../public/logo/coalshift_logo_long-light-mono.svg';
+import Button from './Button';
+import { usePathname } from 'next/navigation';
 
 export default function Footer() {
+  const pathname = usePathname();
+  const isHomePage = pathname === '/';
+
+  const scrollToSection = (id: string) => {
+    if (isHomePage) {
+      const element = document.getElementById(id);
+      if (element) {
+        const headerOffset = 32; // 2rem = 32px
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.scrollY - headerOffset;
+        
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      }
+    }
+  };
+
   return (
     <footer className="bg-[#4A4A4A] text-white font-inter py-0 pt-16">
       <div className="max-w-[1200px] mx-auto px-4">
@@ -22,41 +43,49 @@ export default function Footer() {
             
             <nav className="flex flex-col space-y-4 text-sm">
               <Link 
-                href="#benefits" 
+                href={isHomePage ? "#benefits" : "/#benefits"} 
                 className="underline"
                 onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById('benefits')?.scrollIntoView({ behavior: 'smooth' });
+                  if (isHomePage) {
+                    e.preventDefault();
+                    scrollToSection('benefits');
+                  }
                 }}
               >
                 O aplikaci
               </Link>
               <Link 
-                href="#video-section" 
+                href={isHomePage ? "#pricing" : "/#pricing"} 
                 className="underline"
                 onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById('video-section')?.scrollIntoView({ behavior: 'smooth' });
+                  if (isHomePage) {
+                    e.preventDefault();
+                    scrollToSection('pricing');
+                  }
                 }}
               >
-                Ukázka
+                Ceník
               </Link>
               <Link 
-                href="#logo-carousel" 
+                href={isHomePage ? "#faq" : "/#faq"} 
                 className="underline"
                 onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById('logo-carousel')?.scrollIntoView({ behavior: 'smooth' });
+                  if (isHomePage) {
+                    e.preventDefault();
+                    scrollToSection('faq');
+                  }
                 }}
               >
-                Reference
+                Nejčastější dotazy
               </Link>
               <Link 
-                href="#pricing-section" 
+                href={isHomePage ? "#contact" : "/#contact"} 
                 className="underline"
                 onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById('pricing-section')?.scrollIntoView({ behavior: 'smooth' });
+                  if (isHomePage) {
+                    e.preventDefault();
+                    scrollToSection('contact');
+                  }
                 }}
               >
                 Kontakt

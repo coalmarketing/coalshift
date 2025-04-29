@@ -4,10 +4,29 @@ import Link from "next/link";
 import Image from "next/image";
 import logoSvg from "../../public/logo/coalshift_logo_long-dark-color.svg";
 import Button from "./Button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const isHomePage = pathname === '/';
+  
+  const scrollToSection = (id: string) => {
+    if (isHomePage) {
+      const element = document.getElementById(id);
+      if (element) {
+        const headerOffset = 32; // 2rem = 32px
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.scrollY - headerOffset;
+        
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      }
+    }
+  };
 
   return (
     <>
@@ -17,7 +36,7 @@ export default function Header() {
             <Link 
               href="/"
               onClick={(e) => {
-                if (window.location.pathname === '/') {
+                if (isHomePage) {
                   e.preventDefault();
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
@@ -54,41 +73,49 @@ export default function Header() {
           <div className="hidden lg:flex items-center space-x-12">
             <nav className="space-x-12 font-lekton font-bold">
               <Link 
-                href="#benefits" 
+                href={isHomePage ? "#benefits" : "/#benefits"} 
                 className="text-cerna hover:underline"
                 onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById('benefits')?.scrollIntoView({ behavior: 'smooth' });
+                  if (isHomePage) {
+                    e.preventDefault();
+                    scrollToSection('benefits');
+                  }
                 }}
               >
                 O aplikaci
               </Link>
               <Link 
-                href="#pricing" 
+                href={isHomePage ? "#pricing" : "/#pricing"} 
                 className="text-cerna hover:underline"
                 onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
+                  if (isHomePage) {
+                    e.preventDefault();
+                    scrollToSection('pricing');
+                  }
                 }}
               >
                 Ceník
               </Link>
               <Link 
-                href="#faq" 
+                href={isHomePage ? "#faq" : "/#faq"} 
                 className="text-cerna hover:underline"
                 onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById('faq')?.scrollIntoView({ behavior: 'smooth' });
+                  if (isHomePage) {
+                    e.preventDefault();
+                    scrollToSection('faq');
+                  }
                 }}
               >
                 Nejčastější dotazy
               </Link>
               <Link 
-                href="#contact" 
+                href={isHomePage ? "#contact" : "/#contact"} 
                 className="text-cerna hover:underline"
                 onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                  if (isHomePage) {
+                    e.preventDefault();
+                    scrollToSection('contact');
+                  }
                 }}
               >
                 Kontakt
@@ -117,44 +144,52 @@ export default function Header() {
           >
             <div className="flex flex-col items-center space-y-8 p-6 font-lekton font-bold">
               <Link 
-                href="#benefits"
+                href={isHomePage ? "#benefits" : "/#benefits"}
                 className="text-cerna hover:underline"
                 onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById('benefits')?.scrollIntoView({ behavior: 'smooth' });
+                  if (isHomePage) {
+                    e.preventDefault();
+                    scrollToSection('benefits');
+                  }
                   setIsMenuOpen(false);
                 }}
               >
                 O aplikaci
               </Link>
               <Link 
-                href="#pricing"
+                href={isHomePage ? "#pricing" : "/#pricing"}
                 className="text-cerna hover:underline"
                 onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
+                  if (isHomePage) {
+                    e.preventDefault();
+                    scrollToSection('pricing');
+                  }
                   setIsMenuOpen(false);
                 }}
               >
                 Ceník
               </Link>
               <Link 
-                href="#faq"
+                href={isHomePage ? "#faq" : "/#faq"}
                 className="text-cerna hover:underline"
                 onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById('faq')?.scrollIntoView({ behavior: 'smooth' });
+                  if (isHomePage) {
+                    e.preventDefault();
+                    scrollToSection('faq');
+                  }
                   setIsMenuOpen(false);
                 }}
               >
                 Nejčastější dotazy
               </Link>
               <Link 
-                href="#contact"
+                href={isHomePage ? "#contact" : "/#contact"}
                 className="text-cerna hover:underline"
                 onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                  if (isHomePage) {
+                    e.preventDefault();
+                    scrollToSection('contact');
+                  }
                   setIsMenuOpen(false);
                 }}
               >
