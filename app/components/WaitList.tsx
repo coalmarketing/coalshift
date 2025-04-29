@@ -26,7 +26,7 @@ export default function WaitList() {
             </p>
           </div>
 
-          {/* Sekce 2: Bonus pro čekající */}
+          {/* Sekce 2: Bonus pro čekající 
           <div className="flex items-start gap-4 mb-12 bg-white rounded-xl p-6">
             <div className="flex-shrink-0">
               <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center">
@@ -50,9 +50,8 @@ export default function WaitList() {
                 Prozkoumat ukázky už teď
               </Button>
             </div>
-          </div>
+          </div> */}
 
-          {/* Sekce 3: Co můžete očekávat */}
           <div>
             <h2 className="text-xl font-lekton font-bold text-gray-900 mb-6">
               Co můžete očekávat dál:

@@ -6,10 +6,9 @@ export default function ThankYouPage() {
   return (
     <>
       <Header />
-      <main className="flex flex-col min-h-screen">
+      <main className="flex flex-col items-center justify-center">
         <WaitList />
       </main>
-      <Footer />
     </>
   );
 } 
