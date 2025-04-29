@@ -17,19 +17,39 @@ export default function WaitListRegistration() {
   const [company, setCompany] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isRegistered, setIsRegistered] = useState(false);
+  const [debugInfo, setDebugInfo] = useState<string>('');
 
   // Vylepšená funkce pro inicializaci Onquanda formuláře
   useEffect(() => {
     let intervalId: NodeJS.Timeout | null = null;
+    let retryCount = 0;
+    const maxRetries = 30; // 30 pokusů (3 sekundy)
+
+    const log = (message: string) => {
+      console.log(message);
+      setDebugInfo(prev => prev + '\n' + message);
+    };
 
     const initOnquanda = () => {
       const trigger = document.querySelector('.qndTrigger');
+      log(`DOM check: qndTrigger exists: ${!!trigger}, window.qnd exists: ${!!window.qnd}`);
+      
       if (window.qnd && trigger) {
-        console.log("Calling qnd.init() with trigger available");
-        window.qnd.init();
+        log("Calling qnd.init() with trigger available");
+        try {
+          window.qnd.init();
+          log("qnd.init() called successfully");
+        } catch (error) {
+          log(`Error calling qnd.init(): ${error}`);
+        }
       } else {
-        console.log("Trigger not ready yet, retrying...");
-        setTimeout(initOnquanda, 100);
+        log("Trigger or qnd not ready yet, retrying...");
+        if (retryCount < maxRetries) {
+          retryCount++;
+          setTimeout(initOnquanda, 100);
+        } else {
+          log("Max retries reached. Check console for more details.");
+        }
       }
     };
 
@@ -37,28 +57,54 @@ export default function WaitListRegistration() {
     if (!window.qnd) {
       // Přidat skript jen pokud tam ještě není
       if (!document.getElementById(scriptId)) {
-        console.log("qnd not found, appending script");
+        log("qnd not found, appending script");
         const script = document.createElement('script');
         script.id = scriptId;
         script.src = 'https://webform.onquanda.com/webform/assets/js/qndInitWebform.js';
         script.async = true;
         script.onload = () => {
-          console.log("Script loaded, trying to init");
-          initOnquanda();
+          log("Script loaded, checking if window.qnd exists");
+          log(`window.qnd exists directly after load: ${!!window.qnd}`);
+          
+          // Pokus o přímé volání init po načtení
+          if (window.qnd) {
+            try {
+              log("Trying direct qnd.init() call");
+              window.qnd.init();
+              log("Direct qnd.init() called");
+            } catch (error) {
+              log(`Error in direct qnd.init(): ${error}`);
+            }
+          } else {
+            // Pokud qnd neexistuje ihned, nastavíme interval, který bude čekat na qnd
+            log("window.qnd not available immediately, waiting...");
+            initOnquanda();
+          }
+        };
+        script.onerror = (error) => {
+          log(`Failed to load Onquanda script: ${error}`);
         };
         document.body.appendChild(script);
       } else {
-        console.log("Script already appended, waiting for qnd to become ready");
+        log("Script already appended, waiting for qnd to become ready");
         // Polling dokud nebude qnd dostupné
         intervalId = setInterval(() => {
+          log(`Polling for window.qnd: ${!!window.qnd}`);
           if (window.qnd) {
             if (intervalId) clearInterval(intervalId);
             initOnquanda();
           }
+          
+          // Ukončit interval po maximálním počtu pokusů
+          retryCount++;
+          if (retryCount > maxRetries) {
+            log("Max polling retries reached");
+            if (intervalId) clearInterval(intervalId);
+          }
         }, 100);
       }
     } else {
-      console.log("qnd found, initializing");
+      log("qnd found, initializing");
       initOnquanda();
     }
 
@@ -183,6 +229,14 @@ export default function WaitListRegistration() {
       {/* Kontejner pro Onquanda formulář */}
       <div className="bg-white rounded-xl p-0 border border-gray-200 mb-12 flex flex-col justify-center items-center">
         <div style={{ display: "block" }} className="qndTrigger mx-auto" data-key="2128f532d89ef03752d1b45d0eac06de" data-form-html-class="" data-static="true"></div>
+        
+        {/* Debugging info pro vývoj */}
+        {process.env.NODE_ENV === 'development' && debugInfo && (
+          <div className="mt-4 p-4 bg-gray-100 text-xs font-mono w-full overflow-auto max-h-40">
+            <div className="font-bold mb-2">Debug Info:</div>
+            {debugInfo.split('\n').map((line, i) => <div key={i}>{line}</div>)}
+          </div>
+        )}
       </div>
     </section>
   );
