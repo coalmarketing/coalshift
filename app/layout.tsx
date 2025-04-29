@@ -59,6 +59,7 @@ export default function RootLayout({
             })(window,document,'script','dataLayer','GTM-K3TVZQ2T');
           `}
         </Script>
+        <Script src="//webform.onquanda.com/static/js/webform/embedded.min.js" strategy="beforeInteractive" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/logo/coalshift_logo_favicon-color.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" href="/logo/coalshift_logo_favicon-color.svg" type="image/svg+xml" />

@@ -10,20 +10,6 @@ export default function WaitListRegistration() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isRegistered, setIsRegistered] = useState(false);
 
-  // Vykreslení Onquanda formuláře pomocí iframe
-  const OnquandaForm = () => {
-    return (
-      <div className="onquanda-container">
-        <iframe 
-          src="https://webform.onquanda.com/webform/2128f532d89ef03752d1b45d0eac06de/embed/?static=true" 
-          style={{width: '100%', height: '500px', border: 'none'}}
-          title="Onquanda Formulář"
-          loading="lazy"
-        />
-      </div>
-    );
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -139,7 +125,7 @@ export default function WaitListRegistration() {
         <h2 className="text-2xl font-lekton font-bold text-modra text-center mb-6">
           Chci být u toho první!
         </h2>
-        <OnquandaForm />
+        <div style={{ display: "block" }} className="qndTrigger" data-key="2128f532d89ef03752d1b45d0eac06de" data-form-html-class="" data-static="true">&nbsp;</div>
       </div>
     </section>
   );

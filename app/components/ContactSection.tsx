@@ -54,6 +54,7 @@ export default function ContactSection() {
               fill
               style={{ objectFit: 'contain' }}
               priority
+              sizes="(max-width: 640px) 200px, (max-width: 1024px) 250px, 300px"
             />
           </div>
         </div>

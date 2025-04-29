@@ -42,7 +42,12 @@ export default function Header() {
                 }
               }}
             >
-              <Image src={logoSvg} alt="Coalshift Logo" className="min-w-32 w-32 lg:min-w-48 w-48" />
+              <Image 
+                src={logoSvg} 
+                alt="Coalshift Logo" 
+                className="min-w-32 w-32 lg:min-w-48 w-48" 
+                sizes="(max-width: 1024px) 8rem, 12rem"
+              />
             </Link>
           </div>
           
