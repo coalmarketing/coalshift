@@ -17,11 +17,11 @@ export default function WaitList() {
                 className="mx-auto"
               />
             </div>
-            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
+            <h1 className="text-3xl sm:text-4xl font-lekton font-bold text-gray-900 mb-6">
               Jste na seznamu čekatelů —<br />
               jsme rádi, že jste s námi!
             </h1>
-            <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg sm:text-xl font-inter text-gray-600 max-w-2xl mx-auto">
               Coalshift spouštíme 1. 7. 2025. Jakmile bude vaše přihlášení aktivní, dáme vám vědět e-mailem i notifikací.
             </p>
           </div>
@@ -40,10 +40,10 @@ export default function WaitList() {
               </div>
             </div>
             <div>
-              <h2 className="text-xl font-bold text-gray-900 mb-2">
+              <h2 className="text-xl font-lekton font-bold text-gray-900 mb-2">
                 Učte se dřív než ostatní!
               </h2>
-              <p className="text-gray-600 mb-4">
+              <p className="text-gray-600 font-inter mb-4">
                 Získejte přístup k tutoriálům a prvním tipům, jak co nejlépe nastavit plánování směn s Coalshiftem – už teď
               </p>
               <Button variant="primaryModra">
@@ -54,7 +54,7 @@ export default function WaitList() {
 
           {/* Sekce 3: Co můžete očekávat */}
           <div>
-            <h2 className="text-xl font-bold text-gray-900 mb-6">
+            <h2 className="text-xl font-lekton font-bold text-gray-900 mb-6">
               Co můžete očekávat dál:
             </h2>
             <div className="space-y-4">
@@ -67,7 +67,7 @@ export default function WaitList() {
                     height={32}
                   />
                 </div>
-                <span className="text-gray-700">Potvrzení e-mailem</span>
+                <span className="text-gray-700 font-inter">Potvrzení e-mailem</span>
               </div>
               <div className="flex items-center gap-4">
                 <div className="w-8 h-8 flex-shrink-0">
@@ -78,7 +78,7 @@ export default function WaitList() {
                     height={32}
                   />
                 </div>
-                <span className="text-gray-700">Budoucí notifikace ke stavu přístupu</span>
+                <span className="text-gray-700 font-inter">Budoucí notifikace ke stavu přístupu</span>
               </div>
               <div className="flex items-center gap-4">
                 <div className="w-8 h-8 flex-shrink-0">
@@ -89,7 +89,7 @@ export default function WaitList() {
                     height={32}
                   />
                 </div>
-                <span className="text-gray-700">Přístup bude spuštěn od 1. července 2025</span>
+                <span className="text-gray-700 font-inter">Přístup bude spuštěn od 1. července 2025</span>
               </div>
             </div>
           </div>

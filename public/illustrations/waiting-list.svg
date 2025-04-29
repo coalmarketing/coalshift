@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="90" cy="90" r="70" fill="#E9F9F0" />
+  <path id="checkmark-path" d="M55 90L80 115L125 70" stroke="#2DCE89" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="160" stroke-dashoffset="160">
+    <animate
+      attributeName="stroke-dashoffset"
+      from="160"
+      to="0"
+      dur="1s"
+      begin="0s"
+      fill="freeze"
+      restart="whenNotActive"
+      calcMode="linear" />
+  </path>
+  <circle cx="90" cy="90" r="70" stroke="#2DCE89" stroke-width="5" stroke-dasharray="440" stroke-dashoffset="440">
+    <animate
+      attributeName="stroke-dashoffset"
+      from="440"
+      to="0"
+      dur="1.2s"
+      begin="0s"
+      fill="freeze"
+      restart="whenNotActive"
+      calcMode="linear" />
+  </circle>
+</svg> 
