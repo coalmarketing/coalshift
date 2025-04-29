@@ -71,7 +71,6 @@ export default function PricingSection() {
         Coalshift nabízí flexibilní cenové plány přizpůsobené potřebám vaší firmy.
       </p>
 
-      {/*
        <div className="bg-gradient-to-r from-modra/5 to-modra/10 border border-modra/20 rounded-lg p-4 mb-6 flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <div className="hidden sm:block">
@@ -96,7 +95,7 @@ export default function PricingSection() {
         >
           Požádat o přístup
         </Button>
-      </div>  */}
+      </div> 
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {pricingPlans.map((plan, index) => (

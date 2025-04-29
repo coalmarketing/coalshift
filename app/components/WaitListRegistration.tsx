@@ -1,13 +1,26 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Button from './Button';
 import Image from 'next/image';
+import Script from 'next/script';
 
 export default function WaitListRegistration() {
   const [email, setEmail] = useState('');
   const [company, setCompany] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isRegistered, setIsRegistered] = useState(false);
+
+  // Manuální načtení Onquanda skriptu
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://webform.onquanda.com/static/js/webform/embedded.min.js';
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -119,7 +132,16 @@ export default function WaitListRegistration() {
         </div>
       </div>
 
-      {/* Registrační formulář */}
+      {/* Kontejner pro Onquanda formulář */}
+      <div className="bg-white rounded-xl p-8 border border-gray-200 mb-12">
+        <h2 className="text-2xl font-lekton font-bold text-modra text-center mb-6">
+          Chci být u toho první!
+        </h2>
+        {/* Onquanda trigger s přesným formátem podle dokumentace */}
+        <div className="qndTrigger" data-key="2128f532d89ef03752d1b45d0eac06de" data-form-html-class="" data-static="true">&nbsp;</div>
+      </div>
+
+      {/* Registrační formulář - původní, možná bude potřeba odstranit, pokud budete používat jen Onquanda
       <div className="bg-white rounded-xl p-8 border border-gray-200">
         <h2 className="text-2xl font-lekton font-bold text-modra text-center mb-6">
           Chci být u toho první!
@@ -161,7 +183,9 @@ export default function WaitListRegistration() {
             {isSubmitting ? 'Registruji...' : 'Získat přístup jako první'}
           </Button>
         </form>
-      </div>
+
+         
+      </div> */}
     </section>
   );
 } 
