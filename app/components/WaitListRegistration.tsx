@@ -19,29 +19,26 @@ export default function WaitListRegistration() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isRegistered, setIsRegistered] = useState(false);
 
-  // Přidáme stav pro sledování načtení Onquanda skriptu
-  const [onquandaLoaded, setOnquandaLoaded] = useState(false);
-
-  // Funkce pro inicializaci Onquanda formuláře
+  // Přímo vložíme iframe
   useEffect(() => {
-    // Pokud je Onquanda již načtená, inicializujeme formulář
-    if (window.qnd && !onquandaLoaded) {
-      window.qnd.init();
-      setOnquandaLoaded(true);
-    } else if (!window.qnd) {
-      // Pokud Onquanda není načtená, načteme skript
-      const script = document.createElement('script');
-      script.src = 'https://webform.onquanda.com/webform/assets/js/qndInitWebform.js';
-      script.async = true;
-      script.onload = () => {
-        if (window.qnd) {
-          window.qnd.init();
-          setOnquandaLoaded(true);
-        }
-      };
-      document.body.appendChild(script);
+    const container = document.getElementById('onquanda-container');
+    if (container) {
+      // Vyčistíme kontejner
+      container.innerHTML = '';
+      
+      // Vytvoříme iframe přímo
+      const iframe = document.createElement('iframe');
+      iframe.src = "https://webform.onquanda.com/webform/2128f53./?static=&dth=374&parent_url=https://www.coalshift.cz/wait-list&form_html_class=";
+      iframe.width = "374";
+      iframe.height = "492";
+      iframe.frameBorder = "0";
+      iframe.style.border = "0px";
+      iframe.style.borderRadius = "0px";
+      
+      // Přidáme iframe do kontejneru
+      container.appendChild(iframe);
     }
-  }, [onquandaLoaded]);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -155,20 +152,9 @@ export default function WaitListRegistration() {
 
       {/* Kontejner pro Onquanda formulář */}
       <div className="bg-white rounded-xl p-0 border border-gray-200 mb-12 flex flex-col justify-center items-center">
-        <div style={{ display: "block" }} className="qndTrigger mx-auto" data-key="2128f532d89ef03752d1b45d0eac06de" data-form-html-class="" data-static="true"></div>
+        {/* Nahradíme qndTrigger přímým kontejnerem pro iframe */}
+        <div id="onquanda-container" className="mx-auto" style={{ width: "374px", height: "492px" }}></div>
       </div>
-
-      {/* Načtení Onquanda skriptu pomocí Next.js Script komponenty */}
-      <Script
-        src="https://webform.onquanda.com/webform/assets/js/qndInitWebform.js"
-        strategy="afterInteractive"
-        onLoad={() => {
-          if (window.qnd) {
-            window.qnd.init();
-            setOnquandaLoaded(true);
-          }
-        }}
-      />
     </section>
   );
 } 
