@@ -71,19 +71,19 @@ export default function PricingSection() {
         Coalshift nabízí flexibilní cenové plány přizpůsobené potřebám vaší firmy.
       </p>
 
-       <div className="bg-gradient-to-r from-modra/5 to-modra/10 border border-modra/20 rounded-lg p-4 mb-6 flex items-center justify-between">
-        <div className="flex items-center space-x-4">
+       <div className="bg-gradient-to-r from-modra/5 to-modra/10 border border-modra/20 rounded-lg p-4 mb-6 flex flex-col sm:flex-row items-center gap-4">
+        <div className="flex items-center space-x-4 w-full sm:w-auto">
           <div className="hidden sm:block">
-            <svg className="w-12 h-12 text-modra" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg className="w-10 h-10 sm:w-12 sm:h-12 text-modra" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M24 44C35.0457 44 44 35.0457 44 24C44 12.9543 35.0457 4 24 4C12.9543 4 4 12.9543 4 24C4 35.0457 12.9543 44 24 44Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               <path d="M24 12V24L32 28" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </div>
           <div>
-            <h3 className="text-lg font-lekton font-bold text-modra">
+            <h3 className="text-lg font-lekton font-bold text-modra text-center sm:text-left">
               Spouštíme 1. července 2025
             </h3>
-            <p className="text-sm text-gray-600 font-inter">
+            <p className="text-sm text-gray-600 font-inter text-center sm:text-left">
               Zaregistrujte se na waiting list a získejte exkluzivní přístup mezi prvními!
             </p>
           </div>
@@ -91,7 +91,7 @@ export default function PricingSection() {
         <Button 
           variant="primaryModra"
           href="/wait-list"
-          className="whitespace-nowrap"
+          className="whitespace-nowrap w-full sm:w-auto mt-2 sm:mt-0 sm:ml-auto text-center"
         >
           Požádat o přístup
         </Button>
