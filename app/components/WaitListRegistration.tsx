@@ -20,28 +20,54 @@ export default function WaitListRegistration() {
 
   // Vylepšená funkce pro inicializaci Onquanda formuláře
   useEffect(() => {
-    console.log("Checking for qnd...");
+    let intervalId: NodeJS.Timeout | null = null;
+
     const initOnquanda = () => {
-      console.log("Running window.qnd.init()");
-      if (window.qnd) {
+      const trigger = document.querySelector('.qndTrigger');
+      if (window.qnd && trigger) {
+        console.log("Calling qnd.init() with trigger available");
         window.qnd.init();
+      } else {
+        console.log("Trigger not ready yet, retrying...");
+        setTimeout(initOnquanda, 100);
       }
     };
 
+    const scriptId = "onquanda-script";
     if (!window.qnd) {
-      console.log("qnd not found, appending script");
-      const script = document.createElement('script');
-      script.src = 'https://webform.onquanda.com/webform/assets/js/qndInitWebform.js';
-      script.async = true;
-      script.onload = () => {
-        console.log("Script loaded, initializing");
-        initOnquanda();
-      };
-      document.body.appendChild(script);
+      // Přidat skript jen pokud tam ještě není
+      if (!document.getElementById(scriptId)) {
+        console.log("qnd not found, appending script");
+        const script = document.createElement('script');
+        script.id = scriptId;
+        script.src = 'https://webform.onquanda.com/webform/assets/js/qndInitWebform.js';
+        script.async = true;
+        script.onload = () => {
+          console.log("Script loaded, trying to init");
+          initOnquanda();
+        };
+        document.body.appendChild(script);
+      } else {
+        console.log("Script already appended, waiting for qnd to become ready");
+        // Polling dokud nebude qnd dostupné
+        intervalId = setInterval(() => {
+          if (window.qnd) {
+            if (intervalId) clearInterval(intervalId);
+            initOnquanda();
+          }
+        }, 100);
+      }
     } else {
       console.log("qnd found, initializing");
       initOnquanda();
     }
+
+    // Cleanup funkce pro interval
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
