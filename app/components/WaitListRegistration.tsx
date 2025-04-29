@@ -2,7 +2,6 @@
 import { useState, useEffect } from 'react';
 import Button from './Button';
 import Image from 'next/image';
-import Script from 'next/script';
 
 // Deklarace typu pro Onquanda API
 declare global {
@@ -19,29 +18,31 @@ export default function WaitListRegistration() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isRegistered, setIsRegistered] = useState(false);
 
-  // Přidáme stav pro sledování načtení Onquanda skriptu
-  const [onquandaLoaded, setOnquandaLoaded] = useState(false);
-
-  // Funkce pro inicializaci Onquanda formuláře
+  // Vylepšená funkce pro inicializaci Onquanda formuláře
   useEffect(() => {
-    // Pokud je Onquanda již načtená, inicializujeme formulář
-    if (window.qnd && !onquandaLoaded) {
-      window.qnd.init();
-      setOnquandaLoaded(true);
-    } else if (!window.qnd) {
-      // Pokud Onquanda není načtená, načteme skript
+    console.log("Checking for qnd...");
+    const initOnquanda = () => {
+      console.log("Running window.qnd.init()");
+      if (window.qnd) {
+        window.qnd.init();
+      }
+    };
+
+    if (!window.qnd) {
+      console.log("qnd not found, appending script");
       const script = document.createElement('script');
       script.src = 'https://webform.onquanda.com/webform/assets/js/qndInitWebform.js';
       script.async = true;
       script.onload = () => {
-        if (window.qnd) {
-          window.qnd.init();
-          setOnquandaLoaded(true);
-        }
+        console.log("Script loaded, initializing");
+        initOnquanda();
       };
       document.body.appendChild(script);
+    } else {
+      console.log("qnd found, initializing");
+      initOnquanda();
     }
-  }, [onquandaLoaded]);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -157,18 +158,6 @@ export default function WaitListRegistration() {
       <div className="bg-white rounded-xl p-0 border border-gray-200 mb-12 flex flex-col justify-center items-center">
         <div style={{ display: "block" }} className="qndTrigger mx-auto" data-key="2128f532d89ef03752d1b45d0eac06de" data-form-html-class="" data-static="true"></div>
       </div>
-
-      {/* Načtení Onquanda skriptu pomocí Next.js Script komponenty */}
-      <Script
-        src="https://webform.onquanda.com/webform/assets/js/qndInitWebform.js"
-        strategy="afterInteractive"
-        onLoad={() => {
-          if (window.qnd) {
-            window.qnd.init();
-            setOnquandaLoaded(true);
-          }
-        }}
-      />
     </section>
   );
 } 
