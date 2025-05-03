@@ -1,5 +1,8 @@
+"use client";
+
 import { ReactNode, ButtonHTMLAttributes, ComponentProps } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 type ButtonBaseProps = {
   variant?: 'primaryModra' | 'primaryBila' | 'secondaryModra' | 'secondaryBila';
@@ -21,6 +24,7 @@ export default function Button({
   className = '',
   ...props
 }: ButtonProps) {
+  const router = useRouter();
   const baseStyles = "px-10 py-2 rounded-sm transition-colors duration-200 font-lekton font-bold";
   const variantStyles = {
     primaryModra: "bg-modra text-white hover:bg-modraHover",
@@ -32,7 +36,7 @@ export default function Button({
   const buttonStyles = `${baseStyles} ${variantStyles[variant]} ${className}`;
 
   if ('href' in props) {
-    const { href, target, onClick, ...restProps } = props as ButtonAsLinkProps;
+    const { href, target, ...restProps } = props as ButtonAsLinkProps;
     
     // Pro /wait-list používáme standardní anchor tag místo Next.js Link
     if (href === '/wait-list') {
@@ -43,8 +47,7 @@ export default function Button({
           target={target}
           onClick={(e) => {
             e.preventDefault();
-            window.location.href = '/wait-list';
-            if (onClick) onClick(e as any);
+            router.push('/wait-list');
           }}
           {...restProps}
         >
@@ -58,7 +61,6 @@ export default function Button({
         href={href as string} 
         className={buttonStyles}
         target={target}
-        onClick={onClick}
         {...restProps}
       >
         {children}

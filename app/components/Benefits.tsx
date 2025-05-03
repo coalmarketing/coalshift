@@ -3,10 +3,10 @@ import calendarIcon from '../../public/icons/calendar-icon.svg';
 import adminIcon from '../../public/icons/admin-icon.svg';
 import heartIcon from '../../public/icons/heart-icon.svg';
 import phoneImage from '../../public/mocup-coalshift.png';
-
+import Button from './Button';
 export default function Benefits() {
   return (
-    <section id="benefits" className="flex flex-col lg:flex-row justify-between items-center max-w-[1200px] mx-auto px-8 py-16 gap-8 text-cerna">
+    <section id="benefits" className="flex flex-col lg:flex-row justify-between items-center max-w-[1200px] mx-auto px-8 py-16 gap-8 text-cerna lg:mt-32 lg:mb-20">
       <div className="w-full lg:w-1/2 space-y-12 mt-0 lg:mt-[-150px]">
         <div>
         <h2 className="text-modra text-3xl sm:text-4xl md:text-5xl font-lekton font-bold mb-6">
@@ -56,9 +56,15 @@ export default function Benefits() {
             <p className="font-inter font-thin">Spravedlivé rozdělení směn, snížení stresu.</p>
           </div>
         </div>
+
+        <div className="flex justify-start mt-8">
+          <Button href="/wait-list" variant="primaryModra">
+            Požádat o přístup
+          </Button>
+        </div>
       </div>
 
-      <div className="w-full lg:w-1/2 flex justify-center">
+      <div className="w-full lg:w-1/2 flex justify-center md:mt-[-100px]">
         <Image
           src={phoneImage}
           alt="Ukázka aplikace na telefonu"
