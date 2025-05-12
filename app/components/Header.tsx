@@ -128,8 +128,7 @@ export default function Header() {
             </nav>
             <Button 
               variant="primaryModra"
-              href="https://app.coalshift.cz/"
-              target="_blank"
+              href="/wait-list"
             >
               Vyzkoušet zdarma!
             </Button>
@@ -202,8 +201,7 @@ export default function Header() {
               </Link>
               <Button 
                 variant="primaryModra"
-                href="https://app.coalshift.cz/"
-                target="_blank"
+                href="/wait-list"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Vyzkoušet zdarma!
