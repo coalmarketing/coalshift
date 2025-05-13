@@ -20,6 +20,12 @@ export default function WaitListRegistration() {
 
   // Jednodušší a robustnější inicializace Onquanda
   useEffect(() => {
+    // Kontrola, zda jsme v prohlížeči
+    if (typeof window === 'undefined') return;
+
+    const scriptId = "onquanda-script";
+
+    // Funkce pro inicializaci Onquanda po načtení DOM
     const initOnquanda = () => {
       const trigger = document.querySelector('.qndTrigger');
       if (window.qnd && trigger) {
@@ -27,27 +33,40 @@ export default function WaitListRegistration() {
         window.qnd.init();
       } else {
         console.log("Formulář ještě není připraven, čekám...");
-        setTimeout(() => requestAnimationFrame(initOnquanda), 100);
+        setTimeout(initOnquanda, 200);
       }
     };
 
-    const scriptId = "onquanda-script";
-    if (!document.getElementById(scriptId)) {
-      console.log("Vkládám Onquanda skript");
-      const script = document.createElement('script');
-      script.id = scriptId;
-      script.src = 'https://webform.onquanda.com/webform/assets/js/qndInitWebform.js';
-      script.async = true;
-      script.onload = () => {
-        console.log("Onquanda skript načten");
-        // Počkáme malou chvíli než DOM domaluje
-        setTimeout(() => requestAnimationFrame(initOnquanda), 100);
-      };
-      document.body.appendChild(script);
+    // Funkce pro načtení Onquanda skriptu
+    const loadScript = () => {
+      if (!document.getElementById(scriptId)) {
+        console.log("Vkládám Onquanda skript");
+        const script = document.createElement('script');
+        script.id = scriptId;
+        script.src = 'https://webform.onquanda.com/webform/assets/js/qndInitWebform.js';
+        script.async = true;
+        script.onload = () => {
+          console.log("Onquanda skript načten");
+          // Delší doba čekání pro jistotu
+          setTimeout(initOnquanda, 300);
+        };
+        document.body.appendChild(script);
+      } else {
+        console.log("Skript už byl načten, inituji znovu");
+        setTimeout(initOnquanda, 300);
+      }
+    };
+
+    // Zajistíme, že DOM je plně načten před vložením skriptu
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', loadScript);
     } else {
-      console.log("Skript už byl načten, inituji znovu");
-      setTimeout(() => requestAnimationFrame(initOnquanda), 100);
+      loadScript();
     }
+
+    return () => {
+      document.removeEventListener('DOMContentLoaded', loadScript);
+    };
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
