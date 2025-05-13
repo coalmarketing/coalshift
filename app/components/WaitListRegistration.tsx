@@ -1,7 +1,6 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import Button from './Button';
-import Script from 'next/script';
 import Image from 'next/image';
 
 // Deklarace typu pro Onquanda API
@@ -18,114 +17,38 @@ export default function WaitListRegistration() {
   const [company, setCompany] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isRegistered, setIsRegistered] = useState(false);
-  const formContainerRef = useRef<HTMLDivElement>(null);
-  const [formInitialized, setFormInitialized] = useState(false);
 
-  // Řešení s použitím Next.js Script komponenty pro čistší načítání externího skriptu
+  // Jednodušší a robustnější inicializace Onquanda
   useEffect(() => {
-    if (typeof window === 'undefined' || !formContainerRef.current) return;
-
-    // Maximální počet pokusů pro inicializaci
-    let attempts = 0;
-    const maxAttempts = 10;
-    let initInterval: NodeJS.Timeout | null = null;
-
-    // Funkce pro inicializaci formuláře
-    const initForm = () => {
-      attempts++;
-      
-      // Zkontrolujeme, zda je objekt qnd dostupný a container existuje
-      if (window.qnd && formContainerRef.current && !formInitialized) {
-        // Vyčistíme interval
-        if (initInterval) clearInterval(initInterval);
-        
-        console.log(`Inicializuji formulář, pokus ${attempts}`);
-        
-        try {
-          // Vyčistíme kontejner
-          const container = formContainerRef.current;
-          container.innerHTML = '';
-          
-          // Vytvoříme trigger element
-          const trigger = document.createElement('div');
-          trigger.className = 'qndTrigger';
-          trigger.setAttribute('data-key', '2128f532d89ef03752d1b45d0eac06de');
-          trigger.setAttribute('data-form-html-class', '');
-          trigger.setAttribute('data-static', 'true');
-          trigger.style.display = 'block';
-          
-          // Přidáme trigger do kontejneru
-          container.appendChild(trigger);
-          
-          // Inicializujeme formulář
-          window.qnd.init();
-          
-          // Označíme formulář jako inicializovaný
-          setFormInitialized(true);
-          console.log("Formulář byl úspěšně inicializován");
-        } catch (e) {
-          console.error("Chyba při inicializaci formuláře:", e);
-        }
-      } else if (attempts >= maxAttempts) {
-        // Pokud jsme vyčerpali všechny pokusy, vyčistíme interval
-        if (initInterval) clearInterval(initInterval);
-        console.log("Dosažen maximální počet pokusů pro inicializaci");
-        
-        // Zobrazíme záložní obsah
-        if (formContainerRef.current) {
-          formContainerRef.current.innerHTML = `
-            <div class="text-center p-6">
-              <p class="text-red-500 mb-4">Nepodařilo se načíst registrační formulář.</p>
-              <button onclick="window.location.reload()" class="bg-blue-500 text-white px-4 py-2 rounded">
-                Zkusit znovu
-              </button>
-            </div>
-          `;
-        }
+    const initOnquanda = () => {
+      const trigger = document.querySelector('.qndTrigger');
+      if (window.qnd && trigger) {
+        console.log("qnd.init() voláno");
+        window.qnd.init();
       } else {
-        console.log(`Pokus o inicializaci ${attempts}/${maxAttempts}. qnd: ${!!window.qnd}, container: ${!!formContainerRef.current}`);
+        console.log("Formulář ještě není připraven, čekám...");
+        setTimeout(() => requestAnimationFrame(initOnquanda), 100);
       }
     };
 
-    // Funkce pro přímé načtení Onquanda skriptu a jeho inicializaci
-    const loadOnquandaScript = () => {
-      const scriptId = "onquanda-script";
-      // Odebereme existující skript, pokud existuje
-      const existingScript = document.getElementById(scriptId);
-      if (existingScript) {
-        existingScript.remove();
-      }
-      
-      // Vytvoříme a přidáme nový skript
+    const scriptId = "onquanda-script";
+    if (!document.getElementById(scriptId)) {
+      console.log("Vkládám Onquanda skript");
       const script = document.createElement('script');
       script.id = scriptId;
       script.src = 'https://webform.onquanda.com/webform/assets/js/qndInitWebform.js';
       script.async = true;
-      script.defer = true;
-      
       script.onload = () => {
-        console.log("Onquanda skript načten, spouštím inicializaci");
-        // Inicializujeme formulář ihned a pak v pravidelných intervalech
-        initForm();
-        initInterval = setInterval(initForm, 1000);
+        console.log("Onquanda skript načten");
+        // Počkáme malou chvíli než DOM domaluje
+        setTimeout(() => requestAnimationFrame(initOnquanda), 100);
       };
-      
       document.body.appendChild(script);
-    };
-
-    // Počkáme na načtení stránky a poté načteme skript
-    if (document.readyState === 'complete') {
-      loadOnquandaScript();
     } else {
-      window.addEventListener('load', loadOnquandaScript);
-      return () => window.removeEventListener('load', loadOnquandaScript);
+      console.log("Skript už byl načten, inituji znovu");
+      setTimeout(() => requestAnimationFrame(initOnquanda), 100);
     }
-
-    // Cleanup function
-    return () => {
-      if (initInterval) clearInterval(initInterval);
-    };
-  }, [formInitialized]);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -238,14 +161,9 @@ export default function WaitListRegistration() {
       </div>
 
       {/* Kontejner pro Onquanda formulář */}
-      <div className="bg-white rounded-xl p-6 border border-gray-200 mb-12 flex flex-col justify-center items-center min-h-[300px]">
-        <div ref={formContainerRef} className="w-full flex justify-center items-center">
-          {!formInitialized && (
-            <div className="text-center">
-              <p className="text-gray-600 mb-4">Načítám formulář...</p>
-              <div className="w-8 h-8 border-t-2 border-b-2 border-blue-500 rounded-full animate-spin"></div>
-            </div>
-          )}
+      <div className="bg-white rounded-xl p-0 border border-gray-200 mb-12 flex flex-col justify-center items-center">
+        <div style={{ display: "block" }} className="qndTrigger mx-auto" data-key="2128f532d89ef03752d1b45d0eac06de" data-form-html-class="" data-static="true">
+          {process.env.NODE_ENV === 'development' && <div className="text-xs text-gray-400">(trigger mount)</div>}
         </div>
       </div>
     </section>
