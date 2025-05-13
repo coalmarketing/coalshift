@@ -18,77 +18,103 @@ export default function WaitListRegistration() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isRegistered, setIsRegistered] = useState(false);
   const [formLoaded, setFormLoaded] = useState(false);
+  const [loadingError, setLoadingError] = useState(false);
   const formInitialized = useRef(false);
   const formContainer = useRef<HTMLDivElement>(null);
 
   // Manuální vložení formuláře Onquanda
   useEffect(() => {
+    // Kontrola, zda jsme v prohlížeči a zda už nebyl formulář inicializován
     if (typeof window === 'undefined' || formInitialized.current) return;
     
+    // Označení, že jsme začali inicializaci
     formInitialized.current = true;
     
+    // Funkce pro inicializaci formuláře
     const initForm = () => {
-      if (!formContainer.current) return;
-      
-      // Vyčistit kontejner před vložením
-      while (formContainer.current.firstChild) {
-        formContainer.current.removeChild(formContainer.current.firstChild);
+      // Kontrola, zda existuje container
+      if (!formContainer.current) {
+        console.error("Kontejner formuláře není k dispozici");
+        setLoadingError(true);
+        return;
       }
       
-      // Vytvořit nový trigger element
-      const triggerDiv = document.createElement('div');
-      triggerDiv.className = "qndTrigger mx-auto";
-      triggerDiv.dataset.key = "2128f532d89ef03752d1b45d0eac06de";
-      triggerDiv.dataset.formHtmlClass = "";
-      triggerDiv.dataset.static = "true";
-      triggerDiv.style.display = "block";
-      
-      // Vložit trigger do kontejneru
-      formContainer.current.appendChild(triggerDiv);
-      
-      // Načíst a inicializovat Onquanda skript
-      const loadScript = () => {
-        console.log("Načítám Onquanda skript");
+      try {
+        // Vytvořit nový trigger element
+        const triggerDiv = document.createElement('div');
+        triggerDiv.className = "qndTrigger mx-auto";
+        triggerDiv.dataset.key = "2128f532d89ef03752d1b45d0eac06de";
+        triggerDiv.dataset.formHtmlClass = "";
+        triggerDiv.dataset.static = "true";
+        triggerDiv.style.display = "block";
+        
+        // Vložit trigger do kontejneru
+        formContainer.current.innerHTML = '';
+        formContainer.current.appendChild(triggerDiv);
+        
+        // Načíst Onquanda skript
         const scriptId = "onquanda-script";
-
-        if (document.getElementById(scriptId)) {
-          document.getElementById(scriptId)?.remove();
+        
+        // Odstranit existující skript, pokud existuje
+        const existingScript = document.getElementById(scriptId);
+        if (existingScript) {
+          existingScript.remove();
         }
-          
+        
         const script = document.createElement('script');
         script.id = scriptId;
         script.src = 'https://webform.onquanda.com/webform/assets/js/qndInitWebform.js';
         script.async = true;
+        
         script.onload = () => {
-          console.log("Onquanda skript načten, inicializuji formulář");
-          if (window.qnd) {
-            window.qnd.init();
-            setFormLoaded(true);
-            console.log("Formulář inicializován");
-          } else {
-            console.log("qnd objekt není dostupný po načtení skriptu");
-          }
+          console.log("Onquanda skript načten");
+          
+          // Inicializovat formulář po krátkém zpoždění
+          setTimeout(() => {
+            if (window.qnd) {
+              try {
+                window.qnd.init();
+                setFormLoaded(true);
+                console.log("Formulář inicializován");
+              } catch (err) {
+                console.error("Chyba při inicializaci qnd:", err);
+                setLoadingError(true);
+              }
+            } else {
+              console.error("qnd objekt není dostupný po načtení skriptu");
+              setLoadingError(true);
+            }
+          }, 200);
         };
-        script.onerror = (e) => {
-          console.error("Chyba při načítání Onquanda skriptu:", e);
+        
+        script.onerror = (err) => {
+          console.error("Chyba při načítání Onquanda skriptu:", err);
+          setLoadingError(true);
         };
         
         document.body.appendChild(script);
-      };
-      
-      // Zajistit, že DOM je plně načtený
-      if (document.readyState === 'complete') {
-        loadScript();
-      } else {
-        window.addEventListener('load', loadScript);
-        return () => window.removeEventListener('load', loadScript);
+      } catch (err) {
+        console.error("Chyba při vytváření formuláře:", err);
+        setLoadingError(true);
       }
     };
     
-    // Inicializovat s malou prodlevou pro zajištění načtení DOM
+    // Spustit inicializaci s krátkým zpožděním
     setTimeout(initForm, 300);
     
-  }, []);
+    // Nastavit timeout pro případ, že se formulář nenačte
+    const timeoutId = setTimeout(() => {
+      if (!formLoaded) {
+        console.error("Vypršel časový limit pro načtení formuláře");
+        setLoadingError(true);
+      }
+    }, 10000);
+    
+    // Cleanup při unmount
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [formLoaded]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -203,11 +229,31 @@ export default function WaitListRegistration() {
       {/* Kontejner pro Onquanda formulář */}
       <div className="bg-white rounded-xl p-6 border border-gray-200 mb-12 flex flex-col justify-center items-center">
         <div ref={formContainer} className="w-full">
-          {!formLoaded && (
+          {!formLoaded && !loadingError && (
             <div className="text-center py-12">
               <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-t-2 border-modra mx-auto mb-6"></div>
               <p className="text-xl font-inter text-gray-700 mb-2">Načítání formuláře...</p>
               <p className="text-sm text-gray-500">Počkejte prosím, formulář se právě připravuje</p>
+            </div>
+          )}
+          
+          {loadingError && (
+            <div className="text-center py-12">
+              <div className="text-red-500 mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+              </div>
+              <p className="text-xl font-inter text-gray-700 mb-4">Nepodařilo se načíst formulář</p>
+              <p className="text-sm text-gray-500 mb-6">Došlo k chybě při načítání registračního formuláře</p>
+              
+              <Button 
+                variant="primaryModra" 
+                onClick={() => window.location.reload()}
+                className="px-6"
+              >
+                Zkusit znovu
+              </Button>
             </div>
           )}
         </div>

@@ -9,27 +9,19 @@ export default function WaitListPage() {
   useEffect(() => {
     if (typeof window === 'undefined') return;
     
-    // Vytvoříme unikátní ID pro tuto návštěvu - kombinace timestamp a náhodného čísla
-    const pageVisitId = `waitlist_visit_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    
-    // Vytvoříme klíč pro localStorage
+    // Jednoduchý příznak v sessionStorage, který zabrání opakovanému obnovení
     const refreshKey = 'waitlist_page_refreshed';
     
-    // Načteme současnou hodnotu z localStorage
-    const currentValue = localStorage.getItem(refreshKey);
+    // Zkontrolujeme, zda jsme již jednou obnovili
+    const wasRefreshed = sessionStorage.getItem(refreshKey) === 'true';
     
-    if (!currentValue || currentValue !== pageVisitId) {
-      // Uložíme ID této návštěvy do localStorage
-      localStorage.setItem(refreshKey, pageVisitId);
+    if (!wasRefreshed) {
+      // Nastavíme příznak, že jsme obnovili stránku
+      sessionStorage.setItem(refreshKey, 'true');
       
-      // Nastavíme timeout na reload - dáme stránce čas se načíst
-      const reloadTimer = setTimeout(() => {
-        console.log('Automatické obnovení stránky pro správné načtení formuláře');
-        window.location.reload();
-      }, 500);
-      
-      // Cleanup funkce pro useEffect
-      return () => clearTimeout(reloadTimer);
+      // Jednorázové obnovení stránky po krátkém zpoždění
+      console.log('Provádím jednorázový refresh pro načtení formuláře');
+      setTimeout(() => window.location.reload(), 100);
     }
   }, []);
 
