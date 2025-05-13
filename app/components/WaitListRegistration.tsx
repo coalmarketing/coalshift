@@ -18,35 +18,62 @@ export default function WaitListRegistration() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isRegistered, setIsRegistered] = useState(false);
 
-  // Jednodušší a robustnější inicializace Onquanda
+  // Vylepšená inicializace Onquanda
   useEffect(() => {
+    let scriptLoaded = false;
+    let retryCount = 0;
+    const maxRetries = 5;
+    
     const initOnquanda = () => {
       const trigger = document.querySelector('.qndTrigger');
       if (window.qnd && trigger) {
         console.log("qnd.init() voláno");
-        window.qnd.init();
-      } else {
-        console.log("Formulář ještě není připraven, čekám...");
-        setTimeout(() => requestAnimationFrame(initOnquanda), 100);
+        try {
+          window.qnd.init();
+        } catch (e) {
+          console.error("Chyba při inicializaci Onquanda:", e);
+          if (retryCount < maxRetries) {
+            retryCount++;
+            setTimeout(() => requestAnimationFrame(initOnquanda), 200);
+          }
+        }
+      } else if (retryCount < maxRetries) {
+        console.log("Formulář ještě není připraven, čekám...", retryCount);
+        retryCount++;
+        setTimeout(() => requestAnimationFrame(initOnquanda), 200);
       }
     };
 
-    const scriptId = "onquanda-script";
-    if (!document.getElementById(scriptId)) {
-      console.log("Vkládám Onquanda skript");
-      const script = document.createElement('script');
-      script.id = scriptId;
-      script.src = 'https://webform.onquanda.com/webform/assets/js/qndInitWebform.js';
-      script.async = true;
-      script.onload = () => {
-        console.log("Onquanda skript načten");
-        // Počkáme malou chvíli než DOM domaluje
-        setTimeout(() => requestAnimationFrame(initOnquanda), 100);
-      };
-      document.body.appendChild(script);
+    const loadScript = () => {
+      const scriptId = "onquanda-script";
+      if (!document.getElementById(scriptId)) {
+        console.log("Vkládám Onquanda skript");
+        const script = document.createElement('script');
+        script.id = scriptId;
+        script.src = 'https://webform.onquanda.com/webform/assets/js/qndInitWebform.js';
+        script.async = true;
+        script.onload = () => {
+          console.log("Onquanda skript načten");
+          scriptLoaded = true;
+          // Spustit inicializaci ihned, ale počkat až doběhne první render cyklu
+          setTimeout(() => initOnquanda(), 50);
+        };
+        document.body.appendChild(script);
+      } else if (!scriptLoaded) {
+        scriptLoaded = true;
+        setTimeout(() => initOnquanda(), 50);
+      }
+    };
+
+    // Okamžitě začít načítat skript
+    loadScript();
+
+    // Pokud se na stránku přišlo přímým odkazem, zajistit inicializaci po kompletním načtení stránky
+    if (document.readyState === 'complete') {
+      loadScript();
     } else {
-      console.log("Skript už byl načten, inituji znovu");
-      setTimeout(() => requestAnimationFrame(initOnquanda), 100);
+      window.addEventListener('load', loadScript);
+      return () => window.removeEventListener('load', loadScript);
     }
   }, []);
 
