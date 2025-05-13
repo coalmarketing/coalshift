@@ -5,23 +5,20 @@ import Footer from "../components/Footer";
 import WaitListRegistration from "../components/WaitListRegistration";
 import { useEffect } from 'react';
 
+// Jednoduchá funkce, která provede refresh stránky pouze jednou
+// pomocí proměnné v URL
 export default function WaitListPage() {
   useEffect(() => {
+    // Kontrola, zda jsme v prohlížeči
     if (typeof window === 'undefined') return;
     
-    // Jednoduchý příznak v sessionStorage, který zabrání opakovanému obnovení
-    const refreshKey = 'waitlist_page_refreshed';
+    // Zjistíme, zda URL obsahuje parametr refreshed=true
+    const hasRefreshed = window.location.href.includes('refreshed=true');
     
-    // Zkontrolujeme, zda jsme již jednou obnovili
-    const wasRefreshed = sessionStorage.getItem(refreshKey) === 'true';
-    
-    if (!wasRefreshed) {
-      // Nastavíme příznak, že jsme obnovili stránku
-      sessionStorage.setItem(refreshKey, 'true');
-      
-      // Jednorázové obnovení stránky po krátkém zpoždění
-      console.log('Provádím jednorázový refresh pro načtení formuláře');
-      setTimeout(() => window.location.reload(), 100);
+    // Pokud ne, přidáme parametr a provedeme refresh
+    if (!hasRefreshed) {
+      const separator = window.location.href.includes('?') ? '&' : '?';
+      window.location.href = window.location.href + separator + 'refreshed=true';
     }
   }, []);
 
