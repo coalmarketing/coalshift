@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Button from './Button';
 import Image from 'next/image';
 
@@ -17,64 +17,151 @@ export default function WaitListRegistration() {
   const [company, setCompany] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isRegistered, setIsRegistered] = useState(false);
+  const formContainerRef = useRef<HTMLDivElement>(null);
+  const scriptLoadedRef = useRef(false);
+  const scriptErrorRef = useRef(false);
 
-  // Vylepšená inicializace Onquanda
+  // Oddělená inicializace Onquanda skriptu a formuláře
   useEffect(() => {
-    let scriptLoaded = false;
-    let retryCount = 0;
-    const maxRetries = 5;
+    if (typeof window === 'undefined') return;
     
-    const initOnquanda = () => {
-      const trigger = document.querySelector('.qndTrigger');
-      if (window.qnd && trigger) {
-        console.log("qnd.init() voláno");
+    // Funkce pro inicializaci formuláře
+    const initForm = () => {
+      console.log("Inicializace formuláře...");
+      if (window.qnd && formContainerRef.current) {
         try {
-          window.qnd.init();
+          // Resetujem container před inicializací
+          const container = formContainerRef.current;
+          
+          // Vytvoříme nový trigger element
+          const trigger = document.createElement('div');
+          trigger.className = 'qndTrigger';
+          trigger.setAttribute('data-key', '2128f532d89ef03752d1b45d0eac06de');
+          trigger.setAttribute('data-form-html-class', '');
+          trigger.setAttribute('data-static', 'true');
+          trigger.style.display = 'block';
+          
+          // Vyčistíme container a přidáme nový trigger
+          container.innerHTML = '';
+          container.appendChild(trigger);
+          
+          // Inicializujeme formulář
+          console.log("Volám qnd.init()");
+          setTimeout(() => {
+            if (window.qnd) window.qnd.init();
+          }, 100);
         } catch (e) {
-          console.error("Chyba při inicializaci Onquanda:", e);
-          if (retryCount < maxRetries) {
-            retryCount++;
-            setTimeout(() => requestAnimationFrame(initOnquanda), 200);
+          console.log("Chyba při inicializaci formuláře", e);
+          
+          // Záložní řešení - zobrazit fallback obsah
+          if (formContainerRef.current && scriptErrorRef.current) {
+            formContainerRef.current.innerHTML = `
+              <div class="text-center py-8">
+                <p class="font-inter text-gray-600 mb-4">Pro registraci do čekací listiny nás prosím kontaktujte na:</p>
+                <a href="mailto:info@coalshift.cz" class="text-modra font-bold">info@coalshift.cz</a>
+              </div>
+            `;
           }
         }
-      } else if (retryCount < maxRetries) {
-        console.log("Formulář ještě není připraven, čekám...", retryCount);
-        retryCount++;
-        setTimeout(() => requestAnimationFrame(initOnquanda), 200);
+      } else if (!scriptErrorRef.current) {
+        console.log("qnd nebo container není připraven, zkusím znovu za 200ms");
+        setTimeout(initForm, 200);
       }
     };
 
+    // Funkce pro načtení Onquanda skriptu
     const loadScript = () => {
+      if (scriptLoadedRef.current || scriptErrorRef.current) return;
+      
       const scriptId = "onquanda-script";
-      if (!document.getElementById(scriptId)) {
-        console.log("Vkládám Onquanda skript");
-        const script = document.createElement('script');
-        script.id = scriptId;
-        script.src = 'https://webform.onquanda.com/webform/assets/js/qndInitWebform.js';
-        script.async = true;
-        script.onload = () => {
-          console.log("Onquanda skript načten");
-          scriptLoaded = true;
-          // Spustit inicializaci ihned, ale počkat až doběhne první render cyklu
-          setTimeout(() => initOnquanda(), 50);
-        };
-        document.body.appendChild(script);
-      } else if (!scriptLoaded) {
-        scriptLoaded = true;
-        setTimeout(() => initOnquanda(), 50);
+      const existingScript = document.getElementById(scriptId);
+      
+      if (!existingScript) {
+        console.log("Načítám Onquanda skript");
+        
+        try {
+          const script = document.createElement('script');
+          script.id = scriptId;
+          script.src = 'https://webform.onquanda.com/webform/assets/js/qndInitWebform.js';
+          script.async = true;
+          
+          script.onload = () => {
+            console.log("Onquanda skript načten úspěšně");
+            scriptLoadedRef.current = true;
+            // Po načtení skriptu inicializujeme formulář
+            setTimeout(initForm, 100);
+          };
+          
+          script.onerror = () => {
+            console.log("Nepodařilo se načíst Onquanda skript");
+            scriptErrorRef.current = true;
+            
+            // Záložní řešení - zobrazit fallback obsah
+            if (formContainerRef.current) {
+              formContainerRef.current.innerHTML = `
+                <div class="text-center py-8">
+                  <p class="font-inter text-gray-600 mb-4">Pro registraci do čekací listiny nás prosím kontaktujte na:</p>
+                  <a href="mailto:info@coalshift.cz" class="text-modra font-bold">info@coalshift.cz</a>
+                </div>
+              `;
+            }
+          };
+          
+          // Zkusíme alternativní přístup pro načtení
+          document.head.appendChild(script);
+        } catch (err) {
+          console.log("Chyba při přidávání skriptu do DOM", err);
+          scriptErrorRef.current = true;
+          
+          // Záložní řešení - zobrazit fallback obsah
+          if (formContainerRef.current) {
+            formContainerRef.current.innerHTML = `
+              <div class="text-center py-8">
+                <p class="font-inter text-gray-600 mb-4">Pro registraci do čekací listiny nás prosím kontaktujte na:</p>
+                <a href="mailto:info@coalshift.cz" class="text-modra font-bold">info@coalshift.cz</a>
+              </div>
+            `;
+          }
+        }
+      } else {
+        console.log("Onquanda skript již existuje");
+        scriptLoadedRef.current = true;
+        // Pokud skript již existuje, inicializujeme formulář
+        setTimeout(initForm, 100);
       }
     };
 
-    // Okamžitě začít načítat skript
-    loadScript();
-
-    // Pokud se na stránku přišlo přímým odkazem, zajistit inicializaci po kompletním načtení stránky
-    if (document.readyState === 'complete') {
+    // Pokusíme se načíst skript s malým zpožděním po dokončení renderování komponenty
+    const timer = setTimeout(() => {
       loadScript();
-    } else {
-      window.addEventListener('load', loadScript);
-      return () => window.removeEventListener('load', loadScript);
-    }
+    }, 300);
+
+    // Záložní mechanismus - pokud se skript nepodaří načíst v rozumném čase
+    const fallbackTimer = setTimeout(() => {
+      if (!scriptLoadedRef.current && !scriptErrorRef.current) {
+        console.log("Timeout při načítání skriptu");
+        scriptErrorRef.current = true;
+        
+        // Záložní řešení - zobrazit fallback obsah
+        if (formContainerRef.current) {
+          formContainerRef.current.innerHTML = `
+            <div class="text-center py-8">
+              <p class="font-inter text-gray-600 mb-4">Pro registraci do čekací listiny nás prosím kontaktujte na:</p>
+              <a href="mailto:info@coalshift.cz" class="text-modra font-bold">info@coalshift.cz</a>
+            </div>
+          `;
+        }
+      }
+    }, 5000);
+
+    // Cleanup
+    return () => {
+      clearTimeout(timer);
+      clearTimeout(fallbackTimer);
+      if (formContainerRef.current) {
+        formContainerRef.current.innerHTML = '';
+      }
+    };
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -188,9 +275,9 @@ export default function WaitListRegistration() {
       </div>
 
       {/* Kontejner pro Onquanda formulář */}
-      <div className="bg-white rounded-xl p-0 border border-gray-200 mb-12 flex flex-col justify-center items-center">
-        <div style={{ display: "block" }} className="qndTrigger mx-auto" data-key="2128f532d89ef03752d1b45d0eac06de" data-form-html-class="" data-static="true">
-          {process.env.NODE_ENV === 'development' && <div className="text-xs text-gray-400">(trigger mount)</div>}
+      <div className="bg-white rounded-xl p-6 border border-gray-200 mb-12 flex flex-col justify-center items-center min-h-[300px]">
+        <div ref={formContainerRef} className="w-full">
+          {process.env.NODE_ENV === 'development' && <div className="text-xs text-gray-400 text-center">Načítání formuláře...</div>}
         </div>
       </div>
     </section>
