@@ -6,23 +6,19 @@ import WaitListRegistration from "../components/WaitListRegistration";
 import { useEffect } from 'react';
 
 // Jednoduchá funkce, která provede refresh stránky pouze jednou
+// pomocí proměnné v URL
 export default function WaitListPage() {
   useEffect(() => {
     // Kontrola, zda jsme v prohlížeči
     if (typeof window === 'undefined') return;
     
-    // Klíč pro sessionStorage
-    const refreshKey = 'waitlist_refreshed';
+    // Zjistíme, zda URL obsahuje parametr refreshed=true
+    const hasRefreshed = window.location.href.includes('refreshed=true');
     
-    // Zkontrolujeme, zda už došlo k obnovení
-    const wasRefreshed = sessionStorage.getItem(refreshKey);
-    
-    if (!wasRefreshed) {
-      // Nastavíme příznak, že došlo k obnovení
-      sessionStorage.setItem(refreshKey, 'true');
-      
-      // Provedeme jednoduché obnovení stránky, bez změny URL
-      window.location.reload();
+    // Pokud ne, přidáme parametr a provedeme refresh
+    if (!hasRefreshed) {
+      const separator = window.location.href.includes('?') ? '&' : '?';
+      window.location.href = window.location.href + separator + 'refreshed=true';
     }
   }, []);
 
