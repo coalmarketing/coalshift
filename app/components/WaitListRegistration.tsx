@@ -19,12 +19,21 @@ export default function WaitListRegistration() {
   const [isRegistered, setIsRegistered] = useState(false);
   const formContainerRef = useRef<HTMLDivElement>(null);
   const scriptLoadedRef = useRef(false);
-  const scriptErrorRef = useRef(false);
+
+  // Kompletně přepracovaná inicializace Onquanda
+  useEffect(() => {
+    // Opouštíme komponentu, vyčistíme HTML formuláře
+    return () => {
+      if (formContainerRef.current) {
+        formContainerRef.current.innerHTML = '';
+      }
+    };
+  }, []);
 
   // Oddělená inicializace Onquanda skriptu a formuláře
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-    
+    if (typeof window === 'undefined' || scriptLoadedRef.current) return;
+
     // Funkce pro inicializaci formuláře
     const initForm = () => {
       console.log("Inicializace formuláře...");
@@ -51,19 +60,9 @@ export default function WaitListRegistration() {
             if (window.qnd) window.qnd.init();
           }, 100);
         } catch (e) {
-          console.log("Chyba při inicializaci formuláře", e);
-          
-          // Záložní řešení - zobrazit fallback obsah
-          if (formContainerRef.current && scriptErrorRef.current) {
-            formContainerRef.current.innerHTML = `
-              <div class="text-center py-8">
-                <p class="font-inter text-gray-600 mb-4">Pro registraci do čekací listiny nás prosím kontaktujte na:</p>
-                <a href="mailto:info@coalshift.cz" class="text-modra font-bold">info@coalshift.cz</a>
-              </div>
-            `;
-          }
+          console.error("Chyba při inicializaci formuláře:", e);
         }
-      } else if (!scriptErrorRef.current) {
+      } else {
         console.log("qnd nebo container není připraven, zkusím znovu za 200ms");
         setTimeout(initForm, 200);
       }
@@ -71,58 +70,30 @@ export default function WaitListRegistration() {
 
     // Funkce pro načtení Onquanda skriptu
     const loadScript = () => {
-      if (scriptLoadedRef.current || scriptErrorRef.current) return;
+      if (scriptLoadedRef.current) return;
       
       const scriptId = "onquanda-script";
       const existingScript = document.getElementById(scriptId);
       
       if (!existingScript) {
         console.log("Načítám Onquanda skript");
+        const script = document.createElement('script');
+        script.id = scriptId;
+        script.src = 'https://webform.onquanda.com/webform/assets/js/qndInitWebform.js';
+        script.async = true;
         
-        try {
-          const script = document.createElement('script');
-          script.id = scriptId;
-          script.src = 'https://webform.onquanda.com/webform/assets/js/qndInitWebform.js';
-          script.async = true;
-          
-          script.onload = () => {
-            console.log("Onquanda skript načten úspěšně");
-            scriptLoadedRef.current = true;
-            // Po načtení skriptu inicializujeme formulář
-            setTimeout(initForm, 100);
-          };
-          
-          script.onerror = () => {
-            console.log("Nepodařilo se načíst Onquanda skript");
-            scriptErrorRef.current = true;
-            
-            // Záložní řešení - zobrazit fallback obsah
-            if (formContainerRef.current) {
-              formContainerRef.current.innerHTML = `
-                <div class="text-center py-8">
-                  <p class="font-inter text-gray-600 mb-4">Pro registraci do čekací listiny nás prosím kontaktujte na:</p>
-                  <a href="mailto:info@coalshift.cz" class="text-modra font-bold">info@coalshift.cz</a>
-                </div>
-              `;
-            }
-          };
-          
-          // Zkusíme alternativní přístup pro načtení
-          document.head.appendChild(script);
-        } catch (err) {
-          console.log("Chyba při přidávání skriptu do DOM", err);
-          scriptErrorRef.current = true;
-          
-          // Záložní řešení - zobrazit fallback obsah
-          if (formContainerRef.current) {
-            formContainerRef.current.innerHTML = `
-              <div class="text-center py-8">
-                <p class="font-inter text-gray-600 mb-4">Pro registraci do čekací listiny nás prosím kontaktujte na:</p>
-                <a href="mailto:info@coalshift.cz" class="text-modra font-bold">info@coalshift.cz</a>
-              </div>
-            `;
-          }
-        }
+        script.onload = () => {
+          console.log("Onquanda skript načten úspěšně");
+          scriptLoadedRef.current = true;
+          // Po načtení skriptu inicializujeme formulář
+          setTimeout(initForm, 100);
+        };
+        
+        script.onerror = (e) => {
+          console.error("Chyba při načítání Onquanda skriptu:", e);
+        };
+        
+        document.body.appendChild(script);
       } else {
         console.log("Onquanda skript již existuje");
         scriptLoadedRef.current = true;
@@ -131,37 +102,15 @@ export default function WaitListRegistration() {
       }
     };
 
-    // Pokusíme se načíst skript s malým zpožděním po dokončení renderování komponenty
-    const timer = setTimeout(() => {
+    // Načteme skript po dokončení renderování komponenty
+    if (document.readyState === 'complete') {
       loadScript();
-    }, 300);
-
-    // Záložní mechanismus - pokud se skript nepodaří načíst v rozumném čase
-    const fallbackTimer = setTimeout(() => {
-      if (!scriptLoadedRef.current && !scriptErrorRef.current) {
-        console.log("Timeout při načítání skriptu");
-        scriptErrorRef.current = true;
-        
-        // Záložní řešení - zobrazit fallback obsah
-        if (formContainerRef.current) {
-          formContainerRef.current.innerHTML = `
-            <div class="text-center py-8">
-              <p class="font-inter text-gray-600 mb-4">Pro registraci do čekací listiny nás prosím kontaktujte na:</p>
-              <a href="mailto:info@coalshift.cz" class="text-modra font-bold">info@coalshift.cz</a>
-            </div>
-          `;
-        }
-      }
-    }, 5000);
-
-    // Cleanup
-    return () => {
-      clearTimeout(timer);
-      clearTimeout(fallbackTimer);
-      if (formContainerRef.current) {
-        formContainerRef.current.innerHTML = '';
-      }
-    };
+    } else {
+      window.addEventListener('load', loadScript);
+      // Záložní řešení - pokusíme se načíst po krátké prodlevě i když 'load' událost ještě nenastala
+      setTimeout(loadScript, 500);
+      return () => window.removeEventListener('load', loadScript);
+    }
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
