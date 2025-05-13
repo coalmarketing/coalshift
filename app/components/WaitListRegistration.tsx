@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Button from './Button';
 import Image from 'next/image';
 
@@ -17,56 +17,77 @@ export default function WaitListRegistration() {
   const [company, setCompany] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isRegistered, setIsRegistered] = useState(false);
+  const [formLoaded, setFormLoaded] = useState(false);
+  const formInitialized = useRef(false);
+  const formContainer = useRef<HTMLDivElement>(null);
 
-  // Jednodušší a robustnější inicializace Onquanda
+  // Manuální vložení formuláře Onquanda
   useEffect(() => {
-    // Kontrola, zda jsme v prohlížeči
-    if (typeof window === 'undefined') return;
-
-    const scriptId = "onquanda-script";
-
-    // Funkce pro inicializaci Onquanda po načtení DOM
-    const initOnquanda = () => {
-      const trigger = document.querySelector('.qndTrigger');
-      if (window.qnd && trigger) {
-        console.log("qnd.init() voláno");
-        window.qnd.init();
-      } else {
-        console.log("Formulář ještě není připraven, čekám...");
-        setTimeout(initOnquanda, 200);
+    if (typeof window === 'undefined' || formInitialized.current) return;
+    
+    formInitialized.current = true;
+    
+    const initForm = () => {
+      if (!formContainer.current) return;
+      
+      // Vyčistit kontejner před vložením
+      while (formContainer.current.firstChild) {
+        formContainer.current.removeChild(formContainer.current.firstChild);
       }
-    };
+      
+      // Vytvořit nový trigger element
+      const triggerDiv = document.createElement('div');
+      triggerDiv.className = "qndTrigger mx-auto";
+      triggerDiv.dataset.key = "2128f532d89ef03752d1b45d0eac06de";
+      triggerDiv.dataset.formHtmlClass = "";
+      triggerDiv.dataset.static = "true";
+      triggerDiv.style.display = "block";
+      
+      // Vložit trigger do kontejneru
+      formContainer.current.appendChild(triggerDiv);
+      
+      // Načíst a inicializovat Onquanda skript
+      const loadScript = () => {
+        console.log("Načítám Onquanda skript");
+        const scriptId = "onquanda-script";
 
-    // Funkce pro načtení Onquanda skriptu
-    const loadScript = () => {
-      if (!document.getElementById(scriptId)) {
-        console.log("Vkládám Onquanda skript");
+        if (document.getElementById(scriptId)) {
+          document.getElementById(scriptId)?.remove();
+        }
+          
         const script = document.createElement('script');
         script.id = scriptId;
         script.src = 'https://webform.onquanda.com/webform/assets/js/qndInitWebform.js';
         script.async = true;
         script.onload = () => {
-          console.log("Onquanda skript načten");
-          // Delší doba čekání pro jistotu
-          setTimeout(initOnquanda, 300);
+          console.log("Onquanda skript načten, inicializuji formulář");
+          if (window.qnd) {
+            window.qnd.init();
+            setFormLoaded(true);
+            console.log("Formulář inicializován");
+          } else {
+            console.log("qnd objekt není dostupný po načtení skriptu");
+          }
         };
+        script.onerror = (e) => {
+          console.error("Chyba při načítání Onquanda skriptu:", e);
+        };
+        
         document.body.appendChild(script);
+      };
+      
+      // Zajistit, že DOM je plně načtený
+      if (document.readyState === 'complete') {
+        loadScript();
       } else {
-        console.log("Skript už byl načten, inituji znovu");
-        setTimeout(initOnquanda, 300);
+        window.addEventListener('load', loadScript);
+        return () => window.removeEventListener('load', loadScript);
       }
     };
-
-    // Zajistíme, že DOM je plně načten před vložením skriptu
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', loadScript);
-    } else {
-      loadScript();
-    }
-
-    return () => {
-      document.removeEventListener('DOMContentLoaded', loadScript);
-    };
+    
+    // Inicializovat s malou prodlevou pro zajištění načtení DOM
+    setTimeout(initForm, 300);
+    
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -181,8 +202,13 @@ export default function WaitListRegistration() {
 
       {/* Kontejner pro Onquanda formulář */}
       <div className="bg-white rounded-xl p-0 border border-gray-200 mb-12 flex flex-col justify-center items-center">
-        <div style={{ display: "block" }} className="qndTrigger mx-auto" data-key="2128f532d89ef03752d1b45d0eac06de" data-form-html-class="" data-static="true">
-          {process.env.NODE_ENV === 'development' && <div className="text-xs text-gray-400">(trigger mount)</div>}
+        <div ref={formContainer} className="w-full p-8">
+          {!formLoaded && (
+            <div className="text-center p-6">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-modra mx-auto mb-4"></div>
+              <p className="text-gray-600">Načítání formuláře...</p>
+            </div>
+          )}
         </div>
       </div>
     </section>
