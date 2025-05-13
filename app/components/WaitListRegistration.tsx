@@ -201,12 +201,13 @@ export default function WaitListRegistration() {
       </div>
 
       {/* Kontejner pro Onquanda formulář */}
-      <div className="bg-white rounded-xl p-0 border border-gray-200 mb-12 flex flex-col justify-center items-center">
-        <div ref={formContainer} className="w-full p-8">
+      <div className="bg-white rounded-xl p-6 border border-gray-200 mb-12 flex flex-col justify-center items-center">
+        <div ref={formContainer} className="w-full">
           {!formLoaded && (
-            <div className="text-center p-6">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-modra mx-auto mb-4"></div>
-              <p className="text-gray-600">Načítání formuláře...</p>
+            <div className="text-center py-12">
+              <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-t-2 border-modra mx-auto mb-6"></div>
+              <p className="text-xl font-inter text-gray-700 mb-2">Načítání formuláře...</p>
+              <p className="text-sm text-gray-500">Počkejte prosím, formulář se právě připravuje</p>
             </div>
           )}
         </div>
