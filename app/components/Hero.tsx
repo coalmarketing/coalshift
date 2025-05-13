@@ -22,7 +22,7 @@ export default function Hero() {
                   Spouštíme 1. července 2025
                 </h3>
                 <p className="text-sm text-gray-200 font-inter text-center sm:text-left">
-                  Zaregistrujte se na waiting list a získejte exkluzivní přístup mezi prvními!
+                  Zaregistruj se na waiting list a získej exkluzivní přístup mezi prvními!
                 </p>
               </div>
             </div>
@@ -31,7 +31,7 @@ export default function Hero() {
               href="/wait-list"
               className="whitespace-nowrap w-full sm:w-auto mt-2 sm:mt-0 sm:ml-auto text-center"
             >
-              Požádat o přístup
+              Požádej o přístup
             </Button>
           </div>
           <div className="flex items-center justify-center mb-8 md:mb-20 mt-[-4rem]">
@@ -51,8 +51,8 @@ export default function Hero() {
             Ušetřete až 50 % času stráveného plánováním směn. Automatizujte, zrychlete, digitalizujte.
           </h2>
           <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center items-center">
-            <Button href="https://app.coalshift.cz/" target="_blank" variant="primaryBila">
-              Vyzkoušet zdarma!
+            <Button href="/wait-list" variant="primaryBila">
+              Požádej o přístup!
             </Button>
             <Link 
               href="#benefits" 

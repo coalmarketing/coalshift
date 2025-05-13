@@ -11,7 +11,7 @@ interface FAQItem {
 const faqItems: FAQItem[] = [
   {
     question: 'Jak mi coalshift pomůže s plánováním směn?',
-    answer: 'coalshift vám umožní efektivně plánovat směny, automaticky kontrolovat konflikty a spravovat dostupnost zaměstnanců. Systém také nabízí přehledné statistiky a reporty.'
+    answer: 'Coalshift ti umožní efektivně plánovat směny, automaticky kontrolovat konflikty a spravovat dostupnost zaměstnanců. Systém také nabízí přehledné statistiky a reporty.'
   },
   {
     question: 'Je coalshift vhodný i pro malé firmy?',
@@ -27,11 +27,11 @@ const faqItems: FAQItem[] = [
   },
   {
     question: 'Jak probíhá implementace a je složitá?',
-    answer: 'Implementace je jednoduchá a intuitivní. Náš tým vám poskytne kompletní podporu při nastavení systému a zaškolení zaměstnanců.'
+    answer: 'Implementace je jednoduchá a intuitivní. Náš tým ti poskytne kompletní podporu při nastavení systému a zaškolení zaměstnanců.'
   },
   {
     question: 'Jak probíhá integrace s naším systémem?',
-    answer: 'coalshift se snadno napojuje na HELIOS, SAP, Alveno a další systémy.'
+    answer: 'Coalshift se snadno napojuje na HELIOS, SAP, Alveno a další systémy.'
   }
 ];
 

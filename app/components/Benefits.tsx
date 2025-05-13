@@ -59,7 +59,7 @@ export default function Benefits() {
 
         <div className="flex justify-start mt-8">
           <Button href="/wait-list" variant="primaryModra">
-            Požádat o přístup
+            Požádej o přístup
           </Button>
         </div>
       </div>

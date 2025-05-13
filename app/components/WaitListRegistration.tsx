@@ -43,21 +43,21 @@ export default function WaitListRegistration() {
             Jste na seznamu čekatelů
           </h1>
           <p className="text-xl font-inter text-gray-600 mb-4">
-            Jsme rádi, že jste s námi!
+            Jsme rádi, že jsi s námi!
           </p>
           <p className="font-inter text-gray-600">
-            Coalshift spouštíme 1. 7. 2025. Jakmile bude vaše přihlášení aktivní, dáme vám vědět e-mailem i notifikací.
+            Coalshift spouštíme 1. 7. 2025. Jakmile bude tvé přihlášení aktivní, dáme ti vědět e-mailem i notifikací.
           </p>
         </div>
 
         {/* Bonus pro čekající */}
         <div className="bg-white rounded-xl p-8 mb-12 border border-gray-200">
-          <h2 className="text-2xl font-lekton font-bold text-modra mb-6">🧠 Učte se dřív než ostatní!</h2>
+          <h2 className="text-2xl font-lekton font-bold text-modra mb-6">🧠 Uč se dřív než ostatní!</h2>
           <p className="font-inter text-gray-600 mb-6">
-            Získejte přístup k tutoriálům a prvním tipům, jak co nejlépe nastavit plánování směn s Coalshiftem – už teď.
+            Získej přístup k tutoriálům a prvním tipům, jak co nejlépe nastavit plánování směn s Coalshiftem – už teď.
           </p>
           <Button variant="primaryModra" className="w-full">
-            Prozkoumat ukázky už teď
+            Prozkoumej ukázky už teď
           </Button>
         </div>
 
@@ -67,12 +67,12 @@ export default function WaitListRegistration() {
           <div className="grid gap-6">
             <div>
               <h3 className="font-lekton font-bold text-lg mb-2">E-mail s potvrzením</h3>
-              <p className="font-inter text-gray-600">Obdržíte potvrzení registrace na váš e-mail</p>
+              <p className="font-inter text-gray-600">Obdržíš potvrzení registrace na tvůj e-mail</p>
             </div>
 
             <div>
               <h3 className="font-lekton font-bold text-lg mb-2">Budoucí notifikace</h3>
-              <p className="font-inter text-gray-600">Budeme vás informovat o stavu přístupu</p>
+              <p className="font-inter text-gray-600">Budeme tě informovat o stavu přístupu</p>
             </div>
 
             <div>
@@ -93,7 +93,7 @@ export default function WaitListRegistration() {
           Buďte mezi prvními
         </h1>
         <p className="text-xl font-inter text-gray-600 mb-8">
-          Připravujeme revoluční systém pro plánování směn. Zaregistrujte se nyní a získejte:
+          Připravujeme revoluční systém pro plánování směn. Zaregistruj se nyní a získej:
         </p>
       </div>
 
@@ -102,7 +102,7 @@ export default function WaitListRegistration() {
         <div className="bg-white rounded-xl p-6 border border-gray-200">
           <h3 className="font-lekton font-bold text-lg mb-2">Přednostní přístup</h3>
           <p className="font-inter text-gray-600">
-            Získejte přístup k aplikaci jako první a začněte optimalizovat plánování směn dříve než ostatní.
+            Získej přístup k aplikaci jako první a začni optimalizovat plánování směn dříve než ostatní.
           </p>
         </div>
 
@@ -116,7 +116,7 @@ export default function WaitListRegistration() {
         <div className="bg-white rounded-xl p-6 border border-gray-200">
           <h3 className="font-lekton font-bold text-lg mb-2">Early Access Program</h3>
           <p className="font-inter text-gray-600">
-            Možnost ovlivnit vývoj produktu a získat funkce šité na míru vašim potřebám.
+            Možnost ovlivnit vývoj produktu a získat funkce šité na míru tvým potřebám.
           </p>
         </div>
 

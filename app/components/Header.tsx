@@ -130,7 +130,7 @@ export default function Header() {
               variant="primaryModra"
               href="/wait-list"
             >
-              Vyzkoušet zdarma!
+              Požádej o přístup!
             </Button>
           </div>
         </div>
@@ -204,7 +204,7 @@ export default function Header() {
                 href="/wait-list"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Vyzkoušet zdarma!
+                Požádej o přístup!
               </Button>
             </div>
           </nav>

@@ -11,7 +11,7 @@ export default function ContactSection() {
       <div className="flex flex-col lg:flex-row justify-between items-center lg:items-start gap-8 lg:gap-4">
         <div className="flex-1 w-full lg:w-auto text-center lg:text-left">
           <h2 className="text-2xl sm:text-3xl font-lekton font-bold mb-8">
-            Máte další dotazy? Kontaktujte nás!
+            Máš další dotazy? Kontaktuj nás!
           </h2>
           <div className="space-y-4">
             <div className="flex items-center gap-3 justify-center lg:justify-start">
@@ -37,7 +37,7 @@ export default function ContactSection() {
           
           <a href="mailto:pavel.hajek@coalsoft.cz">
             <Button variant="primaryModra" className="mt-6">
-              Kontaktujte nás!
+              Kontaktuj nás!
             </Button>
           </a>
         </div>
