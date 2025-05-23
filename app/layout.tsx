@@ -61,9 +61,11 @@ export default function RootLayout({
         </Script>
         <Script src="//webform.onquanda.com/static/js/webform/embedded.min.js" strategy="beforeInteractive" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/logo/coalshift_logo_favicon-color.svg" type="image/svg+xml" />
-        <link rel="apple-touch-icon" href="/logo/coalshift_logo_favicon-color.svg" type="image/svg+xml" />
-        <link rel="manifest" href="/manifest.json" />
+        <link rel="icon" href="/favicon/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png" />
+        <link rel="apple-touch-icon" href="/favicon/apple-touch-icon.png" />
+        <link rel="manifest" href="/favicon/site.webmanifest" />
         <meta name="theme-color" content="#ffffff" />
         <meta name="format-detection" content="telephone=no" />
       </head>
