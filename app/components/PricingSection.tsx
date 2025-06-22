@@ -13,7 +13,7 @@ const pricingPlans = [
       'Přiřazování zaměstnanců',
       'Přehled směn',
       'Databáze zaměstnanců',
-      'Max. 10 zaměstnanců'
+      'Max. 10 zaměstnanců, poté 50,- Kč / měsíc za každého dalšího'
     ]
   },
   {
