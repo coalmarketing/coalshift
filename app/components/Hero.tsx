@@ -19,19 +19,19 @@ export default function Hero() {
               </div>
               <div>
                 <h3 className="text-lg font-lekton font-bold text-white text-center sm:text-left">
-                  Spouštíme 1. července 2025
+                  Aplikace je dostupná nyní
                 </h3>
                 <p className="text-sm text-gray-200 font-inter text-center sm:text-left">
-                  Zaregistruj se na waiting list a získej exkluzivní přístup mezi prvními!
+                  Začni používat revoluční systém pro plánování směn!
                 </p>
               </div>
             </div>
             <Button 
               variant="primaryBila"
-              href="/wait-list"
+              href="/registrace"
               className="whitespace-nowrap w-full sm:w-auto mt-2 sm:mt-0 sm:ml-auto text-center"
             >
-              Požádej o přístup
+              CHCI SI VYZKOUŠET APLIKACI
             </Button>
           </div>
           <div className="flex items-center justify-center mb-8 md:mb-20 mt-[-4rem]">
@@ -51,8 +51,8 @@ export default function Hero() {
             Ušetřete až 50 % času stráveného plánováním směn. Automatizujte, zrychlete, digitalizujte.
           </h2>
           <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center items-center">
-            <Button href="/wait-list" variant="primaryBila">
-              Požádej o přístup!
+            <Button href="/registrace" variant="primaryBila">
+              CHCI SI VYZKOUŠET APLIKACI
             </Button>
             <Link 
               href="#benefits" 

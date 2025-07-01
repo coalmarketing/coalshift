@@ -38,16 +38,16 @@ export default function Button({
   if ('href' in props) {
     const { href, target, ...restProps } = props as ButtonAsLinkProps;
     
-    // Pro /wait-list používáme standardní anchor tag místo Next.js Link
-    if (href === '/wait-list') {
+    // Pro /registrace používáme standardní anchor tag místo Next.js Link
+    if (href === '/registrace') {
       return (
         <a 
-          href="/wait-list"
+          href="/registrace"
           className={buttonStyles}
           target={target}
           onClick={(e) => {
             e.preventDefault();
-            router.push('/wait-list');
+            router.push('/registrace');
           }}
           {...restProps}
         >

@@ -12,7 +12,7 @@ export default function Benefits() {
         <h2 className="text-modra text-3xl sm:text-4xl md:text-5xl font-lekton font-bold mb-6">
           Výhody aplikace
         </h2>
-        <p className="text-cerna font-inter text-sm">Plánování směn nikdy nebylo jednodušší! Coalshift je <strong>inteligentní systém pro plánování směn</strong>, který automatizuje procesy, zohledňuje <strong>preference zaměstnanců</strong>, dodržuje legislativu a <strong>umožňuje rychlé přesuny směn i přehledné reporty</strong>.</p>
+        <p className="text-cerna font-inter text-sm">Plánování směn nikdy nebylo jednodušší! Coalshift je <strong>inteligentní systém pro plánování směn</strong>, který automatizuje procesy, zohledňuje <strong>preference zaměstnanců</strong>, dodržuje legislativu a <strong>umožňuje rychlé přesuny směn i přehledné reporty</strong>. Začni používat aplikaci hned teď!</p>
         </div>
 
         <div className="flex items-start gap-4">
@@ -58,8 +58,8 @@ export default function Benefits() {
         </div>
 
         <div className="flex justify-start mt-8">
-          <Button href="/wait-list" variant="primaryModra">
-            Požádej o přístup
+          <Button href="/registrace" variant="primaryModra">
+            CHCI SI VYZKOUŠET APLIKACI
           </Button>
         </div>
       </div>

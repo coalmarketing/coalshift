@@ -128,9 +128,9 @@ export default function Header() {
             </nav>
             <Button 
               variant="primaryModra"
-              href="/wait-list"
+              href="/registrace"
             >
-              Požádej o přístup!
+              CHCI SI VYZKOUŠET APLIKACI
             </Button>
           </div>
         </div>
@@ -201,10 +201,10 @@ export default function Header() {
               </Link>
               <Button 
                 variant="primaryModra"
-                href="/wait-list"
+                href="/registrace"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Požádej o přístup!
+                CHCI SI VYZKOUŠET APLIKACI
               </Button>
             </div>
           </nav>

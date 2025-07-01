@@ -68,7 +68,7 @@ export default function PricingSection() {
         Ceník
       </h2>
       <p className="text-cerna font-inter text-sm mt-4 mb-8">
-        Coalshift nabízí flexibilní cenové plány přizpůsobené potřebám tvé firmy.
+        Coalshift nabízí flexibilní cenové plány přizpůsobené potřebám tvé firmy. Začni používat aplikaci hned teď!
       </p>
 
        <div className="bg-gradient-to-r from-modra/5 to-modra/10 border border-modra/20 rounded-lg p-4 mb-6 flex flex-col sm:flex-row items-center gap-4">
@@ -81,19 +81,19 @@ export default function PricingSection() {
           </div>
           <div>
             <h3 className="text-lg font-lekton font-bold text-modra text-center sm:text-left">
-              Spouštíme 1. července 2025
+              Aplikace je dostupná nyní
             </h3>
             <p className="text-sm text-gray-600 font-inter text-center sm:text-left">
-              Zaregistruj se na waiting list a získej exkluzivní přístup mezi prvními!
+              Začni používat revoluční systém pro plánování směn!
             </p>
           </div>
         </div>
         <Button 
           variant="primaryModra"
-          href="/wait-list"
+          href="/registrace"
           className="whitespace-nowrap w-full sm:w-auto mt-2 sm:mt-0 sm:ml-auto text-center"
         >
-          Požádej o přístup
+          CHCI SI VYZKOUŠET APLIKACI
         </Button>
       </div> 
 
