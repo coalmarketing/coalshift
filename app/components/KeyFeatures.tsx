@@ -18,7 +18,7 @@ const Feature = ({ number, title, description }: FeatureProps) => (
 
 export default function KeyFeatures() {
   return (
-    <section className="max-w-[1200px] mx-auto px-4 py-0 mt-0 lg:mt-[-80px]">
+    <section className="max-w-[1200px] mx-auto px-8 py-0 mt-0 lg:mt-[-40px]">
       <h2 className="text-3xl sm:text-4xl md:text-5xl text-modra font-lekton font-bold mb-6 sm:mb-8 md:mb-12">
         Klíčové funkce
       </h2>

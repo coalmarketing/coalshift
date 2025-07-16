@@ -126,12 +126,21 @@ export default function Header() {
                 Kontakt
               </Link>
             </nav>
-            <Button 
-              variant="primaryModra"
-              href="/registrace"
-            >
-              CHCI SI VYZKOUŠET APLIKACI
-            </Button>
+            <div className="flex items-center space-x-12">
+              <Link 
+                href="https://app.coalshift.cz/login"
+                className="text-modra hover:underline font-lekton font-bold"
+              >
+                Přihlášení
+              </Link>
+              <Button 
+                variant="primaryModra"
+                href="https://app.coalshift.cz/register"
+                target="_blank"
+              >
+                Vyzkoušet zdarma
+              </Button>
+            </div>
           </div>
         </div>
 
@@ -199,13 +208,24 @@ export default function Header() {
               >
                 Kontakt
               </Link>
-              <Button 
-                variant="primaryModra"
-                href="/registrace"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                CHCI SI VYZKOUŠET APLIKACI
-              </Button>
+              <div className="flex flex-col space-y-4 w-full">
+                <Link 
+                  href="https://app.coalshift.cz/login"
+                  className="text-modra hover:underline font-lekton font-bold text-center"
+                  target="_blank"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Přihlášení
+                </Link>
+                <Button 
+                  variant="primaryModra"
+                  href="https://app.coalshift.cz/register"
+                  target="_blank"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Vyzkoušet zdarma
+                </Button>
+              </div>
             </div>
           </nav>
         </div>

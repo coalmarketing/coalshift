@@ -8,6 +8,7 @@ type ButtonBaseProps = {
   variant?: 'primaryModra' | 'primaryBila' | 'secondaryModra' | 'secondaryBila';
   children: ReactNode;
   className?: string;
+  onClick?: () => void;
 };
 
 type ButtonAsButtonProps = ButtonBaseProps & ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -22,6 +23,7 @@ export default function Button({
   variant = 'primaryModra', 
   children, 
   className = '',
+  onClick,
   ...props
 }: ButtonProps) {
   const router = useRouter();
@@ -34,6 +36,16 @@ export default function Button({
   };
 
   const buttonStyles = `${baseStyles} ${variantStyles[variant]} ${className}`;
+
+  // Pokud je přítomen onClick, použijeme button element místo Link
+  if (onClick) {
+    const buttonProps = props as ButtonHTMLAttributes<HTMLButtonElement>;
+    return (
+      <button className={buttonStyles} onClick={onClick} {...buttonProps}>
+        {children}
+      </button>
+    );
+  }
 
   if ('href' in props) {
     const { href, target, ...restProps } = props as ButtonAsLinkProps;

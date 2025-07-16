@@ -7,12 +7,12 @@ import Button from './Button';
 export default function Benefits() {
   return (
     <section id="benefits" className="flex flex-col lg:flex-row justify-between items-center max-w-[1200px] mx-auto px-8 py-16 gap-8 text-cerna lg:mt-32 lg:mb-20">
-      <div className="w-full lg:w-1/2 space-y-12 mt-0 lg:mt-[-150px]">
+      <div className="w-full lg:w-1/2 space-y-12 mt-0 lg:mt-[-80px]">
         <div>
         <h2 className="text-modra text-3xl sm:text-4xl md:text-5xl font-lekton font-bold mb-6">
-          Výhody aplikace
+          Klíčové výhody AI asistenta
         </h2>
-        <p className="text-cerna font-inter text-sm">Plánování směn nikdy nebylo jednodušší! Coalshift je <strong>inteligentní systém pro plánování směn</strong>, který automatizuje procesy, zohledňuje <strong>preference zaměstnanců</strong>, dodržuje legislativu a <strong>umožňuje rychlé přesuny směn i přehledné reporty</strong>. Začni používat aplikaci hned teď!</p>
+        <p className="text-cerna font-inter text-sm">Trávíš hodiny nad papírováním a složitým nastavováním směn? Bojíš se chyb v rozvrzích, nedodržení zákonných podmínek a nespokojených zaměstnanců?<br/><br/>Coalshift je tvůj chytrý AI asistent pro plánování směn, který se nikdy neunaví a přebírá náročné rutinní úkoly – ušetří ti hodiny administrativní práce, respektuje preference zaměstnanců, zajišťuje správné dodržování zákonných pravidel a nabízí okamžité přehledné reporty.</p>
         </div>
 
         <div className="flex items-start gap-4">
@@ -58,8 +58,8 @@ export default function Benefits() {
         </div>
 
         <div className="flex justify-start mt-8">
-          <Button href="/registrace" variant="primaryModra">
-            CHCI SI VYZKOUŠET APLIKACI
+          <Button href="https://app.coalshift.cz/register" variant="primaryModra" target="_blank">
+            Vyzkoušet zdarma  
           </Button>
         </div>
       </div>

@@ -7,7 +7,7 @@ import emailIcon from '../../public/icons/email-icon.svg';
 
 export default function ContactSection() {
   return (
-    <div className="max-w-[1200px] mx-auto px-4 sm:px-8">
+    <div id="contact-section" className="max-w-[1200px] mx-auto px-4 sm:px-8">
       <div className="flex flex-col lg:flex-row justify-between items-center lg:items-start gap-8 lg:gap-4">
         <div className="flex-1 w-full lg:w-auto text-center lg:text-left">
           <h2 className="text-2xl sm:text-3xl font-lekton font-bold mb-8">
