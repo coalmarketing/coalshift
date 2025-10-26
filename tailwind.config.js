@@ -13,6 +13,8 @@ module.exports = {
         cerna: '#27251F',
         modraHover: '#0096BB',
         bilaHover: '#EAFBFF',
+        sparta: '#6B7280',
+        lightBlue: '#E8F4F8',
       },
       fontFamily: {
         inter: ['Inter', 'sans-serif'],
