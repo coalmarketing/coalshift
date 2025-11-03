@@ -128,6 +128,12 @@ export default function Header() {
             </nav>
             <div className="flex items-center space-x-12">
               <Link 
+                href="/zdravotnici" 
+                className="text-cerna hover:underline font-lekton font-bold"
+              >
+                Zdravotníci
+              </Link>
+              <Link 
                 href="https://app.coalshift.cz/login"
                 className="text-modra hover:underline font-lekton font-bold"
               >
@@ -207,6 +213,13 @@ export default function Header() {
                 }}
               >
                 Kontakt
+              </Link>
+              <Link 
+                href="/zdravotnici"
+                className="text-cerna hover:underline"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Zdravotníci
               </Link>
               <div className="flex flex-col space-y-4 w-full">
                 <Link 

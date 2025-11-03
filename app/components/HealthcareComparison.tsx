@@ -34,16 +34,6 @@ export default function HealthcareComparison() {
     },
     {
       before: {
-        title: "Hledání záskoku po telefonu",
-        description: "Zdlouhavé obvolávání kolegů."
-      },
-      after: {
-        title: "Burza směn v appce",
-        description: "Jednoduché a rychlé hledání náhrady."
-      }
-    },
-    {
-      before: {
         title: "Nespokojený tým",
         description: "Pocit nespravedlnosti a frustrace."
       },

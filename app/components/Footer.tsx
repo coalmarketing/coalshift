@@ -55,6 +55,12 @@ export default function Footer() {
                 O aplikaci
               </Link>
               <Link 
+                href="/zdravotnici" 
+                className="underline"
+              >
+                Zdravotníci
+              </Link>
+              <Link 
                 href={isHomePage ? "#pricing" : "/#pricing"} 
                 className="underline"
                 onClick={(e) => {
