@@ -4,7 +4,7 @@ import Button from './Button';
 const pricingPlans = [
   {
     title: 'Basic',
-    subtitle: 'do 10 zaměstnanců',
+    subtitle: 'do 5 zaměstnanců',
     price: 'ZDARMA',
     pricePerMonth: '',
     buttonText: 'Vyzkoušet',
@@ -14,7 +14,7 @@ const pricingPlans = [
       'Přiřazování zaměstnanců',
       'Přehled směn',
       'Databáze zaměstnanců',
-      'Max. 10 zaměstnanců, poté 50,- Kč / měsíc za každého dalšího'
+      'Max. 5 zaměstnanců, poté 50,- Kč / měsíc za každého dalšího'
     ]
   },
   {
