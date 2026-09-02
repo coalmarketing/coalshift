@@ -1,7 +1,5 @@
 'use client';
 import { useState } from 'react';
-import Button from './Button';
-import ContactSection from './ContactSection';
 
 interface FAQItem {
   question: string;

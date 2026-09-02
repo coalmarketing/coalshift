@@ -1,9 +1,7 @@
 'use client';
 
-import Image from 'next/image';
-import logoSvg from '../../public/logo/coalshift_logo_long-light-mono.svg';
 import Button from './Button';
-import Link from 'next/link';
+import { shouldSmoothScroll, smoothScrollToId } from '../lib/smoothScroll';
 
 export default function Hero() {
     return (
@@ -19,21 +17,20 @@ export default function Hero() {
             <Button href="https://app.coalshift.cz/register" variant="primaryBila" target="_blank">
               Vyzkoušet zdarma
             </Button>
-            <Link 
-              href="#benefits" 
-              className="text-white hover:underline"
+            <Button
+              href="#benefits"
+              variant="secondaryBila"
               onClick={(e) => {
-                e.preventDefault();
-                document.getElementById('benefits')?.scrollIntoView({ behavior: 'smooth' });
+                if (shouldSmoothScroll(e, 'benefits')) {
+                  e.preventDefault();
+                  smoothScrollToId('benefits');
+                }
               }}
             >
-              <Button variant="secondaryBila">
-                Zjisti více
-              </Button>
-            </Link>
+              Zjisti více
+            </Button>
           </div>
         </div>
       </section>
     );
   }
-  

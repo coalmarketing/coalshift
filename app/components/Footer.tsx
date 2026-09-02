@@ -1,27 +1,19 @@
 'use client';
 import Image from 'next/image';
 import Link from 'next/link';
+import type { MouseEvent as ReactMouseEvent } from 'react';
 import logoSvg from '../../public/logo/coalshift_logo_long-light-mono.svg';
-import Button from './Button';
 import { usePathname } from 'next/navigation';
+import { shouldSmoothScroll, smoothScrollToId } from '../lib/smoothScroll';
 
 export default function Footer() {
   const pathname = usePathname();
   const isHomePage = pathname === '/';
 
-  const scrollToSection = (id: string) => {
-    if (isHomePage) {
-      const element = document.getElementById(id);
-      if (element) {
-        const headerOffset = 32; // 2rem = 32px
-        const elementPosition = element.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.scrollY - headerOffset;
-        
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: 'smooth'
-        });
-      }
+  const handleFragment = (e: ReactMouseEvent<HTMLAnchorElement>, id: string) => {
+    if (isHomePage && shouldSmoothScroll(e, id)) {
+      e.preventDefault();
+      smoothScrollToId(id);
     }
   };
 
@@ -42,57 +34,37 @@ export default function Footer() {
             </div>
             
             <nav className="flex flex-col space-y-4 text-sm">
-              <Link 
-                href={isHomePage ? "#benefits" : "/#benefits"} 
+              <Link
+                href={isHomePage ? "#benefits" : "/#benefits"}
                 className="underline"
-                onClick={(e) => {
-                  if (isHomePage) {
-                    e.preventDefault();
-                    scrollToSection('benefits');
-                  }
-                }}
+                onClick={(e) => handleFragment(e, 'benefits')}
               >
                 O aplikaci
               </Link>
-              <Link 
-                href="/zdravotnici" 
+              <Link
+                href="/zdravotnici"
                 className="underline"
               >
                 Zdravotníci
               </Link>
-              <Link 
-                href={isHomePage ? "#pricing" : "/#pricing"} 
+              <Link
+                href={isHomePage ? "#pricing" : "/#pricing"}
                 className="underline"
-                onClick={(e) => {
-                  if (isHomePage) {
-                    e.preventDefault();
-                    scrollToSection('pricing');
-                  }
-                }}
+                onClick={(e) => handleFragment(e, 'pricing')}
               >
                 Ceník
               </Link>
-              <Link 
-                href={isHomePage ? "#faq" : "/#faq"} 
+              <Link
+                href={isHomePage ? "#faq" : "/#faq"}
                 className="underline"
-                onClick={(e) => {
-                  if (isHomePage) {
-                    e.preventDefault();
-                    scrollToSection('faq');
-                  }
-                }}
+                onClick={(e) => handleFragment(e, 'faq')}
               >
                 Nejčastější dotazy
               </Link>
-              <Link 
-                href={isHomePage ? "#contact" : "/#contact"} 
+              <Link
+                href={isHomePage ? "#contact" : "/#contact"}
                 className="underline"
-                onClick={(e) => {
-                  if (isHomePage) {
-                    e.preventDefault();
-                    scrollToSection('contact');
-                  }
-                }}
+                onClick={(e) => handleFragment(e, 'contact')}
               >
                 Kontakt
               </Link>

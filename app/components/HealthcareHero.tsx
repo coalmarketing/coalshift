@@ -1,7 +1,7 @@
 'use client';
 
 import Button from './Button';
-import Link from 'next/link';
+import { shouldSmoothScroll, smoothScrollToId } from '../lib/smoothScroll';
 
 export default function HealthcareHero() {
     return (
@@ -15,23 +15,23 @@ export default function HealthcareHero() {
             My si vaší práce vážíme – a víme, že váš čas patří pacientům, ne tabulkám.<br/>
             Proto máte <b>coalshift na 30 dní zdarma.</b>
           </h2>
-          
+
           <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center items-center">
             <Button href="https://app.coalshift.cz/register" variant="primaryBila" target="_blank">
               Vyzkoušet zdarma na 30 dní
             </Button>
-            <Link 
-              href="#video" 
-              className="text-white hover:underline"
+            <Button
+              href="#video"
+              variant="secondaryBila"
               onClick={(e) => {
-                e.preventDefault();
-                document.getElementById('video')?.scrollIntoView({ behavior: 'smooth' });
+                if (shouldSmoothScroll(e, 'video')) {
+                  e.preventDefault();
+                  smoothScrollToId('video');
+                }
               }}
             >
-              <Button variant="secondaryBila">
-                Podívat se, jak to funguje
-              </Button>
-            </Link>
+              Podívat se, jak to funguje
+            </Button>
           </div>
 
           {/* Badge */}

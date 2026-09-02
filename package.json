@@ -2,25 +2,32 @@
   "name": "coalshift",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=24 <25"
+  },
   "scripts": {
-    "build": "next build",
-    "pages:build": "npx @cloudflare/next-on-pages",
-    "preview": "npm run pages:build && wrangler pages dev .vercel/output/static",
-    "deploy": "npm run pages:build && wrangler pages deploy .vercel/output/static"
+    "images:generate": "node scripts/generate-image-derivatives.mjs",
+    "dev": "npm run images:generate && next dev",
+    "build": "npm run images:generate && next build",
+    "pages:build": "npm run images:generate && next build",
+    "typecheck": "npm run images:generate && next typegen && tsc --noEmit",
+    "preview": "wrangler pages dev out",
+    "deploy": "wrangler pages deploy out"
   },
   "dependencies": {
-    "next": "15.1.7",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "next": "16.3.4",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
   },
   "devDependencies": {
-    "@cloudflare/next-on-pages": "^1.13.16",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
+    "@types/node": "^24",
+    "@types/react": "^19.2",
+    "@types/react-dom": "^19.2",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.5.2",
+    "sharp": "^0.35.4",
     "tailwindcss": "^3.4.17",
-    "typescript": "^5"
+    "typescript": "^5.9",
+    "wrangler": "^4.128.0"
   }
 }

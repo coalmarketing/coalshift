@@ -1,7 +1,7 @@
 'use client';
 import Button from './Button';
 import Image from 'next/image';
-import hajekImage from '../../public/img/adamec.png';
+import ResponsiveImage from './ResponsiveImage';
 import phoneIcon from '../../public/icons/phone-icon.svg';
 import emailIcon from '../../public/icons/email-icon.svg';
 
@@ -35,11 +35,9 @@ export default function ContactSection() {
             </div>
           </div>
           
-          <a href="mailto:miroslav.adamec@coalsoft.cz">
-            <Button variant="primaryModra" className="mt-6">
-              Kontaktuj nás!
-            </Button>
-          </a>
+          <Button href="mailto:miroslav.adamec@coalsoft.cz" variant="primaryModra" className="mt-6">
+            Kontaktuj nás!
+          </Button>
         </div>
 
         <div className="flex flex-col-reverse sm:flex-row items-center lg:mt-[-60px]">
@@ -48,11 +46,11 @@ export default function ContactSection() {
             <p className="text-gray-600 font-inter font-thin">Development manager, obchodní konzultant</p>
           </div>
           <div className="relative w-[200px] sm:w-[250px] lg:w-[300px] h-[300px] sm:h-[350px] lg:h-[400px] order-1 sm:order-2">
-            <Image
-              src={hajekImage}
+            <ResponsiveImage
+              src="/img/adamec.png"
               alt="Miroslav Adamec - Development manager, obchodní konzultant"
               fill
-              style={{ objectFit: 'contain' }}
+              className="object-contain"
               priority
               sizes="(max-width: 640px) 200px, (max-width: 1024px) 250px, 300px"
             />

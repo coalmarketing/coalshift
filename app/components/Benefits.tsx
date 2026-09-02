@@ -2,11 +2,11 @@ import Image from 'next/image';
 import calendarIcon from '../../public/icons/calendar-icon.svg';
 import adminIcon from '../../public/icons/admin-icon.svg';
 import heartIcon from '../../public/icons/heart-icon.svg';
-import phoneImage from '../../public/mocup-coalshift.png';
 import Button from './Button';
+import ResponsiveImage from './ResponsiveImage';
 export default function Benefits() {
   return (
-    <section id="benefits" className="flex flex-col lg:flex-row justify-between items-center max-w-[1200px] mx-auto px-8 py-16 gap-8 text-cerna lg:mt-32 lg:mb-20">
+    <section className="flex flex-col lg:flex-row justify-between items-center max-w-[1200px] mx-auto px-8 py-16 gap-8 text-cerna lg:mt-32 lg:mb-20">
       <div className="w-full lg:w-1/2 space-y-12 mt-0 lg:mt-[-80px]">
         <div>
         <h2 className="text-modra text-3xl sm:text-4xl md:text-5xl font-lekton font-bold mb-6">
@@ -65,12 +65,11 @@ export default function Benefits() {
       </div>
 
       <div className="w-full lg:w-1/2 flex justify-center md:mt-[-100px]">
-        <Image
-          src={phoneImage}
+        <ResponsiveImage
+          src="/mocup-coalshift.png"
           alt="Ukázka aplikace na telefonu"
-          width={600}
-          height={1000}
-          className="max-w-[500px] h-auto"
+          sizes="(min-width: 1024px) 426px, min(100vw - 4rem, 426px)"
+          className="h-auto w-full max-w-[426px]"
           priority
         />
       </div>

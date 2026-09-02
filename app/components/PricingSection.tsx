@@ -1,5 +1,7 @@
 'use client';
+import type { MouseEvent } from 'react';
 import Button from './Button';
+import { shouldSmoothScroll, smoothScrollToId } from '../lib/smoothScroll';
 
 const pricingPlans = [
   {
@@ -66,17 +68,13 @@ const pricingPlans = [
 ];
 
 export default function PricingSection() {
-  const scrollToContact = () => {
-    const element = document.getElementById('contact-section');
-    if (element) {
-      const headerOffset = 32; // 2rem = 32px
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.scrollY - headerOffset;
-      
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      });
+  const scrollToContact = (event: MouseEvent<HTMLAnchorElement>) => {
+    // The href (#contact-section) is a real fragment link; intercept only an
+    // ordinary same-page activation so modifier clicks keep opening a new tab
+    // and the page is not scrolled twice.
+    if (shouldSmoothScroll(event, 'contact-section')) {
+      event.preventDefault();
+      smoothScrollToId('contact-section');
     }
   };
 

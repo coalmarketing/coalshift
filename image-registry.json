@@ -1,0 +1,22 @@
+{
+  "outputDir": "public/img/derivatives",
+  "derivativesUrl": "/img/derivatives",
+  "images": [
+    {
+      "src": "/mocup-coalshift.png",
+      "file": "public/mocup-coalshift.png",
+      "name": "mocup-coalshift",
+      "width": 426,
+      "height": 519,
+      "widths": [213, 320, 426]
+    },
+    {
+      "src": "/img/adamec.png",
+      "file": "public/img/adamec.png",
+      "name": "adamec",
+      "width": 1080,
+      "height": 1080,
+      "widths": [240, 320, 480, 640]
+    }
+  ]
+}

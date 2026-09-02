@@ -1,79 +1,81 @@
 "use client";
 
-import { ReactNode, ButtonHTMLAttributes, ComponentProps } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import type {
+  AnchorHTMLAttributes,
+  ButtonHTMLAttributes,
+  ReactNode,
+} from "react";
+import Link from "next/link";
 
-type ButtonBaseProps = {
-  variant?: 'primaryModra' | 'primaryBila' | 'secondaryModra' | 'secondaryBila';
+type Variant = "primaryModra" | "primaryBila" | "secondaryModra" | "secondaryBila";
+
+type SharedProps = {
+  variant?: Variant;
   children: ReactNode;
   className?: string;
-  onClick?: () => void;
 };
 
-type ButtonAsButtonProps = ButtonBaseProps & ButtonHTMLAttributes<HTMLButtonElement> & {
-  href?: undefined;
-};
-
-type ButtonAsLinkProps = ButtonBaseProps & ComponentProps<typeof Link>;
-
-export type ButtonProps = ButtonAsButtonProps | ButtonAsLinkProps;
-
-export default function Button({ 
-  variant = 'primaryModra', 
-  children, 
-  className = '',
-  onClick,
-  ...props
-}: ButtonProps) {
-  const router = useRouter();
-  const baseStyles = "px-10 py-2 rounded-sm transition-colors duration-200 font-lekton font-bold";
-  const variantStyles = {
-    primaryModra: "bg-modra text-white hover:bg-modraHover",
-    primaryBila: "bg-white text-modra hover:bg-bilaHover",
-    secondaryBila: "bg-transparent text-white border border-white hover:bg-white hover:text-modra",
-    secondaryModra: "bg-transparent text-modra border border-modra hover:bg-white hover:text-modra"
+/** Action-only control: no `href`, renders a real <button>. */
+type ButtonElementProps = SharedProps &
+  Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children" | "className"> & {
+    href?: undefined;
   };
 
-  const buttonStyles = `${baseStyles} ${variantStyles[variant]} ${className}`;
+/**
+ * Link control: has an `href` and may also carry an `onClick` (e.g. a fragment
+ * link that additionally runs smooth scrolling). Renders next/link for internal
+ * app routes and a plain <a> for fragments, external URLs, `mailto:` and `tel:`.
+ */
+type LinkElementProps = SharedProps &
+  Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "children" | "className" | "href"> & {
+    href: string;
+  };
 
-  // Pokud je přítomen onClick, použijeme button element místo Link
-  if (onClick) {
-    const buttonProps = props as ButtonHTMLAttributes<HTMLButtonElement>;
+export type ButtonProps = ButtonElementProps | LinkElementProps;
+
+const baseStyles =
+  "px-10 py-2 rounded-sm transition-colors duration-200 font-lekton font-bold";
+
+const variantStyles: Record<Variant, string> = {
+  primaryModra: "bg-modra text-white hover:bg-modraHover",
+  primaryBila: "bg-white text-modra hover:bg-bilaHover",
+  secondaryBila:
+    "bg-transparent text-white border border-white hover:bg-white hover:text-modra",
+  secondaryModra:
+    "bg-transparent text-modra border border-modra hover:bg-white hover:text-modra",
+};
+
+export default function Button({
+  variant = "primaryModra",
+  children,
+  className = "",
+  ...props
+}: ButtonProps) {
+  const classes = `${baseStyles} ${variantStyles[variant]} ${className}`;
+
+  if (props.href === undefined) {
+    const { type = "button", ...rest } = props as ButtonElementProps;
     return (
-      <button className={buttonStyles} onClick={onClick} {...buttonProps}>
+      <button type={type} className={classes} {...rest}>
         {children}
       </button>
     );
   }
 
-  if ('href' in props) {
-    const { href, target, ...restProps } = props as ButtonAsLinkProps;
-    
-    // Pro /registrace používáme standardní anchor tag místo Next.js Link
-    if (href === '/registrace') {
-      return (
-        <a 
-          href="/registrace"
-          className={buttonStyles}
-          target={target}
-          onClick={(e) => {
-            e.preventDefault();
-            router.push('/registrace');
-          }}
-          {...restProps}
-        >
-          {children}
-        </a>
-      );
-    }
-    
+  const { href, target, rel, ...rest } = props as LinkElementProps;
+  const resolvedRel =
+    target === "_blank" && rel === undefined ? "noopener" : rel;
+
+  // Internal application routes use next/link; fragments (`#…`), external URLs,
+  // `mailto:` and `tel:` use a plain anchor.
+  if (href.startsWith("/")) {
     return (
-      <Link 
-        href={href as string} 
-        className={buttonStyles}
+      <Link
+        href={href}
+        className={classes}
         target={target}
-        {...restProps}
+        rel={resolvedRel}
+        {...rest}
       >
         {children}
       </Link>
@@ -81,8 +83,14 @@ export default function Button({
   }
 
   return (
-    <button className={buttonStyles} {...props}>
+    <a
+      href={href}
+      className={classes}
+      target={target}
+      rel={resolvedRel}
+      {...rest}
+    >
       {children}
-    </button>
+    </a>
   );
-} 
+}
