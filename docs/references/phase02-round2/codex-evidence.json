@@ -1,0 +1,639 @@
+{
+  "testedArtifact": "/Users/jakubtesarik/Programování/coalshift/out",
+  "browserVersion": "152.0.7977.65",
+  "notes": "Existing uncommitted exported artifact, not a fresh build. Local static server; external scripts stubbed to isolate app interactions. Pending fixture deliberately stalls only Quanda beforeInteractive. No production or user profile accessed.",
+  "results": [
+    {
+      "mode": "controlled-ready",
+      "snapshots": [
+        {
+          "selected": [
+            "Směny a AI"
+          ],
+          "panels": [
+            {
+              "hidden": false,
+              "heading": "Připravte rozpis a mějte přehled o obsazení",
+              "rect": {
+                "w": 790,
+                "h": 433.1875
+              }
+            }
+          ]
+        },
+        {
+          "selected": [
+            "Lidé a pozice"
+          ],
+          "panels": [
+            {
+              "hidden": false,
+              "heading": "Mějte údaje týmu po ruce při plánování",
+              "rect": {
+                "w": 790,
+                "h": 357.59375
+              }
+            }
+          ]
+        },
+        {
+          "selected": [
+            "Nepřítomnosti"
+          ],
+          "panels": [
+            {
+              "hidden": false,
+              "heading": "Zohledněte volno i změny v dostupnosti",
+              "rect": {
+                "w": 790,
+                "h": 357.59375
+              }
+            }
+          ]
+        },
+        {
+          "selected": [
+            "Exporty"
+          ],
+          "panels": [
+            {
+              "hidden": false,
+              "heading": "Připravte podklady pro další práci",
+              "rect": {
+                "w": 790,
+                "h": 357.59375
+              }
+            }
+          ]
+        },
+        {
+          "selected": [
+            "Statistiky"
+          ],
+          "panels": [
+            {
+              "hidden": false,
+              "heading": "Získejte přehled o hodinách a nepřítomnostech",
+              "rect": {
+                "w": 790,
+                "h": 357.59375
+              }
+            }
+          ]
+        }
+      ],
+      "geometry": {
+        "viewport": {
+          "width": 1440,
+          "height": 1000,
+          "dpr": 1
+        },
+        "header": {
+          "width": 1150,
+          "height": 56,
+          "font": "16px",
+          "display": "flex",
+          "overflow": "visible",
+          "shadow": "none",
+          "outline": "rgb(229, 229, 229) none 3px",
+          "outlineOffset": "0px"
+        },
+        "buttons": [
+          {
+            "label": "Začít zdarma",
+            "width": 154.796875,
+            "height": 40,
+            "font": "14px",
+            "display": "inline-flex",
+            "overflow": "hidden",
+            "shadow": "rgb(64, 64, 64) 0px 0px 0px 1px",
+            "outline": "rgb(255, 255, 255) none 3px",
+            "outlineOffset": "0px",
+            "labelBox": {
+              "width": 84,
+              "height": 22,
+              "font": "14px",
+              "display": "block",
+              "overflow": "visible",
+              "shadow": "none",
+              "outline": "rgb(255, 255, 255) none 3px",
+              "outlineOffset": "0px"
+            },
+            "disc": {
+              "width": 28,
+              "height": 28,
+              "font": "14px",
+              "display": "grid",
+              "overflow": "hidden",
+              "shadow": "none",
+              "outline": "rgb(23, 23, 23) none 3px",
+              "outlineOffset": "0px"
+            },
+            "arrow": {
+              "width": 16,
+              "height": 16,
+              "font": "14px",
+              "display": "block",
+              "overflow": "hidden",
+              "shadow": "none",
+              "outline": "rgb(23, 23, 23) none 3px",
+              "outlineOffset": "0px"
+            },
+            "client": 155,
+            "scroll": 155
+          },
+          {
+            "label": "Vyzkoušet na 14 dní zdarma",
+            "width": 154.796875,
+            "height": 40,
+            "font": "14px",
+            "display": "inline-flex",
+            "overflow": "hidden",
+            "shadow": "rgb(64, 64, 64) 0px 0px 0px 1px",
+            "outline": "rgb(255, 255, 255) none 3px",
+            "outlineOffset": "0px",
+            "labelBox": {
+              "width": 182,
+              "height": 22,
+              "font": "14px",
+              "display": "block",
+              "overflow": "visible",
+              "shadow": "none",
+              "outline": "rgb(255, 255, 255) none 3px",
+              "outlineOffset": "0px"
+            },
+            "disc": {
+              "width": 28,
+              "height": 28,
+              "font": "14px",
+              "display": "grid",
+              "overflow": "hidden",
+              "shadow": "none",
+              "outline": "rgb(23, 23, 23) none 3px",
+              "outlineOffset": "0px"
+            },
+            "arrow": {
+              "width": 16,
+              "height": 16,
+              "font": "14px",
+              "display": "block",
+              "overflow": "hidden",
+              "shadow": "none",
+              "outline": "rgb(23, 23, 23) none 3px",
+              "outlineOffset": "0px"
+            },
+            "client": 155,
+            "scroll": 202
+          },
+          {
+            "label": "Vyzkoušet na 14 dní zdarma",
+            "width": 154.796875,
+            "height": 40,
+            "font": "14px",
+            "display": "inline-flex",
+            "overflow": "hidden",
+            "shadow": "rgb(0, 181, 226) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 3px",
+            "outline": "rgb(0, 0, 0) none 3px",
+            "outlineOffset": "0px",
+            "labelBox": {
+              "width": 182,
+              "height": 22,
+              "font": "14px",
+              "display": "block",
+              "overflow": "visible",
+              "shadow": "none",
+              "outline": "rgb(0, 0, 0) none 3px",
+              "outlineOffset": "0px"
+            },
+            "disc": {
+              "width": 28,
+              "height": 28,
+              "font": "14px",
+              "display": "grid",
+              "overflow": "hidden",
+              "shadow": "none",
+              "outline": "rgb(255, 255, 255) none 3px",
+              "outlineOffset": "0px"
+            },
+            "arrow": {
+              "width": 16,
+              "height": 16,
+              "font": "14px",
+              "display": "block",
+              "overflow": "hidden",
+              "shadow": "none",
+              "outline": "rgb(255, 255, 255) none 3px",
+              "outlineOffset": "0px"
+            },
+            "client": 155,
+            "scroll": 202
+          },
+          {
+            "label": "Vyzkoušet na 14 dní zdarma",
+            "width": 154.796875,
+            "height": 40,
+            "font": "14px",
+            "display": "inline-flex",
+            "overflow": "hidden",
+            "shadow": "rgb(64, 64, 64) 0px 0px 0px 1px",
+            "outline": "rgb(255, 255, 255) none 3px",
+            "outlineOffset": "0px",
+            "labelBox": {
+              "width": 182,
+              "height": 22,
+              "font": "14px",
+              "display": "block",
+              "overflow": "visible",
+              "shadow": "none",
+              "outline": "rgb(255, 255, 255) none 3px",
+              "outlineOffset": "0px"
+            },
+            "disc": {
+              "width": 28,
+              "height": 28,
+              "font": "14px",
+              "display": "grid",
+              "overflow": "hidden",
+              "shadow": "none",
+              "outline": "rgb(23, 23, 23) none 3px",
+              "outlineOffset": "0px"
+            },
+            "arrow": {
+              "width": 16,
+              "height": 16,
+              "font": "14px",
+              "display": "block",
+              "overflow": "hidden",
+              "shadow": "none",
+              "outline": "rgb(23, 23, 23) none 3px",
+              "outlineOffset": "0px"
+            },
+            "client": 155,
+            "scroll": 202
+          },
+          {
+            "label": "Vyzkoušet na 14 dní zdarma",
+            "width": 154.8125,
+            "height": 40,
+            "font": "14px",
+            "display": "inline-flex",
+            "overflow": "hidden",
+            "shadow": "rgb(64, 64, 64) 0px 0px 0px 1px",
+            "outline": "rgb(255, 255, 255) none 3px",
+            "outlineOffset": "0px",
+            "labelBox": {
+              "width": 182,
+              "height": 22,
+              "font": "14px",
+              "display": "block",
+              "overflow": "visible",
+              "shadow": "none",
+              "outline": "rgb(255, 255, 255) none 3px",
+              "outlineOffset": "0px"
+            },
+            "disc": {
+              "width": 28,
+              "height": 28,
+              "font": "14px",
+              "display": "grid",
+              "overflow": "hidden",
+              "shadow": "none",
+              "outline": "rgb(23, 23, 23) none 3px",
+              "outlineOffset": "0px"
+            },
+            "arrow": {
+              "width": 16,
+              "height": 16,
+              "font": "14px",
+              "display": "block",
+              "overflow": "hidden",
+              "shadow": "none",
+              "outline": "rgb(23, 23, 23) none 3px",
+              "outlineOffset": "0px"
+            },
+            "client": 155,
+            "scroll": 202
+          }
+        ],
+        "docHeight": 5435
+      },
+      "errors": []
+    },
+    {
+      "mode": "quanda-pending",
+      "snapshots": [
+        {
+          "selected": [
+            "Směny a AI"
+          ],
+          "panels": [
+            {
+              "hidden": false,
+              "heading": "Připravte rozpis a mějte přehled o obsazení",
+              "rect": {
+                "w": 790,
+                "h": 433.1875
+              }
+            }
+          ]
+        },
+        {
+          "selected": [
+            "Směny a AI"
+          ],
+          "panels": [
+            {
+              "hidden": false,
+              "heading": "Připravte rozpis a mějte přehled o obsazení",
+              "rect": {
+                "w": 790,
+                "h": 433.1875
+              }
+            }
+          ]
+        },
+        {
+          "selected": [
+            "Směny a AI"
+          ],
+          "panels": [
+            {
+              "hidden": false,
+              "heading": "Připravte rozpis a mějte přehled o obsazení",
+              "rect": {
+                "w": 790,
+                "h": 433.1875
+              }
+            }
+          ]
+        },
+        {
+          "selected": [
+            "Směny a AI"
+          ],
+          "panels": [
+            {
+              "hidden": false,
+              "heading": "Připravte rozpis a mějte přehled o obsazení",
+              "rect": {
+                "w": 790,
+                "h": 433.1875
+              }
+            }
+          ]
+        },
+        {
+          "selected": [
+            "Směny a AI"
+          ],
+          "panels": [
+            {
+              "hidden": false,
+              "heading": "Připravte rozpis a mějte přehled o obsazení",
+              "rect": {
+                "w": 790,
+                "h": 433.1875
+              }
+            }
+          ]
+        }
+      ],
+      "geometry": {
+        "viewport": {
+          "width": 1440,
+          "height": 1000,
+          "dpr": 1
+        },
+        "header": {
+          "width": 1150,
+          "height": 56,
+          "font": "16px",
+          "display": "flex",
+          "overflow": "visible",
+          "shadow": "none",
+          "outline": "rgb(229, 229, 229) none 3px",
+          "outlineOffset": "0px"
+        },
+        "buttons": [
+          {
+            "label": "Začít zdarma",
+            "width": 154.796875,
+            "height": 40,
+            "font": "14px",
+            "display": "inline-flex",
+            "overflow": "hidden",
+            "shadow": "rgb(64, 64, 64) 0px 0px 0px 1px",
+            "outline": "rgb(255, 255, 255) none 3px",
+            "outlineOffset": "0px",
+            "labelBox": {
+              "width": 84,
+              "height": 22,
+              "font": "14px",
+              "display": "block",
+              "overflow": "visible",
+              "shadow": "none",
+              "outline": "rgb(255, 255, 255) none 3px",
+              "outlineOffset": "0px"
+            },
+            "disc": {
+              "width": 28,
+              "height": 28,
+              "font": "14px",
+              "display": "grid",
+              "overflow": "hidden",
+              "shadow": "none",
+              "outline": "rgb(23, 23, 23) none 3px",
+              "outlineOffset": "0px"
+            },
+            "arrow": {
+              "width": 16,
+              "height": 16,
+              "font": "14px",
+              "display": "block",
+              "overflow": "hidden",
+              "shadow": "none",
+              "outline": "rgb(23, 23, 23) none 3px",
+              "outlineOffset": "0px"
+            },
+            "client": 155,
+            "scroll": 155
+          },
+          {
+            "label": "Vyzkoušet na 14 dní zdarma",
+            "width": 154.796875,
+            "height": 40,
+            "font": "14px",
+            "display": "inline-flex",
+            "overflow": "hidden",
+            "shadow": "rgb(64, 64, 64) 0px 0px 0px 1px",
+            "outline": "rgb(255, 255, 255) none 3px",
+            "outlineOffset": "0px",
+            "labelBox": {
+              "width": 182,
+              "height": 22,
+              "font": "14px",
+              "display": "block",
+              "overflow": "visible",
+              "shadow": "none",
+              "outline": "rgb(255, 255, 255) none 3px",
+              "outlineOffset": "0px"
+            },
+            "disc": {
+              "width": 28,
+              "height": 28,
+              "font": "14px",
+              "display": "grid",
+              "overflow": "hidden",
+              "shadow": "none",
+              "outline": "rgb(23, 23, 23) none 3px",
+              "outlineOffset": "0px"
+            },
+            "arrow": {
+              "width": 16,
+              "height": 16,
+              "font": "14px",
+              "display": "block",
+              "overflow": "hidden",
+              "shadow": "none",
+              "outline": "rgb(23, 23, 23) none 3px",
+              "outlineOffset": "0px"
+            },
+            "client": 155,
+            "scroll": 202
+          },
+          {
+            "label": "Vyzkoušet na 14 dní zdarma",
+            "width": 154.796875,
+            "height": 40,
+            "font": "14px",
+            "display": "inline-flex",
+            "overflow": "hidden",
+            "shadow": "rgb(0, 181, 226) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 3px",
+            "outline": "rgb(0, 0, 0) none 3px",
+            "outlineOffset": "0px",
+            "labelBox": {
+              "width": 182,
+              "height": 22,
+              "font": "14px",
+              "display": "block",
+              "overflow": "visible",
+              "shadow": "none",
+              "outline": "rgb(0, 0, 0) none 3px",
+              "outlineOffset": "0px"
+            },
+            "disc": {
+              "width": 28,
+              "height": 28,
+              "font": "14px",
+              "display": "grid",
+              "overflow": "hidden",
+              "shadow": "none",
+              "outline": "rgb(255, 255, 255) none 3px",
+              "outlineOffset": "0px"
+            },
+            "arrow": {
+              "width": 16,
+              "height": 16,
+              "font": "14px",
+              "display": "block",
+              "overflow": "hidden",
+              "shadow": "none",
+              "outline": "rgb(255, 255, 255) none 3px",
+              "outlineOffset": "0px"
+            },
+            "client": 155,
+            "scroll": 202
+          },
+          {
+            "label": "Vyzkoušet na 14 dní zdarma",
+            "width": 154.796875,
+            "height": 40,
+            "font": "14px",
+            "display": "inline-flex",
+            "overflow": "hidden",
+            "shadow": "rgb(64, 64, 64) 0px 0px 0px 1px",
+            "outline": "rgb(255, 255, 255) none 3px",
+            "outlineOffset": "0px",
+            "labelBox": {
+              "width": 182,
+              "height": 22,
+              "font": "14px",
+              "display": "block",
+              "overflow": "visible",
+              "shadow": "none",
+              "outline": "rgb(255, 255, 255) none 3px",
+              "outlineOffset": "0px"
+            },
+            "disc": {
+              "width": 28,
+              "height": 28,
+              "font": "14px",
+              "display": "grid",
+              "overflow": "hidden",
+              "shadow": "none",
+              "outline": "rgb(23, 23, 23) none 3px",
+              "outlineOffset": "0px"
+            },
+            "arrow": {
+              "width": 16,
+              "height": 16,
+              "font": "14px",
+              "display": "block",
+              "overflow": "hidden",
+              "shadow": "none",
+              "outline": "rgb(23, 23, 23) none 3px",
+              "outlineOffset": "0px"
+            },
+            "client": 155,
+            "scroll": 202
+          },
+          {
+            "label": "Vyzkoušet na 14 dní zdarma",
+            "width": 154.8125,
+            "height": 40,
+            "font": "14px",
+            "display": "inline-flex",
+            "overflow": "hidden",
+            "shadow": "rgb(64, 64, 64) 0px 0px 0px 1px",
+            "outline": "rgb(255, 255, 255) none 3px",
+            "outlineOffset": "0px",
+            "labelBox": {
+              "width": 182,
+              "height": 22,
+              "font": "14px",
+              "display": "block",
+              "overflow": "visible",
+              "shadow": "none",
+              "outline": "rgb(255, 255, 255) none 3px",
+              "outlineOffset": "0px"
+            },
+            "disc": {
+              "width": 28,
+              "height": 28,
+              "font": "14px",
+              "display": "grid",
+              "overflow": "hidden",
+              "shadow": "none",
+              "outline": "rgb(23, 23, 23) none 3px",
+              "outlineOffset": "0px"
+            },
+            "arrow": {
+              "width": 16,
+              "height": 16,
+              "font": "14px",
+              "display": "block",
+              "overflow": "hidden",
+              "shadow": "none",
+              "outline": "rgb(23, 23, 23) none 3px",
+              "outlineOffset": "0px"
+            },
+            "client": 155,
+            "scroll": 202
+          }
+        ],
+        "docHeight": 5503
+      },
+      "errors": []
+    }
+  ]
+}

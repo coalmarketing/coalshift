@@ -17,6 +17,22 @@
       "width": 1080,
       "height": 1080,
       "widths": [240, 320, 480, 640]
+    },
+    {
+      "src": "/img/martina-adamcova.png",
+      "file": "public/img/martina-adamcova.png",
+      "name": "martina-adamcova",
+      "width": 1080,
+      "height": 1080,
+      "widths": [240, 320, 480, 640]
+    },
+    {
+      "src": "/img/sarka-melisova.png",
+      "file": "public/img/sarka-melisova.png",
+      "name": "sarka-melisova",
+      "width": 1080,
+      "height": 1080,
+      "widths": [240, 320, 480, 640]
     }
   ]
 }

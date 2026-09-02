@@ -1,30 +1,38 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import Script from "next/script";
+import { themeScript } from "./components/theme/themeScript";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#000000" },
+  ],
+};
+
+const HOME_TITLE = "coalshift | AI plánovač směn a docházky";
+const HOME_DESC =
+  "Plánujte směny s pomocí AI, spravujte nepřítomnosti a mějte přehled o svém týmu. Vyzkoušejte coalshift na 14 dní zdarma.";
 
 export const metadata: Metadata = {
-  title: "Coalshift | Inteligentní systém pro plánování směn a docházky",
-  description: "Automatizujte plánování směn a správu docházky. Ušetřete až 50 hodin měsíčně s cloudovým řešením pro efektivní řízení směn ve výrobě, maloobchodu a hotelnictví.",
-  keywords: "plánování směn, docházkový systém, správa směn, automatizace docházky, směnový software, digitální docházka, cloudový docházkový systém, SaaS plánovač směn, plánování směn ve výrobě, směnový software pro hotely",
+  metadataBase: new URL("https://coalshift.cz"),
+  title: HOME_TITLE,
+  description: HOME_DESC,
   openGraph: {
-    title: "Coalshift | Inteligentní systém pro plánování směn",
-    description: "Automatizujte plánování směn a ušetřete až 50 hodin měsíčně. Cloudové řešení pro efektivní řízení směn.",
+    title: HOME_TITLE,
+    description: HOME_DESC,
     type: "website",
     locale: "cs_CZ",
-    siteName: "Coalshift",
+    siteName: "coalshift",
+    url: "https://coalshift.cz",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Coalshift | Plánování směn a docházky",
-    description: "Automatizujte plánování směn a ušetřete až 50 hodin měsíčně. Cloudové řešení pro efektivní řízení směn.",
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-    },
+    title: HOME_TITLE,
+    description:
+      "Plánujte směny s pomocí AI, spravujte nepřítomnosti a mějte přehled o svém týmu.",
   },
   alternates: {
     canonical: "https://coalshift.cz",
@@ -37,8 +45,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="cs">
+    <html lang="cs" suppressHydrationWarning>
       <head>
+        {/* Render-blocking theme bootstrap — sets the theme class before paint. */}
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+
         <Script id="google-tag-manager" strategy="afterInteractive">
           {`
             (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -48,23 +59,43 @@ export default function RootLayout({
             })(window,document,'script','dataLayer','GTM-NQDZKVLF');
           `}
         </Script>
-        <Script src="//webform.onquanda.com/static/js/webform/embedded.min.js" strategy="beforeInteractive" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png" />
         <link rel="apple-touch-icon" href="/favicon/apple-touch-icon.png" />
         <link rel="manifest" href="/favicon/site.webmanifest" />
-        <meta name="theme-color" content="#ffffff" />
         <meta name="format-detection" content="telephone=no" />
+
+        {/* Local fonts with Czech (Latin Extended) glyph coverage. */}
+        <link
+          rel="preload"
+          as="font"
+          type="font/woff2"
+          href="/fonts/inter-v20-latin-ext-regular.woff2"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          as="font"
+          type="font/woff2"
+          href="/fonts/inter-v20-latin-ext-600.woff2"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          as="font"
+          type="font/woff2"
+          href="/fonts/lekton-v21-latin-ext-700.woff2"
+          crossOrigin="anonymous"
+        />
       </head>
-      <body className="antialiased">
+      <body>
         <noscript>
-          <iframe 
+          <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-NQDZKVLF"
-            height="0" 
-            width="0" 
-            style={{ display: 'none', visibility: 'hidden' }}
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
           />
         </noscript>
         {children}

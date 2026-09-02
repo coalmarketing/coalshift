@@ -1,10 +1,10 @@
-# Coalshift — Brief
+# coalshift — Brief
 
 Approved planning baseline: 2 September 2026. Documentation generation was explicitly authorized by Jakub. Implementation is handed to Claude Code one assignment at a time.
 
 ## Project identity
 
-- Work: redesign and revision of the existing Czech marketing website for Coalshift, a product of coalsoft s.r.o.
+- Work: redesign and revision of the existing Czech marketing website for coalshift, a product of coalsoft s.r.o.
 - Repository: `/Users/jakubtesarik/Programování/coalshift`.
 - Remote: `https://github.com/coalmarketing/coalshift.git`.
 - Stack: Next.js App Router, React, TypeScript, Tailwind CSS; retain this stack.
@@ -13,16 +13,18 @@ Approved planning baseline: 2 September 2026. Documentation generation was expli
 
 ## Goal and scope
 
-Make the website a coherent member of the current coalfamily visual identity, using COALsoft blue, and correct the supplied content, pricing, mobile navigation and image-delivery issues. Improve the affected accessibility, SEO, responsive behavior and maintainability within the agreed four phases.
+Make the website a coherent member of the current coalfamily visual identity, using coalsoft blue, and correct the supplied content, pricing, mobile navigation and image-delivery issues. Improve the affected accessibility, SEO, responsive behavior and maintainability within the agreed four phases.
 
 The website explains the product and sends users to the separate application for registration or login. The application at `app.coalshift.cz`, its backend, billing and product capabilities are outside this repository's scope. Website copy must not invent new capabilities or contractual terms.
 
-All existing routes remain available and receive the redesign:
+Seven content routes are currently planned: the five previously preserved routes plus two owner-requested legal pages. The owner retired the healthcare page during phase-02 review; the new phrase “only two subpages” is being clarified before any further old-route deletion:
 
 | Route | Role | Scope |
 | --- | --- | --- |
 | `/` | Main marketing page | Full content and visual revision |
-| `/zdravotnici` | Healthcare landing page | Same design system, revised copy and trial duration |
+| `/gdpr` | Zásady ochrany osobních údajů (GDPR) | Phase 02: lower subpage intro and exact `waulterGdpr` container, linked in footer |
+| `/cookies` | Podmínky cookies | Phase 02: lower subpage intro and exact `waulterCookies` container, linked in footer |
+| `/zdravotnici` and `/zdravotnici/` | Retired healthcare page | Phase 02: remove the page and its links; 301 to `/#industries`; healthcare remains an audience label |
 | `/reference` | Existing references | Preserve route and existing testimonial attribution; redesign |
 | `/registrace` | Registration landing page | Preserve route and registration destination; redesign |
 | `/wait-list` | Historical landing page | Preserve route, remove stale launch messaging, redesign |
@@ -42,24 +44,54 @@ Preserve the established navigation scope. A route that was not linked from the 
 
 | Source item | Approved treatment | Phase |
 | --- | --- | --- |
-| 1 — Browser title | Homepage title: `Coalshift \| AI plánovač směn a docházky`; route-specific metadata elsewhere | 03 |
+| 1 — Browser title | Homepage title: `coalshift \| AI plánovač směn a docházky`; route-specific metadata elsewhere | 03 |
 | 2 — Cookie/GDPR banner | Owner confirmed the deployed banner works and owns it through GTM. Preserve integration; no banner replacement or consent audit | Boundary in 01–04 |
 | 3 — Missing phone image and portrait | Repair static image delivery; fix aspect ratio/loading. Replace the obsolete contact with the supplied new people and portraits | 01, 02 |
-| 4 — Copyright | `© 2026 coalsoft s.r.o.` for this release | 02 |
+| 4 — Copyright | `© 2026 coalsoft s.r.o. Všechna práva vyhrazena.` and the family developer credit in content.md | 02 |
 | 5 — Calendly | Consultation CTA plus inline booking in contact area, after owner setup | 04 |
-| 6 — Pricing | Use the exact table in content.md, prices excluding VAT. Plans differ only in employee count; remove per-tier feature lists and per-employee add-ons | 02 |
-| 7 — Page sections | Keep the AI-assistant benefits topic; revise the remainder to the approved benefits, capabilities and audiences in content.md | 02 |
+| 6 — Pricing | Monthly-only table in content.md supersedes annual pricing in the PDF; prices excluding VAT. Plans differ only in employee count; remove per-tier feature lists and per-employee add-ons | 02 |
+| 7 — Page sections | Keep a separate compact key-functions overview; explain practical benefits including AI in a five-tab browser, immediately followed by pricing; compact audience overview | 02 |
 | 8 — Contacts | Martina Adamcová and Šárka Melišová with the approved roles, email addresses and phone numbers | 02 |
 
 Additional confirmed decisions:
 
-- Free trial: **14 days everywhere**, including healthcare, historical landing pages, metadata and hidden accessible labels where applicable. Keep the Free plan distinct from the time-limited trial; do not invent what happens after the trial.
-- The design inherits **COALsoft blue `#00B5E2`**, with both light and dark themes, dark by default, and the coalfamily brand bar. Coalios orange is not Coalshift's primary color.
+- **Phase-02 owner revision (2 September 2026):** use the specific coalios browser, CTA outline/circular-arrow animation, icon-card border glow and family-bar behavior documented in [the earlier D1–D7 correction assignment](phase-02-fidelity-corrections.md). Preserve the separate key-functions section as explicitly confirmed in the owner's follow-up; the browser explains its topics from a practical-use perspective. Compact the page by merging repetitive benefits and closing-CTA blocks, not by removing the visible functions overview.
+- **Brand spelling:** coalshift and all family brand names use lowercase even in headings and sentence starts. This supersedes earlier title/prose capitalization.
+- **Offer:** monthly prices only; remove annual amounts, switch, discount note and annual inquiry. The five employee bands, monthly amounts, VAT status and 14-day trial are unchanged.
+- **Route decision:** remove the standalone healthcare page now and redirect its old URL to the homepage audience overview. All other historical/reference/registration pages remain, with unchanged homepage-link visibility. Retire the healthcare-only video with that page; no new homepage video is requested.
+
+- Free trial: **14 days everywhere**, across retained routes, metadata and hidden accessible labels where applicable. Keep the Free plan distinct from the time-limited trial; do not invent what happens after the trial.
+- The design inherits **coalsoft blue `#00B5E2`**, with both light and dark themes, dark by default, and the coalfamily brand bar. coalios orange is not coalshift's primary color.
 - Rewrite and unify Czech copy. Remove unsupported absolute promises and correct the legal wording about breaks and rest; do not promise universal compliance with labour law.
 - An update to a supported, patched Next.js release and compatible React is authorized. Select exact versions against current official guidance during phase 01.
 - The obsolete Netlify configuration should be absent. It is already absent from the production branch used as the starting point; do not invent a deletion task or return to the stale master branch.
 - Use a separate preview branch so work cannot automatically publish to production. Production is `cloudflare-deploy`; the local working branch is `redesign`.
 - No migration to Eleventy, CMS, Workers application runtime or a paid image service is approved by the design reference or the framework update.
+
+## Previous owner feedback — phase 02, second correction (superseded where noted)
+
+[The previous D1–D7 assignment](phase-02-fidelity-corrections.md) supersedes earlier approximations. coalios is the mandatory source for design, interaction, sizing, spacing and content composition. Whenever uncertain, Claude must consult the actual reference implementation. The user permits larger buttons and navigation to preserve its proportions.
+
+- Restore the real centered browser URL and working selection of all five populated panels. Fix the demonstrated pending-Quanda startup dependency while retaining Quanda and GTM.
+- Paid pricing buttons say **Vyzkoušet** with **Prvních 14 dní zdarma.** below; Free remains distinct. All prices and employee bands stay unchanged.
+- Use six audience icon cards, the coalios round-portrait team-card pattern, and **Developed with 💜 by coalmarketing.cz** plus **Všechna práva vyhrazena.** in the footer.
+- Port reference CTA outlines/arrows/type and header/container proportions. Reduce redundant vertical space; preserve the separate key-functions overview.
+
+This is still phase 02; other page-body redesign, SEO and Calendly retain their agreed phases. No publication permission changes.
+
+## Previous owner feedback — phase 02, third correction
+
+[Previous E1–E5 assignment](phase-02-interaction-content-corrections.md): remove Quanda completely while preserving Waulter/GTM; preserve working tabs/theme and correct orientation-specific keyboard handling; expand Czech copy in both six-card grids and unify their icon/card treatment; finish the reference border glow and bottom-edge menu underlines; make login the primary header action; synchronize illustrative mock-browser paths with selection; move company data below the logo in a two-column footer.
+
+The owner supplied `/gdpr` with `<div id="waulterGdpr"></div>` and `/cookies` with `<div id="waulterCookies"></div>`. Their footer links, smaller reference-style subpage intros, exact empty containers and basic route metadata are included in this phase-02 correction. Existing Waulter supplies policy HTML. No independent legal drafting, new consent loader or GTM administration is requested. Full site SEO and Calendly stay in their existing phases.
+
+Until the owner's route wording is clarified, keep the previously approved hidden reference/registration/wait-list URLs. No new deletion is assigned. The owner subsequently withdrew the interaction report after explaining confusion with the dev/IP-served version. Clean local checks passed; the incident is closed by owner clarification and is not a further investigation task.
+
+## Current owner feedback — phase 02, final polish
+
+[Active F1–F6 assignment](phase-02-final-polish.md), 3 September 2026: stable browser layout; centered audience closing line with an outlined plus and no enclosing card; pricing-card border glow; translucent partial-height blue highlighting of selected coalshift words; a brighter light-theme icon accent close to the brand hue.
+
+The owner's subsequent follow-up explicitly replaces the browser phone with two reference-style numerical cards for each topic. Draft example values are authorized for this local design iteration, visibly labelled **Ilustrační údaj** and recorded separately from confirmed product counts. The exact proposed content and confirmation queue are in content.md. This supersedes the earlier requirement to keep the phone in the first panel; preserve the original file and image pipeline. Do not import coalios performance claims as facts. Product-team confirmation/replacement precedes final publication. The final follow-up also requests exact light/dark contrast between browser layers and the reference header’s top/scrolled states: a floating rounded bar becomes a full-width translucent white/black bar flush to the viewport top, with the family strip moving away. Put the theme switch before primary login and port the source navigation spacing. This is still phase 02, with no new phase, stack change or publishing permission.
 
 ## Verified starting point
 
@@ -82,4 +114,4 @@ The selected quality areas and deferred work are detailed in [quality.md](qualit
 
 ## Acceptance
 
-The result must satisfy the selected quality requirements and each phase's acceptance criteria, preserve all six routes, and match the approved content and family design in blue. A local build, a preview deployment and the owner's acceptance are separate outcomes. Production release requires an explicit later instruction; it is not performed automatically on completion of a phase.
+The result must satisfy the selected quality requirements and each phase's acceptance criteria, preserve the current seven-route inventory and the healthcare redirect, and match the approved content and family design in blue. A local build, a preview deployment and the owner's acceptance are separate outcomes. Production release requires an explicit later instruction; it is not performed automatically on completion of a phase.

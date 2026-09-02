@@ -1,0 +1,124 @@
+Phase Report — Phase 02: Homepage and design
+
+Outcome: COMPLETED_FOR_REVIEW. Phase 02 → in_review, overall PARTIAL (real narrow-viewport rendering and completed smooth-scroll animation are NOT_RUN — environment-bound). Not accepted; phase 03 not started.
+
+---
+
+1. Baseline, branch, working tree
+
+- Repository: /Users/jakubtesarik/Programování/coalshift · Branch: redesign (tracks origin/redesign)
+- Review baseline / HEAD: 8f1db89f2e01dad80eb6678a5cbd0df0187b797a — unchanged (no commit)
+- Reference used: coalios f3d727dc32dd9cd04493915f512b3375ef7d0cf4 — read-only; coalios-manual not touched; its .DS_Store preserved. No live coalios render was available, so visual comparison is source + implemented-screenshot only.
+- Preserved on entry (Codex's pre-phase-02 edits, not mine): docs/Phases/01-…md, docs/Phases/04-…md, docs/agent-instructions.md (already M on disk), and the two untracked portrait PNGs.
+
+Changed files (uncommitted, vs 8f1db89)
+
+┌─────────────────────────────┬─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│            Kind             │                                                                  Files                                                                  │
+├─────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ Modified                    │ app/layout.tsx, app/page.tsx, app/globals.css, app/components/Header.tsx, app/components/Footer.tsx, tailwind.config.js,                │
+│                             │ image-registry.json                                                                                                                     │
+├─────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ Deleted (superseded         │ Hero, Benefits, KeyFeatures, PricingSection, FAQ, ContactSection, VideoSection, LogoCarousel (.tsx)                                     │
+│ homepage)                   │                                                                                                                                         │
+├─────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ Deleted (unreferenced       │ public/fonts/inter/*.ttf (9), public/fonts/lekton/*.ttf (3) — ~2.9 MB                                                                   │
+│ legacy fonts)               │                                                                                                                                         │
+├─────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ Added — homepage            │ app/components/home/{Hero,AiBenefits,WhyCoalshift,Capabilities,Industries,Pricing,Faq,Contact,ClosingCta}.tsx                           │
+├─────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ Added — primitives / theme  │ app/components/ui/{CtaButton,Section,Card,FragmentCta}.tsx, app/components/theme/{themeScript.ts,ThemeToggle.tsx},                      │
+│ / icons                     │ app/components/icons/FamilyIcons.tsx                                                                                                    │
+├─────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ Added — data                │ app/lib/{links,pricing,contacts}.ts                                                                                                     │
+├─────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ Added — assets              │ public/fonts/*.woff2 (6) + public/fonts/FONT-LICENSE.md; new portrait derivatives are generated (git-ignored)                           │
+├─────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ Docs                        │ docs/plan.md, docs/quality.md, docs/Phases/02-homepage-and-design.md                                                                    │
+└─────────────────────────────┴─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+Remaining working tree after phase 02: the above + the two untracked portrait originals (public/img/martina-adamcova.png, public/img/sarka-melisova.png) + Codex's three preserved doc edits. git status = 49 entries.
+
+2. Implemented design and content
+
+Shared design (COALsoft blue). Tailwind darkMode:'selector' with a coalsoft 50–950 blue scale, family-brand tokens (coalios/coaledu/coalmarketing/coalfamily kept as brand-icon identities only), 4xl radius. Local Inter (400/500/600/700) + Lekton (400/700) WOFF2 with Latin-Extended (Czech) coverage, copied from the reference with an OFL note (public/fonts/FONT-LICENSE.md); three faces preloaded, font-display: swap. Lekton headings, Inter body. Reusable primitives: CtaButton (pill, primary/secondary/ghost, arrow motif, link/action split with rel="noopener" auto for _blank), Section + SectionHeading, Card, FragmentCta.
+
+Shared chrome. Floating rounded header pill with a coalfamily bar above it (5 links, target="_blank" rel="noopener noreferrer", accessible sr-only names, inlined brand marks so currentColor works; parent coalsoft marked in blue). Nav: O aplikaci / Ceník / Nejčastější dotazy / Kontakt / Zdravotníci + "Přihlásit se" (same-tab) + primary CTA + theme toggle. Responsive inert mobile menu (aria-expanded/aria-controls, Escape, focus-return, scroll-lock). Rounded footer panel with the approved © 2026 coalsoft s.r.o., preserved nav scope + company data, coalmarketing.cz credit. --header-height is published from the measured header so native #hash and JS smooth-scroll share one offset.
+
+Theme control. Render-blocking inline bootstrap (themeScript.ts) sets dark class + data-theme + color-scheme before paint — first visit = dark, system prefers-color-scheme intentionally ignored, every storage read/write in try/catch. ThemeToggle button with aria-label + aria-pressed.
+
+Homepage (app/page.tsx, all copy verbatim from content.md, vykání, 14-day trial): Hero → AI-assistant benefits + repaired phone mockup (ResponsiveImage, lazy — now below fold) → practical benefits → capabilities (6) → industries (6, "Zdravotnictví" links to the existing /zdravotnici) → pricing → FAQ disclosure → contacts → closing CTA. Homepage <title> / description / OG / canonical set to the canonical values (removes the old "ušetřete až 50 hodin" claim); remaining per-route SEO is phase 03.
+
+Pricing (app/lib/pricing.ts, single source): five canonical tiers, Měsíčně / Ročně switch (aria-pressed), amount always labelled "za měsíc/rok, bez DPH", annual = 11× monthly for Start/Lite/Advanced (12 430 / 28 600 / 48 400 Kč), Pro annual = Individuálně (never computed) + "Domluvit roční tarif" → #contact, Všechny ceny jsou uvedeny bez DPH. + the 11-month note always visible. No per-tier feature lists, no per-employee surcharge.
+
+Contacts (app/lib/contacts.ts): Martina Adamcová (Obchod a produkt) + Šárka Melišová (Podpora) with the exact tel:/mailto: targets and the new 1080² portraits through the extended Sharp pipeline (image-registry.json → martina-adamcova-* / sarka-melisova-* WebP at 240/320/480/640; originals preserved). Obsolete Miroslav Adamec removed — 0 "miroslav" in any built route. Contact layout left ready for the phase-04 inline calendar (comment marker, no placeholder/dead booking link).
+
+Preserved: GTM GTM-NQDZKVLF (snippet + <noscript>), Quanda <Script>, /zdravotnici video, static Cloudflare Pages / out architecture and verified scripts. No framework, dependency, CMS, form or tracking change.
+
+3. Visual evidence
+
+- Sent to you: homepage-hero-light-1512w.jpg, homepage-ai-benefits-dark-1512w.jpg
+- Also captured during review (in …/scratchpad/phase02-shots/ and inline in this session): pricing (light, Měsíčně + Ročně states), FAQ, contacts with both portraits, footer + closing CTA (dark), /zdravotnici with new chrome.
+- Browser: Chrome via Claude-in-Chrome, ~1512 CSS px / DPR 2 (fixed), wrangler pages dev out.
+
+4. Acceptance criteria & quality IDs
+
+AC-01 (Q-007, Q-008)
+Result: PASS desktop/both themes; NOT_RUN mobile widths
+Notes: Reference-aligned design; theme = dark default, instant toggle, reload persistence, clear-storage→dark, no hydration error, accessible control.
+────────────────────────────────────────
+AC-02 (Q-009, Q-010)
+Result: PARTIAL — built + desktop-verified; NOT_RUN at 320/390/768 px & real keyboard
+Notes: 1×h1, labelled landmarks, 0 dup ids, 0 nested interactive, visible focus (2px, ≥3:1 both themes), FAQ + menu state/inert/Escape/focus-return, reduced-motion media
+query. Contrast measured: primary CTA 5.5:1 light / 8.7:1 dark, body/eyebrow/nav ≥8:1, H1 ≥17:1.
+────────────────────────────────────────
+AC-03 (Q-011, Q-012)
+Result: PASS (homepage)
+Notes: Copy verbatim from content.md; false-savings meta removed; pricing canonical + period states + VAT/annual notes; no feature/surcharge differentiation.
+────────────────────────────────────────
+AC-04 (Q-003, Q-013)
+Result: PASS data/targets/delivery; NOT_RUN rendered crop at real widths
+Notes: New portraits generated (HTTP 200 image/webp), truthful srcSet, consistent crop, lazy; exact roles + tel:/mailto:; 0 "miroslav"; phone mockup proportions + 0
+/_next/image.
+────────────────────────────────────────
+AC-05 (Q-004, Q-006, Q-015, Q-016)
+Result: PASS behaviour/semantics/loading/integration; NOT_RUN completed animation + real mobile pointer
+Notes: Fragment guard on new header (plain → scrollTo(elementTop−108, smooth), modifier/middle not intercepted); register _blank+noopener, desktop login same-tab; all 6
+routes 200 + render; no refreshed=true; below-fold images lazy, fonts preloaded/swap, no decorative JS; GTM ×3 + Quanda + video preserved on every route.
+
+Q-005 unchanged (PASS). Q-014/Q-017/Q-018 remain phase 03/04.
+
+5. Commands run
+
+┌──────────────────────────────────┬───────────────────────────────────────────────────────────────────────────────────┐
+│             Command              │                                      Result                                       │
+├──────────────────────────────────┼───────────────────────────────────────────────────────────────────────────────────┤
+│ npm run images:generate          │ 15 derivatives (adds martina-adamcova-*, sarka-melisova-*)                        │
+├──────────────────────────────────┼───────────────────────────────────────────────────────────────────────────────────┤
+│ npm run typecheck                │ exit 0 (next typegen + tsc --noEmit)                                              │
+├──────────────────────────────────┼───────────────────────────────────────────────────────────────────────────────────┤
+│ npm run pages:build              │ exit 0 — Turbopack, TypeScript OK, 9/9 static pages, out/ 4.9 MB                  │
+├──────────────────────────────────┼───────────────────────────────────────────────────────────────────────────────────┤
+│ wrangler pages dev out + browser │ homepage in both themes, 6-route smoke check, DOM/contrast/guard/FAQ/theme checks │
+└──────────────────────────────────┴───────────────────────────────────────────────────────────────────────────────────┘
+
+6. Remaining limitations / deferred (NOT_RUN)
+
+The automation environment cannot set innerWidth below 1728 px and cannot run window.scrollTo({behavior:"smooth"}) (confirmed: behavior:"auto" works). So these need the owner or a real device — checklist in docs/Phases/02-homepage-and-design.md → "Validation results":
+
+1. Mobile (~390 px): hamburger open → item tap → menu closes + section lands below the sticky header; focus stays in the open menu; Escape returns focus.
+2. Widths 320/768/1440 px, both themes: no horizontal page scroll; pricing stacks; long labels wrap.
+3. 200% text-zoom reflow.
+4. Keyboard-only header pass (visible focus, Enter on "Ceník" → pricing, Enter on CTA → app).
+5. Portrait crop at real narrow/wide widths.
+6. Optional: OS reduce-motion suppresses the decorative effects.
+
+Also deferred: a measured transfer-size / CWV comparison vs the phase-01 baseline (Q-015). Carried phase-01 Q-003/Q-004 items are now re-based on the redesigned UI and roll into this checklist + phase 04.
+
+Out of scope (unchanged): full /zdravotnici, /reference, /registrace, /wait-list* body redesigns + per-route metadata/sitemap/robots (phase 03); Calendly embed (phase 04). Those pages currently render their phase-01 content inside the new shared chrome.
+
+7. Git / deployment actions
+
+None. HEAD still 8f1db89; no commit, branch, push, merge, npm run deploy, or Cloudflare change. All phase 02 work is uncommitted on redesign for review.
+
+✻ Crunched for 30m 42s

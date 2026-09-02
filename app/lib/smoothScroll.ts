@@ -17,11 +17,21 @@ export function smoothScrollToId(id: string): void {
   const target = document.getElementById(id);
   if (!target) return;
 
-  const header = document.querySelector("header");
-  const headerOffset =
-    header instanceof HTMLElement && header.offsetHeight > 0 ? header.offsetHeight : 72;
+  // Clearance = the visible fixed nav bar (not the whole header wrapper, which
+  // includes the family strip that scrolls out of view). `[data-nav-bar]` is
+  // the pinned navigation surface; fall back to the published CSS var, then 80.
+  const navBar = document.querySelector("[data-nav-bar]");
+  let headerOffset = 80;
+  if (navBar instanceof HTMLElement && navBar.getBoundingClientRect().height > 0) {
+    headerOffset = navBar.getBoundingClientRect().height;
+  } else {
+    const varValue = parseFloat(
+      getComputedStyle(document.documentElement).getPropertyValue("--header-height"),
+    );
+    if (Number.isFinite(varValue) && varValue > 0) headerOffset = varValue;
+  }
 
-  const top = target.getBoundingClientRect().top + window.scrollY - headerOffset;
+  const top = target.getBoundingClientRect().top + window.scrollY - headerOffset - 8;
   window.scrollTo({ top, behavior: "smooth" });
 }
 

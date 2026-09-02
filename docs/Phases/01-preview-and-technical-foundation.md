@@ -1,5 +1,11 @@
 # 01 — Preview and technical foundation
 
+## Owner-approved handoff — 2 September 2026
+
+After viewing `https://6011b67f.coalshift.pages.dev`, the owner reported that the preview appeared to work and explicitly requested continuing with phase 02 while handling the remaining detailed checks later. Codex independently verified the remote refs, all six preview routes and their noindex headers, all 14 image src URLs and preserved integration markup. The accepted implementation is commit `8f1db89f2e01dad80eb6678a5cbd0df0187b797a`; the sole phase status is in plan.md.
+
+The missing Q-003 viewport/DPR rendering and Q-004 real mobile/keyboard/modified-click/menu-focus/completed-scroll scenarios remain NOT_RUN. They now belong to verification of the redesigned UI in phase 02 and must be accounted for before the phase 04 release handoff. This owner-approved deferral supersedes the earlier requirement to complete those checks before starting phase 02. It does not turn unperformed checks into PASS or authorize production publication. The original implementation specification and reports below are historical evidence; use the current plan.md handoff and phase 02 assignment for subsequent work.
+
 ## Objective
 
 Make the existing site reproducibly build and run as a static Cloudflare Pages export, repair image delivery and mobile registration, and prepare verifiable preview work on the isolated branch. Preserve the existing offer and appearance until phase 02.
@@ -140,7 +146,7 @@ Use exact resolved package versions and a coherent lockfile; after dependency up
 
 Record evidence with the tested branch/commit or uncommitted state, browser, viewport and environment. Requirement results must be **PASS, FAIL, NOT_RUN or BLOCKED**. `PARTIAL` is an overall Phase Report outcome, not an additional Q-ID result.
 
-No preview has been published or authorized by these planning reports. Complete the local implementation and report remote checks as NOT_RUN/BLOCKED until a real preview is available. Local success does not automatically satisfy remote AC portions.
+The planning reports did not authorize publication; a later assignment (2 September 2026) explicitly did. The preview is now published and verified (deployment `6011b67f`). Remaining remote-class checks that the browser-automation environment cannot perform stay NOT_RUN. Local or preview success does not automatically satisfy owner acceptance.
 
 ## Scope and implementation steps
 
@@ -153,9 +159,31 @@ No preview has been published or authorized by these planning reports. Complete 
 - [x] Run the targeted local verification matrix and record separate remote limitations. — See "Verification results (local)" below and the updated evidence in quality.md. Remote checks are `NOT_RUN`/`BLOCKED` pending an authorized preview.
 - [x] Update verified commands in README/agent-instructions, quality evidence and the plan handoff; return the report. — done.
 
+## Verification results
+
+### Preview publication and verification — 2 September 2026
+
+Published under explicit authorization. Reviewed phase 01 scope staged explicitly (21 modified tracked files, 2 tracked deletions, 5 new implementation/config files, plus `AGENTS.md`, `CLAUDE.md`, `docs/` incl. the source PDF; the two owner portrait PNGs kept untracked; `out/`/`.next/`/derivatives/`.wrangler/`/`node_modules` excluded); `git diff --cached --check` clean; committed as `8f1db89f2e01dad80eb6678a5cbd0df0187b797a` ("Prepare Coalshift technical foundation for preview", parent `0138dbb`); pushed `git push --set-upstream origin redesign:refs/heads/redesign`.
+
+**Cloudflare Preview deployment `6011b67f-f080-4428-9a64-87d0e0ad8ae6`** — environment Preview, branch `redesign` `8f1db89`, status **success** (initialize 4s / clone 2s / build 49s / deploy 11s). Deployment URL `https://6011b67f.coalshift.pages.dev`; branch alias `https://redesign.coalshift.pages.dev`. Build log: cloned `8f1db89`; `wrangler.toml` `pages_build_output_dir: out`; Node **24.20.0** from `.nvmrc` (npm 10.9.2); `npm clean-install` → "added 174 packages … found 0 vulnerabilities" (`glob@10.5.0` deprecation notice printed, benign); `npm run pages:build` → `images:generate` produced all 7 WebP derivatives at exact dimensions → Next.js 16.3.4 (Turbopack), "Compiled successfully", "Finished TypeScript", 9/9 static pages, static export. Production (`cloudflare-deploy` → `https://5e352b4f.coalshift.pages.dev`) and `master` unchanged; no merge, force-push, `npm run deploy` or Cloudflare settings change.
+
+Checks on the deployed preview (HTTP via `curl`, HTML inspection, in-browser render + synthetic guard events, runtime network):
+
+| ID | Result | Preview evidence |
+| --- | --- | --- |
+| Q-001 | PASS (preview) | Six routes each return `x-robots-tag: noindex`. `origin/redesign` == `8f1db89`; production branch/URL untouched. |
+| Q-002 | PASS (preview) | Build log above: Node 24.20.0, `npm ci` 0 vulnerabilities, image generation, `next build` static export, deploy success. |
+| Q-003 | PASS (metadata/HTTP/render); NOT_RUN (real narrow/wide + DPR) | 0 `/_next/image` in any route's HTML; phone `<img>` `srcSet` `213w,320w,426w` + `sizes` + `width/height` 426×519 + `loading="eager"` `fetchPriority="high"`; portrait `srcSet` `240w,320w,480w,640w`. All 7 derivative URLs HTTP 200 `image/webp`, byte sizes equal the build log. SVGs HTTP 200 `image/svg+xml`. Phone mockup renders at correct proportions (screenshot). |
+| Q-004 | PASS (guard/semantics); NOT_RUN (real mobile pointer/keyboard, completed animation) | Live-DOM synthetic matrix: plain fragment click → `defaultPrevented`; `metaKey`/`ctrlKey`/middle → not prevented; home-logo plain → prevented, `metaKey` → not; register CTA `target="_blank" rel="noopener"` plain → not prevented. `a a, a button, button a` = 0. Desktop login same-tab; mobile login `_blank`. Handler calls `window.scrollTo({top: 2276, behavior:"smooth"})`, 2276 = elementDocTop − 72. Animation does not visually complete in the automation environment (`behavior:"smooth"` inert there, `"auto"` works) — harness limit. |
+| Q-005 | PASS | Committed tree has one Tailwind/PostCSS config, no `tailwind.config.ts`/`postcss.config.mjs`; preview build resolves it and renders unchanged typography. |
+| Q-006 | PASS (preview) | All six routes HTTP 200 direct + `curl` refresh; `/wait-list/thank-you/` → 308 canonical; unknown → 404; 0 `refreshed=true` in any HTML; each route rendered (screenshots); homepage links unchanged. |
+| Q-016 | PASS (preview) | `GTM-NQDZKVLF` ×3 (snippet + config + `<noscript>`) on every route; Quanda `embedded.min.js` retained; `/zdravotnici` YouTube `X4EybJeE-Fk` retained; GA `/g/collect` and `ct.leady.com` beacons fire at runtime; no duplicate trackers. |
+
+At publication, the following checks remained NOT_RUN (the reported environment limitations did not establish the absence of code defects): real 320/390/768/1440 CSS px rendering and touch, real completed smooth-scroll animation, real keyboard Tab traversal/visible focus. These checks were subsequently deferred by the owner to verification of the redesigned UI, as recorded at the top of this file. Observations for later phases (not phase 01 defects): homepage/routes carry `<meta name="robots" content="index, follow">` — preview de-indexing relies on the Cloudflare `x-robots-tag` header, which is present (Q-014, phase 03); the contact portrait still shows "Miroslav Adamec" via `adamec-*.webp` and `/zdravotnici` still says "30 dní" and `/wait-list*` still shows the 1.7.2025 launch copy (Q-011/Q-013, phases 02–03); nav-link focus outline is `none` (Q-010, phase 02).
+
 ## Verification results (local)
 
-**Current Codex assessment after the correction report:** candidate metadata, fresh build/typecheck and local HTTP checks pass. The detailed Claude evidence below is retained, but its aggregate local PASS labels for Q-003/Q-004 are superseded by the split results in quality.md: required mobile/keyboard/scroll and remaining viewport/DPR checks are still NOT_RUN. Phase status remains in_review in plan.md. The complete phase 01 /recheck has been assessed and the bounded R4/R5 correction recorded in plan.md is now applied and verified (see "R4" and "R5" below). The remaining outstanding work is the actual mobile/keyboard/scroll/viewport interaction checks and the authorized Cloudflare preview; the review and R4/R5 do not replace them.
+**Historical Codex assessment after R1–R3, before preview publication and owner acceptance:** candidate metadata, fresh build/typecheck and local HTTP checks pass. The detailed Claude evidence below is retained, but its aggregate local PASS labels for Q-003/Q-004 are superseded by the split results in quality.md: required mobile/keyboard/scroll and remaining viewport/DPR checks are still NOT_RUN. Phase status remains in_review in plan.md. The complete phase 01 /recheck has been assessed and the bounded R4/R5 correction recorded in plan.md is now applied and verified (see "R4" and "R5" below). The remaining outstanding work is the actual mobile/keyboard/scroll/viewport interaction checks and the authorized Cloudflare preview; the review and R4/R5 do not replace them.
 
 **Corrections R1–R3 applied 2 September 2026** (see "Correction Report" and the R1–R3 findings in plan.md). Environment: Node 24.20.0, npm 11.19.0, Next.js 16.3.4 (Turbopack), Chrome via Claude-in-Chrome, **actual rendering viewport fixed at 1728 CSS px / DPR 2** (the harness does not honour `resize_window` for `innerWidth`; no device-emulation tool is available), served from `wrangler pages dev out`. Branch `redesign`, uncommitted on baseline `0138dbb`.
 
@@ -226,7 +254,7 @@ Codex focused R4/R5 assessment, 2 September 2026: the actual `smoothScroll.ts` m
 
 Retained cleanup limitation: the legacy Quanda embed script is kept per the consolidated specification; it calls `console.clear()` on load.
 
-Remote gate: no preview published or authorized. Remote checks for Q-001, Q-002 (real Cloudflare build), Q-003, Q-004, Q-006, Q-016 and `X-Robots-Tag: noindex` are `NOT_RUN`.
+Remote gate: **preview published and verified on 2 September 2026** — see "Verification results → Preview publication and verification" above. Cloudflare Preview deployment `6011b67f` (commit `8f1db89`, `https://6011b67f.coalshift.pages.dev`) supplies the remote evidence for Q-001, Q-002 (real Cloudflare build), Q-003, Q-004, Q-006, Q-016 and `x-robots-tag: noindex`. The local rows below predate the publication and are retained as history. Still NOT_RUN: real mobile-viewport rendering, real completed smooth-scroll animation and real keyboard traversal (browser-automation environment limit).
 
 ## Acceptance criteria
 
@@ -240,7 +268,7 @@ Remote gate: no preview published or authorized. Remote checks for Q-001, Q-002 
 
 [Quality profile](../quality.md): **Q-001, Q-002, Q-003, Q-004, Q-005, Q-006, Q-016**. Q-003 concerns existing images here; new contact portraits belong to phase 02.
 
-## Execution boundaries and completion
+## Original phase 01 execution boundaries and completion (historical)
 
 The local implementation assignment allows the edits, dependency installation and generated build artifacts necessary for this phase. Keep the work uncommitted on `redesign`; do not ask for commit permission as a prerequisite to editing. No commit, push, reset, merge, Cloudflare settings change or deployment is authorized by these reports or this specification.
 

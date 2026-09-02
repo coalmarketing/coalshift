@@ -21,7 +21,7 @@ export default function WaitList() {
               jsme rádi, že jsi s námi!
             </h1>
             <p className="text-lg sm:text-xl font-inter text-gray-600 max-w-2xl mx-auto">
-              Coalshift spouštíme 1. 7. 2025. Jakmile bude tvé přihlášení aktivní, dáme ti vědět e-mailem i notifikací.
+              coalshift spouštíme 1. 7. 2025. Jakmile bude tvé přihlášení aktivní, dáme ti vědět e-mailem i notifikací.
             </p>
           </div>
 
@@ -43,7 +43,7 @@ export default function WaitList() {
                 Uč se dřív než ostatní!
               </h2>
               <p className="text-gray-600 font-inter mb-4">
-                Získej přístup k tutoriálům a prvním tipům, jak co nejlépe nastavit plánování směn s Coalshiftem – už teď
+                Získej přístup k tutoriálům a prvním tipům, jak co nejlépe nastavit plánování směn s coalshiftem – už teď
               </p>
               <Button variant="primaryModra">
                 Prozkoumej ukázky už teď

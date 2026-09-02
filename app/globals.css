@@ -2,77 +2,417 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-  font-family: 'Inter';
-  src: url('/fonts/inter/Inter-Regular.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
-}
+/* ============================================================= */
+/* Fonts — local WOFF2 with Latin Extended (Czech) glyph coverage */
+/* Copied from the coalios design reference. See public/fonts/FONT-LICENSE.md */
+/* ============================================================= */
 
 @font-face {
   font-family: 'Inter';
-  src: url('/fonts/inter/Inter-Bold.ttf') format('truetype');
-  font-weight: 700;
   font-style: normal;
-}
-
-@font-face {
-  font-family: 'Lekton';
-  src: url('/fonts/lekton/Lekton-Regular.ttf') format('truetype');
   font-weight: 400;
-  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/inter-v20-latin-ext-regular.woff2') format('woff2');
 }
-
 @font-face {
-  font-family: 'Lekton';
-  src: url('/fonts/lekton/Lekton-Bold.ttf') format('truetype');
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/inter-v20-latin-ext-500.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/inter-v20-latin-ext-600.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
   font-weight: 700;
-  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/inter-v20-latin-ext-700.woff2') format('woff2');
 }
-
 @font-face {
   font-family: 'Lekton';
-  src: url('/fonts/lekton/Lekton-Italic.ttf') format('truetype');
+  font-style: normal;
   font-weight: 400;
-  font-style: italic;
+  font-display: swap;
+  src: url('/fonts/lekton-v21-latin-ext-regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Lekton';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/lekton-v21-latin-ext-700.woff2') format('woff2');
 }
 
+@layer base {
+  html {
+    /* Keep native #fragment navigation clear of the floating header. The exact
+       header height is also written to --header-height by the Header component
+       and used by the JS smooth-scroll helper. */
+    scroll-padding-top: var(--header-height, 8.5rem);
+    -webkit-text-size-adjust: 100%;
+  }
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+  body {
+    @apply bg-white text-neutral-800 font-inter antialiased;
+  }
+
+  .dark body {
+    @apply bg-black text-neutral-200;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-lekton;
+  }
+
+  /* Visible keyboard focus on every interactive element. */
+  :focus-visible {
+    outline: 2px solid theme('colors.coalsoft.700');
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+  .dark :focus-visible {
+    outline-color: theme('colors.coalsoft.300');
+  }
+
+  ::selection {
+    background-color: theme('colors.coalsoft.500');
+    color: #ffffff;
+  }
 }
 
-html {
-  /* Keep in-page fragment navigation clear of the fixed header. */
-  scroll-padding-top: 72px;
+@layer components {
+  /* Page shell — reference container maxima (1280px at lg/xl, 1536px at 2xl). */
+  .container-page {
+    @apply mx-auto w-full max-w-[80rem] px-4 sm:px-6 lg:px-8 2xl:max-w-[96rem];
+  }
+  /* Narrower measure for prose-heavy blocks. */
+  .container-prose {
+    @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Family "topper" pill used above section headings. */
+  .eyebrow {
+    @apply inline-flex items-center gap-2 rounded-full border px-3 py-1 font-lekton text-sm font-bold leading-none;
+    @apply border-coalsoft-200 bg-coalsoft-50 text-coalsoft-800;
+  }
+  .dark .eyebrow {
+    @apply border-coalsoft-800/60 bg-coalsoft-900/30 text-coalsoft-300;
+  }
+
+  /* Rounded surface panel. */
+  .panel {
+    @apply rounded-3xl border border-neutral-200 bg-neutral-50;
+  }
+  .dark .panel {
+    @apply border-neutral-800 bg-neutral-900;
+  }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+/* CTA + glow-border live OUTSIDE @layer so Tailwind's component-layer purge
+   never strips the dynamically-composed `cta--*` / `glow-border` selectors.
+   `@apply` and `theme()` still resolve at build time. */
+
+  /* ---------------------------------------------------------------- */
+  /* CTA pill — ported from coalios `.btn` (src/assets/css/input.css  */
+  /* + compiled main.css ~1440-1620). Fluid label/arrow sizes and     */
+  /* disc padding match the reference clamps. Resting: filled pill +  */
+  /* a real 1px outline separated by 2px + a diagonal arrow in a      */
+  /* contrasting circular disc. Hover (~500ms): fill sweeps up from    */
+  /* the bottom, the label rises out as a twin rises in, the first    */
+  /* arrow exits upper-right as its twin enters lower-left inside the  */
+  /* clipped disc. `outline` is decorative only; :focus-visible adds  */
+  /* a distinct box-shadow ring. Reduced motion: no travel.           */
+  /* ---------------------------------------------------------------- */
+  .cta {
+    @apply relative isolate inline-flex select-none items-center justify-center overflow-hidden rounded-full font-lekton font-bold;
+    line-height: 1;
+    outline: 1px solid theme('colors.coalsoft.600');
+    outline-offset: 2px;
+    transition: outline-color 0.5s ease, color 0.5s ease;
+  }
+  .cta::before {
+    content: "";
+    @apply absolute inset-0 -z-10 origin-bottom rounded-full;
+    transform: scaleY(0);
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .cta:hover::before,
+  .cta:focus-visible::before { transform: scaleY(1); }
+
+  /* Both label copies share one grid cell → identical rest/hover position
+     at any button width (incl. full-width pricing buttons). */
+  .cta__labels {
+    display: inline-grid;
+    place-items: center;
+    overflow: hidden;
+  }
+  .cta__label {
+    grid-area: 1 / 1;
+    white-space: nowrap;
+    padding-top: 0.125rem;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease;
+  }
+  .cta__label--in {
+    opacity: 0;
+    transform: translateY(2rem);
+  }
+  .cta:hover .cta__label:first-child,
+  .cta:focus-visible .cta__label:first-child { transform: translateY(-2rem); opacity: 0; }
+  .cta:hover .cta__label--in,
+  .cta:focus-visible .cta__label--in { transform: translateY(0); opacity: 1; }
+
+  .cta__disc {
+    @apply relative grid shrink-0 place-items-center overflow-hidden rounded-full;
+    transition: background-color 0.5s ease, color 0.5s ease;
+  }
+  .cta__arrow {
+    grid-area: 1 / 1;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease;
+  }
+  .cta__arrow--in { opacity: 0; transform: translate(-1.25rem, 0.9rem); }
+  .cta:hover .cta__arrow:first-child,
+  .cta:focus-visible .cta__arrow:first-child { transform: translate(1.1rem, -1.1rem); opacity: 0; }
+  .cta:hover .cta__arrow--in,
+  .cta:focus-visible .cta__arrow--in { transform: translate(0, 0); opacity: 1; }
+
+  /* Sizes (reference clamps). */
+  .cta--md {
+    font-size: clamp(0.875rem, 0.696rem + 0.446vw, 1.125rem);
+    gap: clamp(0.625rem, 0.536rem + 0.223vw, 0.75rem);
+    padding: clamp(0.25rem, 0.161rem + 0.223vw, 0.375rem) 0.5rem clamp(0.25rem, 0.161rem + 0.223vw, 0.375rem) 1.25rem;
+  }
+  .cta--md .cta__disc { padding: 0.375rem; }
+  .cta--md .cta__arrow { width: clamp(0.875rem, 0.607rem + 0.67vw, 1.25rem); height: clamp(0.875rem, 0.607rem + 0.67vw, 1.25rem); }
+  .cta--lg {
+    font-size: clamp(1rem, 0.82rem + 0.45vw, 1.25rem);
+    gap: clamp(0.625rem, 0.446rem + 0.446vw, 0.875rem);
+    padding: clamp(0.25rem, 0.07rem + 0.45vw, 0.5rem) 0.5rem clamp(0.25rem, 0.07rem + 0.45vw, 0.5rem) clamp(1.25rem, 0.89rem + 0.89vw, 1.75rem);
+  }
+  .cta--lg .cta__disc { padding: 0.5rem; }
+  .cta--lg .cta__arrow { width: clamp(1rem, 0.64rem + 0.89vw, 1.5rem); height: clamp(1rem, 0.64rem + 0.89vw, 1.5rem); }
+
+  /* Primary — coalsoft fill, black label (8.7:1 on #00B5E2 both themes). */
+  .cta--primary { @apply bg-coalsoft-500 text-black; }
+  .cta--primary::before { @apply bg-black; }
+  .cta--primary .cta__disc { @apply bg-black text-white; }
+  .cta--primary:hover, .cta--primary:focus-visible { @apply text-white; outline-color: #000; }
+  .cta--primary:hover .cta__disc, .cta--primary:focus-visible .cta__disc { @apply bg-white text-black; }
+  .dark .cta--primary::before { @apply bg-white; }
+  .dark .cta--primary .cta__disc { @apply bg-black text-white; }
+  .dark .cta--primary:hover, .dark .cta--primary:focus-visible { @apply text-black; outline-color: #fff; }
+  .dark .cta--primary:hover .cta__disc, .dark .cta--primary:focus-visible .cta__disc { @apply bg-black text-white; }
+
+  /* Secondary — surface fill, neutral outline. */
+  .cta--secondary { @apply bg-white text-neutral-900; outline-color: theme('colors.neutral.300'); }
+  .cta--secondary::before { @apply bg-neutral-900; }
+  .cta--secondary .cta__disc { @apply bg-neutral-900 text-white; }
+  .cta--secondary:hover, .cta--secondary:focus-visible { @apply text-white; outline-color: theme('colors.neutral.900'); }
+  .cta--secondary:hover .cta__disc, .cta--secondary:focus-visible .cta__disc { @apply bg-white text-neutral-900; }
+  .dark .cta--secondary { @apply bg-neutral-900 text-white; outline-color: theme('colors.neutral.700'); }
+  .dark .cta--secondary::before { @apply bg-white; }
+  .dark .cta--secondary .cta__disc { @apply bg-white text-neutral-900; }
+  .dark .cta--secondary:hover, .dark .cta--secondary:focus-visible { @apply text-neutral-900; outline-color: #fff; }
+  .dark .cta--secondary:hover .cta__disc, .dark .cta--secondary:focus-visible .cta__disc { @apply bg-neutral-900 text-white; }
+
+  /* Distinct keyboard focus ring — survives overflow:hidden and the
+     decorative outline (design-reference.md line 67). */
+  .cta:focus-visible {
+    box-shadow: 0 0 0 4px theme('colors.coalsoft.400' / 55%);
+  }
+  .dark .cta:focus-visible {
+    box-shadow: 0 0 0 4px theme('colors.coalsoft.300' / 55%);
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Layered border + pointer-following blue glow (coalios .border-  */
+  /* gradient / magic-bento, border-only, no ambient element).       */
+  /* ---------------------------------------------------------------- */
+  /* 2px inset padding (coalios benefits.njk `p-0.5`). The base layer is the
+     reference `.border-gradient`: a neutral vertical gradient (lighter top,
+     darker lower edge) that stays visible at rest for a subtle raised look.
+     The pointer-following blue radial glow is an ADDITIONAL layer painted
+     above it; at rest --glow-intensity is 0 so only the neutral rim shows. */
+  .glow-border {
+    @apply relative p-0.5;
+    border-radius: var(--gb-radius, 1.5rem);
+    background:
+      radial-gradient(
+        var(--glow-radius, 220px) circle at var(--glow-x, 50%) var(--glow-y, 50%),
+        rgba(0, 181, 226, calc(var(--glow-intensity, 0) * 0.65)) 0%,
+        rgba(0, 181, 226, calc(var(--glow-intensity, 0) * 0.25)) 35%,
+        transparent 70%
+      ),
+      linear-gradient(to bottom, theme('colors.neutral.100'), theme('colors.neutral.300'));
+    background-origin: border-box;
+    background-clip: border-box;
+    transition: background 0.3s ease;
+  }
+  .dark .glow-border {
+    background:
+      radial-gradient(
+        var(--glow-radius, 220px) circle at var(--glow-x, 50%) var(--glow-y, 50%),
+        rgba(0, 181, 226, calc(var(--glow-intensity, 0) * 0.8)) 0%,
+        rgba(0, 181, 226, calc(var(--glow-intensity, 0) * 0.3)) 35%,
+        transparent 70%
+      ),
+      linear-gradient(to bottom, theme('colors.neutral.700'), theme('colors.neutral.900'));
+  }
+  .glow-border > * {
+    @apply relative bg-neutral-100;
+    border-radius: calc(var(--gb-radius, 1.5rem) - 2px);
+  }
+  .dark .glow-border > * {
+    @apply bg-neutral-900;
+  }
+  .glow-border--sm { --gb-radius: 0.875rem; }
+  .glow-border--lg { --gb-radius: 2rem; }
+
+  /* Scoped surface overrides — beat the generic `.glow-border > *` neutral-100
+     fill so the faux browser can reproduce the reference's layered surfaces
+     (F1) and pricing cards keep their approved white interior (F3). The
+     attribute selector raises specificity above `.glow-border > *`. */
+  .glow-border[data-surface="white"] > * { background-color: #ffffff; }
+  .dark .glow-border[data-surface="white"] > * { background-color: theme('colors.neutral.900'); }
+  .glow-border[data-surface="workspace"] > * { background-color: theme('colors.neutral.200'); }
+  .dark .glow-border[data-surface="workspace"] > * { background-color: theme('colors.neutral.900'); }
+
+  /* F5 — brighter, brand-adjacent icon accent for the light theme only. Scoped
+     to bare information-card icons, browser fact icons and the F2 plus; the
+     parent-brand / CTA #00B5E2 and dark-theme icons are untouched. */
+  .icon-accent { color: #009AC0; }
+  .dark .icon-accent { color: theme('colors.coalsoft.400'); }
+
+  /* F4 — one reusable translucent highlighter behind the lower ~70% of the
+     brand word. Not a box/pill: a bottom-anchored band that leaves the top of
+     the lettering clear. Foreground colour and text metrics are unchanged. */
+  .brand-word {
+    background-image: linear-gradient(rgba(0, 181, 226, 0.3), rgba(0, 181, 226, 0.3));
+    background-repeat: no-repeat;
+    background-size: 100% 0.5em;
+    background-position: left 92%;
+    padding-inline: 0.05em;
+    border-radius: 0.06em;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+  .dark .brand-word {
+    background-image: linear-gradient(rgba(90, 213, 245, 0.22), rgba(90, 213, 245, 0.22));
+  }
+
+@media (hover: none), (prefers-reduced-motion: reduce) {
+  /* No pointer glow on coarse pointers or with reduced motion — the plain
+     layered border remains. */
+  .glow-border { --glow-intensity: 0 !important; }
 }
 
-.hero-background {
-  position: relative;
-  isolation: isolate;
+/* ---------------------------------------------------------------- */
+/* Legal pages — readable wrapper for HTML injected by the Waulter  */
+/* provider into #waulterGdpr / #waulterCookies. No typography      */
+/* plugin is installed, so the element rules are written by hand.   */
+/* Lives outside @layer so the descendant selectors targeting       */
+/* provider markup are never purged.                                */
+/* ---------------------------------------------------------------- */
+.legal-content {
+  color: theme('colors.neutral.700');
+  font-size: 1rem;
+  line-height: 1.7;
+}
+.dark .legal-content { color: theme('colors.neutral.300'); }
+
+.legal-content > :first-child { margin-top: 0; }
+
+.legal-content h1,
+.legal-content h2,
+.legal-content h3,
+.legal-content h4 {
+  @apply font-lekton;
+  font-weight: 700;
+  color: theme('colors.neutral.900');
+  line-height: 1.25;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+.dark .legal-content h1,
+.dark .legal-content h2,
+.dark .legal-content h3,
+.dark .legal-content h4 { color: #fff; }
+
+.legal-content h1 { font-size: 1.875rem; }
+.legal-content h2 { font-size: 1.5rem; }
+.legal-content h3 { font-size: 1.25rem; }
+.legal-content h4 { font-size: 1.125rem; }
+
+.legal-content p,
+.legal-content ul,
+.legal-content ol,
+.legal-content table { margin-top: 0; margin-bottom: 1rem; }
+
+.legal-content ul,
+.legal-content ol { padding-left: 1.5rem; }
+.legal-content ul { list-style: disc; }
+.legal-content ol { list-style: decimal; }
+.legal-content li { margin-bottom: 0.375rem; }
+.legal-content li::marker { color: theme('colors.neutral.400'); }
+
+.legal-content a {
+  color: theme('colors.coalsoft.700');
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.dark .legal-content a { color: theme('colors.coalsoft.300'); }
+.legal-content a:hover { text-decoration-thickness: 2px; }
+
+.legal-content strong { color: theme('colors.neutral.900'); font-weight: 700; }
+.dark .legal-content strong { color: #fff; }
+
+.legal-content hr {
+  border: 0;
+  border-top: 1px solid theme('colors.neutral.200');
+  margin: 2rem 0;
+}
+.dark .legal-content hr { border-top-color: theme('colors.neutral.800'); }
+
+.legal-content table {
+  width: 100%;
+  border-collapse: collapse;
+  display: block;
+  overflow-x: auto;
+  font-size: 0.9375rem;
+}
+.legal-content th,
+.legal-content td {
+  border: 1px solid theme('colors.neutral.200');
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+.dark .legal-content th,
+.dark .legal-content td { border-color: theme('colors.neutral.800'); }
+.legal-content th {
+  background: theme('colors.neutral.100');
+  color: theme('colors.neutral.900');
+  font-weight: 700;
+}
+.dark .legal-content th {
+  background: theme('colors.neutral.900');
+  color: #fff;
 }
 
-.hero-background::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: url('./../public/landingImg.jpg') lightgray 50% / cover no-repeat;
-  opacity: 0.05;
-  z-index: -2;
-}
-
-.hero-background::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(50% 50% at 50% 50%, #00B5E2 0%, #008AAC 100%);
-  z-index: -1;
-  mix-blend-mode: multiply;
+/* Respect an explicit reduced-motion preference for decorative animation. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }
