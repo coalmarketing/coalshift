@@ -45,7 +45,7 @@ export default function Capabilities() {
           eyebrow="Funkce"
           title={<>Co všechno <BrandWord /> zvládne</>}
         />
-        <SpotlightGroup className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <SpotlightGroup className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {ITEMS.map((item) => (
             <InfoCard key={item.title} {...item} />
           ))}

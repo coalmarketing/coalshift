@@ -16,27 +16,16 @@ const HOME_TITLE = "coalshift | AI plánovač směn a docházky";
 const HOME_DESC =
   "Plánujte směny s pomocí AI, spravujte nepřítomnosti a mějte přehled o svém týmu. Vyzkoušejte coalshift na 14 dní zdarma.";
 
+/**
+ * Layout metadata carries only `metadataBase` plus a plain title/description
+ * fallback (used by routes with no own metadata, e.g. the built-in 404). Every
+ * content route owns its canonical, Open Graph and Twitter via `app/lib/seo.ts`
+ * (Phase 03) — nothing here is inherited as a per-route canonical or social card.
+ */
 export const metadata: Metadata = {
   metadataBase: new URL("https://coalshift.cz"),
   title: HOME_TITLE,
   description: HOME_DESC,
-  openGraph: {
-    title: HOME_TITLE,
-    description: HOME_DESC,
-    type: "website",
-    locale: "cs_CZ",
-    siteName: "coalshift",
-    url: "https://coalshift.cz",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: HOME_TITLE,
-    description:
-      "Plánujte směny s pomocí AI, spravujte nepřítomnosti a mějte přehled o svém týmu.",
-  },
-  alternates: {
-    canonical: "https://coalshift.cz",
-  },
 };
 
 export default function RootLayout({

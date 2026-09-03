@@ -13,8 +13,10 @@ const NAV = [
   { id: "contact", label: "Kontakt" },
 ] as const;
 
+// coalios footer `.link` treatment: a centre-out underline that animates in on
+// hover / keyboard focus (see `.link` in globals.css), plus a colour shift.
 const LINK_CLASS =
-  "text-neutral-700 underline-offset-4 hover:text-neutral-900 hover:underline dark:text-neutral-300 dark:hover:text-white";
+  "link inline-block py-1 text-neutral-700 transition-colors hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white";
 
 export default function Footer() {
   const pathname = usePathname();
@@ -72,9 +74,9 @@ export default function Footer() {
           {/* Navigation */}
           <nav aria-label="Patička" className="flex flex-col gap-3 sm:items-start">
             <span className="font-lekton text-sm font-bold text-neutral-900 dark:text-white">
-              Web
+              Navigace
             </span>
-            <ul className="flex flex-col gap-2 text-sm">
+            <ul className="flex flex-col gap-1 text-sm">
               {NAV.map((item) => (
                 <li key={item.id}>
                   <Link
@@ -89,6 +91,11 @@ export default function Footer() {
               <li>
                 <Link href={LOGIN_URL} className={LINK_CLASS}>
                   Přihlásit se
+                </Link>
+              </li>
+              <li>
+                <Link href="/reference" className={LINK_CLASS}>
+                  Reference
                 </Link>
               </li>
               {/* Full-document anchors so the Waulter provider initialises

@@ -11,7 +11,7 @@ The owner requires the coalios reference to guide content hierarchy and composit
 - Trial: **14 dní**. Default CTA: **Vyzkoušet na 14 dní zdarma**. Pricing exception: paid-tier button **Vyzkoušet**, immediately followed by **Prvních 14 dní zdarma.** outside the button. Free remains **Začít zdarma**, without this time-limited helper.
 - Registration: `https://app.coalshift.cz/register`. Login: `https://app.coalshift.cz/login`, label **Přihlásit se**. In the header/mobile menu, login is the primary filled CTA and the 14-day trial is secondary. Desktop action order is trial → theme switch → login; the theme switch is immediately before the primary action. Other trial placements stay primary. This project does not change those application flows.
 - Free plan and trial are distinct. Do not add “bez karty”, automatic renewal, cancellation conditions, a trial plan name or a post-trial charge without confirmed product terms.
-- Before phase 04, consultation actions use an honest contact action such as **Kontaktovat tým** pointing to the contact section. In phase 04 the approved booking action becomes **Rezervovat konzultaci** with the real Calendly URL. Never publish a fake URL or disabled button presented as working booking.
+- Before Phase 05, consultation actions use an honest contact action such as **Kontaktovat tým** pointing to the contact section. In Phase 05, once its scope is finalized, the proposed booking action becomes **Rezervovat konzultaci** with the real Calendly URL. Never publish a fake URL or disabled button presented as working booking.
 - Shared pricing, contacts and trial wording should have a single source in implementation so alternate layouts cannot drift.
 
 ## Decorative brand highlighter — F4
@@ -50,7 +50,7 @@ Lead: **Plánujte směny, spravujte nepřítomnosti a mějte přehled o svém t�
 
 Primary CTA: **Vyzkoušet na 14 dní zdarma** → registration.
 
-Secondary CTA: **Kontaktovat tým** → contact section; replace with **Rezervovat konzultaci** → approved Calendly event in phase 04.
+Secondary CTA: **Kontaktovat tým** → contact section; replace with **Rezervovat konzultaci** → approved Calendly event in Phase 05, subject to its final owner-approved scope.
 
 Support line: **Pro malé týmy i větší směnné provozy.**
 
@@ -108,7 +108,7 @@ Exactly two cards accompany each selected topic. These values and areas are prop
 
 Use large normal-color numerals, a small blue badge, short supporting copy and the reference's gray raised-card surface. The **Ilustrační údaj** note is subtle but plainly readable and stays with each illustrative number, including mobile and screenshots. There are six illustrative values and four approved product counts; do not add performance guarantees or pretend these are customer results.
 
-**Product-team follow-up:** Jakub supplies confirmed values or replacement text for the six illustrative IDs. For performance figures, record the source, compared workflow, team/sample and period; percentages of time saved need the baseline time and hours saved need the time period. The two planning figures must describe consistent assumptions if presented together. A number becomes `confirmed` only after supporting input; otherwise keep the illustration label during design review and replace/remove the unverified claim before final publication. This follow-up is content/release work in phases 03/04, not a reason to block this local layout iteration. Do not include illustrative metrics in page metadata, JSON-LD, testimonials or other sections.
+**Product-team follow-up:** Jakub supplies confirmed values or replacement text for the six illustrative IDs. For performance figures, record the source, compared workflow, team/sample and period; percentages of time saved need the baseline time and hours saved need the time period. The two planning figures must describe consistent assumptions if presented together. A number becomes `confirmed` only after supporting input; otherwise keep the illustration label and its unverified status. On 3 September 2026 Jakub accepted the current website and authorized its Phase 04 release; this permits retaining the reviewed labelled examples, not describing them as measured results. Confirmed replacement values remain an owner/product-team content follow-up. Do not include illustrative metrics in page metadata, JSON-LD, testimonials or other sections.
 
 
 Browser address pill: display `https://coalshift.cz` plus the path matching the **selected** tab:
@@ -190,7 +190,7 @@ Do not restore the old blanket HELIOS/SAP/Alveno integration claim without owner
 
 ### Kontakt
 
-Integrate the final trial action into this area: **Vyzkoušejte coalshift ve svém týmu** with **Vyzkoušet na 14 dní zdarma** → registration. Keep it compact; do not recreate the former detached closing-CTA section. Preserve space for the real calendar in phase 04 without displaying an empty calendar placeholder now.
+Integrate the final trial action into this area: **Vyzkoušejte coalshift ve svém týmu** with **Vyzkoušet na 14 dní zdarma** → registration. Keep it compact; do not recreate the former detached closing-CTA section. Preserve space for the selected calendar integration in Phase 05 without displaying an empty calendar placeholder now.
 
 Heading: **Pojďme probrat váš provoz**
 
@@ -220,7 +220,7 @@ Both portraits have an opaque dark background; do not assume transparent cutouts
 
 Remove active Miroslav Adamec contact details from visible copy, accessible labels and metadata. There is no need to delete unrelated historical source assets merely to remove the old contact from the page.
 
-Phase 04 booking block:
+Phase 05 proposed booking block (final mode and placement pending owner decision):
 
 - Heading: **Rezervujte si konzultaci**
 - Intro: **Vyberte si termín, který vám vyhovuje. Společně probereme, jak může coalshift pomoci vašemu týmu.**
@@ -237,7 +237,7 @@ Copyright: **© 2026 coalsoft s.r.o. Všechna práva vyhrazena.**
 
 Credit: **Developed with 💜 by coalmarketing.cz**. Link **coalmarketing.cz** to `https://coalmarketing.cz/`; preserve the purple heart. This exact family credit comes from the reference footer template and `src/_data/footer.json`.
 
-Preserve existing useful links and the owner-managed privacy/consent integration. Do not add links to retained legacy pages that were previously unlinked on the homepage. Move the existing coalsoft s.r.o. company name, both address lines, IČ and DIČ under the coalshift logo/brand copy. Use exactly two desktop columns: brand/company and navigation, stacked on mobile; keep copyright/credit below. Add **Zásady ochrany osobních údajů (GDPR)** → `/gdpr` and **Podmínky cookies** → `/cookies` to footer navigation. Preserve existing company values. Do not copy coalios newsletter or company-specific footer data.
+Preserve existing useful links and the owner-managed privacy/consent integration. Move the existing coalsoft s.r.o. company name, both address lines, IČ and DIČ under the coalshift logo/brand copy. Use exactly two desktop columns: brand/company and navigation, stacked on mobile; keep copyright/credit below. Footer **Navigace** contains the existing homepage links plus **Reference** → `/reference`, **Zásady ochrany osobních údajů (GDPR)** → `/gdpr` and **Podmínky cookies** → `/cookies`. Use the accepted centre-out link animation. Do not add `/registrace`, `/wait-list` or `/wait-list/thank-you` anywhere in the active link graph. Preserve existing company values. Do not copy coalios newsletter or company-specific footer data.
 
 ## Legal pages — `/gdpr` and `/cookies`
 
@@ -252,7 +252,7 @@ Descriptions: `/gdpr` **Informace o zpracování osobních údajů na webu coals
 
 Each div occurs once and is empty before the existing Waulter integration inserts the policy. Do not author substitute legal paragraphs or copy another company's policies/provider configuration. Style a surrounding readable content area for injected headings, lists, tables and links in both themes. Keep React from rewriting injected content on theme changes. Native full-document footer links ensure normal provider initialization; do not assume Next client navigation triggers it again. Verify real provider content separately from the page shell; missing local/domain delivery is a specific outstanding integration result, not permission to change GTM.
 
-Quanda is explicitly retired and must be removed. Waulter and the existing GTM-managed cookie integration remain; these are different services. The two legal pages are the new visible subpages. Previously approved hidden legacy URLs stay available pending clarification of the owner's broader route wording.
+Quanda is explicitly retired and must be removed. Waulter and the existing GTM-managed cookie integration remain; these are different services. The two legal pages and `/reference` are the visible subpages. Source for the three dead legacy pages stays in the repository, but requests to all six slash/no-slash URL forms redirect with HTTP 301 to `/`.
 
 ## Retired healthcare URL `/zdravotnici`
 
@@ -260,11 +260,13 @@ The owner explicitly withdrew the separate healthcare page during phase-02 revie
 
 Preserve visits to the old URL with a Cloudflare Pages **301** redirect from `/zdravotnici` and `/zdravotnici/` to `/#industries`. Add the rules in `public/_redirects` and verify their presence and behavior in the built `out` served by Wrangler. Do not replace this with a fake 200 page or a client-side redirect.
 
-The healthcare-only video is retired with its page. It is not required to move to the homepage. Remove unreferenced healthcare-only components after a reference search; preserve assets or utilities still used by other pages. Remove this route from active metadata/sitemap inventories; the other historical/registration URLs remain.
+The healthcare-only video is retired with its page. It is not required to move to the homepage. Remove unreferenced healthcare-only components after a reference search; preserve assets or utilities still used by other pages. Remove this route from active metadata/sitemap inventories; the three historical/registration implementations remain in source, while their six public URL forms redirect to `/` and stay outside the sitemap.
 
-## Retained registration and historical pages
+## Dead registration and historical pages
 
-Keep the routes as distinct directly accessible URLs and retain their existing navigation visibility. Do not add a new form or claim a successful submission based only on reaching a URL. Remove the `refreshed=true` forced-page-reload workaround in phase 01 after confirming normal rendering; phase 03 verifies the behavior again with the redesigned pages.
+**Final owner clarification, 3 September 2026:** these three implementations are deliberately dead and are not an ongoing design/content surface. Keep their current working source bodies as-is so they can be reactivated or revised later; do not roll them back, remove them or refine them. They are not available as public pages. `/registrace`, `/registrace/`, `/wait-list`, `/wait-list/`, `/wait-list/thank-you` and `/wait-list/thank-you/` must each return HTTP 301 with `Location: /`. They have no active internal link and stay outside the sitemap. The route-specific copy below records retained source state only and is no longer a public requirement or a source for further polish.
+
+Keep the route files/components and their current bodies in the repository, but make the deployed URLs unavailable through Cloudflare Pages static redirects in `public/_redirects`. Static redirect behavior takes precedence over generated route assets. Do not link to them from the header, footer, page content, sitemap or another generated discovery surface. Retained `noindex` metadata may remain as defense-in-depth/source history, but it is not the public mechanism and does not replace the required 301 response. Do not change their copy, structure, styling, CTA targets or shared legacy component in the current correction. The full accepted-design port is reserved for `/reference`.
 
 ### `/registrace`
 
@@ -304,11 +306,11 @@ This is a neutral follow-up page. Do not display “registrace proběhla úspě�
 
 H1: **Reference**
 
-The three existing attributed testimonials in `app/components/References.tsx` remain the content source: Michal Uhlíř (coalfamily), Jana Novotná (HR Manager), Petr Svoboda (Provozní ředitel). Redesign their presentation; do not invent new customers, quotes, company logos, ratings or measured outcomes. Their provenance was not independently verified in this task, so do not describe them in reports as newly verified evidence or promote their claims into general product promises. Do not add review-rating structured data from these cards.
+The three existing attributed testimonials now live in `app/components/reference/ReferenceList.tsx` (ported from the former `References.tsx`): Michal Uhlíř (coalfamily), Jana Novotná (HR Manager), Petr Svoboda (Provozní ředitel). Redesign the complete page with the accepted coalshift visual system, shared header/footer, a compact subpage introduction and responsive cards in both themes. Add **Reference** to footer **Navigace**; do not add it to the desktop or mobile header. Remove the hard-coded five-star graphic and repeated coalshift card logo: neither is supplied customer content, and the stars would present an unverified rating. Do not invent new customers, quotes, company logos, ratings or measured outcomes. Their provenance was not independently verified in this task, so do not describe them in reports as newly verified evidence or promote their claims into general product promises. Do not add review-rating structured data from these cards. Jakub accepted Phase 03 and authorized publication of the current reviewed content on 3 September 2026; this is publication acceptance, not independent provenance verification. Retain that distinction in the compact documentation.
 
 ## Metadata copy and intent
 
-Implement per-route metadata in phase 03. The homepage title must render exactly as below, without an accidentally duplicated template suffix. Descriptions are editorial copy; none promises numerical savings.
+Implement per-route metadata in phase 03. The homepage title must render exactly as below, without an accidentally duplicated template suffix. Descriptions are editorial copy; none promises numerical savings. `/`, `/reference`, `/gdpr` and `/cookies` are public/indexable, use production self-canonicals and appear in the sitemap. The metadata rows for `/registrace`, `/wait-list` and `/wait-list/thank-you` describe retained source only; public requests are intercepted by HTTP 301 redirects to `/`. They have no active internal links and no sitemap entries.
 
 | Route | Title | Description |
 | --- | --- | --- |
@@ -318,7 +320,7 @@ Implement per-route metadata in phase 03. The homepage title must render exactly
 | `/wait-list` | Začněte s coalshiftem | Zjednodušte si plánování směn. Přejděte do aplikace a vyzkoušejte coalshift na 14 dní zdarma. |
 | `/wait-list/thank-you` | Děkujeme za zájem \| coalshift | Pokračujte do aplikace coalshift nebo se vraťte na úvodní stránku. |
 
-Apply the lowercase spelling to existing public titles/labels in the current phase-02 correction without redesigning retained page bodies. Full per-route SEO remains phase 03. Use `https://coalshift.cz` as the production origin. Determine historical-route indexing and canonical treatment with the owner during phase 03 planning; preserved URL and absence of a homepage link do not by themselves mean `noindex`. Do not invent ratings, organization identifiers or social URLs for structured data. Only include structured data if supported by the implemented content and confirmed facts.
+Apply the lowercase spelling to existing public titles/labels. Full per-route SEO remains phase 03. Use `https://coalshift.cz` as the production origin. Move route-specific canonical responsibility out of global layout metadata so a nested public page cannot inherit `/` as its canonical. The sitemap contains only `https://coalshift.cz`, `/reference`, `/gdpr` and `/cookies` (bare homepage origin accepted by Codex on 3 September 2026 to match current metadata output; see Phase 03 URL decision). Public routes use complete text-only Open Graph metadata and `twitter.card = "summary"`; no social-preview image is created or referenced in this phase. The three dead URL families rely on their 301 responses, not crawler-readable body metadata. Do not invent ratings, organization identifiers or social URLs for structured data. Only include structured data if supported by the implemented content and confirmed facts.
 
 ## Legal wording rationale
 

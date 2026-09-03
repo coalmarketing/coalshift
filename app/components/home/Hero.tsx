@@ -11,7 +11,7 @@ export default function Hero() {
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-0 -top-24 -z-10 mx-auto h-[30rem] max-w-4xl rounded-full bg-coalsoft-400/20 blur-3xl dark:bg-coalsoft-500/20"
       />
-      <div className="container-page flex flex-col items-start gap-6 py-16 sm:items-center sm:py-24 sm:text-center">
+      <div className="container-page flex flex-col items-center gap-6 py-16 text-center sm:py-24">
         <span className="eyebrow">AI plánování směn</span>
 
         <h1 className="max-w-4xl text-balance text-4xl font-bold !leading-[1.1] text-neutral-900 sm:text-5xl lg:text-6xl dark:text-white">
@@ -23,7 +23,7 @@ export default function Hero() {
           v jedné aplikaci. <BrandWord /> vám s rozpisem pomůže pomocí AI.
         </p>
 
-        <div className="mt-2 flex flex-col gap-3 sm:flex-row sm:items-center">
+        <div className="mt-2 flex flex-col items-center gap-3 sm:flex-row sm:items-center">
           <CtaButton
             href={REGISTER_URL}
             target="_blank"

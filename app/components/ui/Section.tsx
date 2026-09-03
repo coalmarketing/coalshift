@@ -32,7 +32,7 @@ export default function Section({
     <Tag
       id={id}
       aria-labelledby={labelledBy}
-      className={`scroll-mt-[var(--header-height,8.5rem)] pb-12 sm:pb-16 lg:pb-20 ${
+      className={`pb-12 sm:pb-16 lg:pb-20 ${
         tightTop ? "pt-2 sm:pt-3 lg:pt-4" : "pt-12 sm:pt-16 lg:pt-20"
       } ${className}`.trim()}
     >

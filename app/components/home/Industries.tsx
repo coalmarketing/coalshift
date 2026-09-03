@@ -48,7 +48,7 @@ export default function Industries() {
           intro="Pro týmy, kde je potřeba sladit lidi, směny a každodenní provoz."
         />
 
-        <SpotlightGroup className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <SpotlightGroup className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {INDUSTRIES.map((item) => (
             <InfoCard key={item.title} {...item} />
           ))}

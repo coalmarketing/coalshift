@@ -3,13 +3,29 @@ import type { MouseEvent as ReactMouseEvent } from "react";
 /** Click/activation on an `<a>` element. */
 type AnchorActivation = ReactMouseEvent<HTMLAnchorElement>;
 
+/** True when the visitor asked for reduced motion (guarded for SSR). */
+export function prefersReducedMotion(): boolean {
+  return (
+    typeof window !== "undefined" &&
+    typeof window.matchMedia === "function" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
+}
+
 /**
- * Smoothly scroll to an in-page element, compensating for the fixed header.
+ * Scroll to an in-page element, compensating for the fixed header, and then
+ * reproduce the native `<a href="#id">` side effects that `preventDefault`
+ * would otherwise suppress:
  *
- * The compensation is measured from the rendered header element so it stays
- * correct at every viewport width; it falls back to the header spacer height
- * (72px) when the element cannot be measured. Native fragment navigation uses
- * the matching `scroll-padding-top` declared in globals.css.
+ * - honour `prefers-reduced-motion` (instant scroll instead of `smooth`);
+ * - update the fragment URL exactly once when it actually changes, so the
+ *   section stays shareable and Back reverses the jump — no duplicate entry;
+ * - move focus to the target without adding it to sequential Tab order.
+ *
+ * Clearance = the visible pinned nav bar (`[data-nav-bar]`), not the whole
+ * header wrapper (which includes the family strip that scrolls out of view),
+ * plus an 8px gap. This is the same result as the native
+ * `html { scroll-padding-top: calc(var(--header-height) + 0.5rem) }`.
  */
 export function smoothScrollToId(id: string): void {
   if (typeof document === "undefined") return;
@@ -17,9 +33,6 @@ export function smoothScrollToId(id: string): void {
   const target = document.getElementById(id);
   if (!target) return;
 
-  // Clearance = the visible fixed nav bar (not the whole header wrapper, which
-  // includes the family strip that scrolls out of view). `[data-nav-bar]` is
-  // the pinned navigation surface; fall back to the published CSS var, then 80.
   const navBar = document.querySelector("[data-nav-bar]");
   let headerOffset = 80;
   if (navBar instanceof HTMLElement && navBar.getBoundingClientRect().height > 0) {
@@ -32,7 +45,31 @@ export function smoothScrollToId(id: string): void {
   }
 
   const top = target.getBoundingClientRect().top + window.scrollY - headerOffset - 8;
-  window.scrollTo({ top, behavior: "smooth" });
+  window.scrollTo({ top, behavior: prefersReducedMotion() ? "auto" : "smooth" });
+
+  // Deep-link + Back parity: one history entry only when the hash changes.
+  if (window.location.hash !== `#${id}`) {
+    window.history.pushState(null, "", `#${id}`);
+  }
+
+  // Keyboard/SR parity: focus the section so the next Tab continues from here.
+  // `tabindex="-1"` keeps it out of the sequential Tab order.
+  if (!target.hasAttribute("tabindex")) target.setAttribute("tabindex", "-1");
+  target.focus({ preventScroll: true });
+}
+
+/** Smoothly return to the top of the page (home-logo activation). */
+export function scrollToTop(): void {
+  if (typeof window === "undefined") return;
+  window.scrollTo({ top: 0, behavior: prefersReducedMotion() ? "auto" : "smooth" });
+  // Drop a stale fragment so the URL matches the top-of-page destination.
+  if (window.location.hash) {
+    window.history.pushState(
+      null,
+      "",
+      window.location.pathname + window.location.search,
+    );
+  }
 }
 
 /**

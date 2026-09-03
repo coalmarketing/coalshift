@@ -1,6 +1,52 @@
 # 02 — Homepage and design
 
-## Current correction assignment — F1–F6
+## Owner acceptance — 3 September 2026
+
+Jakub explicitly accepted this phase after Codex's focused review of I1–I8. The accepted version and remaining verification limits are recorded in [plan.md](../plan.md), the sole phase-status source. No further Phase 02 correction is assigned. The implementation records below are historical and do not authorize repeating completed work, publication or Phase 03 implementation.
+
+## Completed correction — I1–I8 after complete recheck (historical)
+
+The complete review found no critical/data/security defect and confirmed all current plan items implemented, but Phase 02 remains `in_review` for eight bounded corrections. Implement [I1–I8](../phase-02-recheck-corrections.md): fragment offsets and native-equivalent URL/history/focus, reduced-motion scrolling, modal mobile-menu focus, reliable skip targets, three contrast states and stable theme-toggle semantics/first paint. Keep all accepted visual behavior and the assignment's explicit exclusions. Return the correction report before acceptance or Phase 03.
+
+- [x] I1 (3 Sep 2026): removed the stacked fragment clearance — `Section` drops `scroll-mt-[var(--header-height,8.5rem)]` (computed `scroll-margin-top: 0px`); `app/globals.css` `html { scroll-padding-top: var(--header-height,8.5rem) }` → `calc(var(--header-height,5rem) + 0.5rem)` as the single native mechanism (fallback aligned to the visible 72–82 px bar). Direct `/#pricing` lands 6 px below the pinned nav bar, `/#industries` `/#faq` `/#contact` 8 px, cross-route and the `/zdravotnici`→`/#industries` 301 6 px; JS path 8 px, matching.
+- [x] I2 (3 Sep 2026): `app/lib/smoothScroll.ts` adds `prefersReducedMotion()` gating `window.scrollTo` behaviour for `smoothScrollToId` and a new `scrollToTop()` (home-logo path, `Header.tsx`); one `history.pushState` only when the hash changes, zero on same-target re-activation; target focused with `tabindex="-1"` (not a Tab stop); modified/non-primary/non-self/missing-target activations still fall through; stale 72/80 px comments reconciled; `history.scrollRestoration` left `"auto"`.
+- [x] I3 (3 Sep 2026): `#mobile-menu` gets `role="dialog" aria-modal="true" aria-label="Navigace"`; a modal effect sets `inert` on `<main>`, `body > footer` and the `#main` skip link (the header keeps its own `inert`), locks body scroll, traps Tab in both directions inside the visible menu, and closes on Escape; `closeMenu(restoreFocus)` keeps focus-return correct (hamburger on Escape/close control, destination section on menu-link activation). Visual layout, animation and z-index unchanged.
+- [x] I4 (3 Sep 2026): `<main id="main">` → `<main id="main" tabIndex={-1} className="outline-none">` on `app/page.tsx` and `app/components/LegalPage.tsx`; the skip link now lands focus on `#main` past the shared header on `/`, `/gdpr`, `/cookies` without `#main` becoming a Tab stop.
+- [x] I5 (3 Sep 2026): `Ilustrační údaj` badge text `text-neutral-500` → `text-neutral-600` — `#525252` on `#E5E5E5` = 6.20:1 light, 6.99:1 dark; wording, `10.4px` size, uppercase, placement, dark result and all 6 instances preserved.
+- [x] I6 (3 Sep 2026): selected browser tab border `border-neutral-300/dark:border-neutral-700` → `border-coalsoft-700/dark:border-coalsoft-400` — at rest 4.38:1 vs list surface / 5.06:1 vs tab fill (light), 8.60:1 / 7.26:1 (dark); neutral fills, vertical layout, roving focus and the separate `:focus-visible` ring unchanged.
+- [x] I7 (3 Sep 2026): non-parent coalfamily icon rest colour `text-neutral-400 dark:text-neutral-500` → `text-neutral-500` — `#737373` = 4.74:1 on white, 4.43:1 on black; parent `coalsoft` keeps `text-coalsoftBrand`; hover/focus brand colours, tooltip, external destinations and dark treatment unchanged.
+- [x] I8 (3 Sep 2026): `ThemeToggle` — stable `aria-label="Tmavý režim"` + `aria-pressed={mounted ? isDark : undefined}` (was a changing action label); sun/moon are Tailwind `dark:` variant classes driven by the bootstrap `<html class="dark">`, correct on first paint including a returning light visitor and cross-route, no hydration error; `size-9`, DOM order and dark-first storage guards preserved.
+- [x] `npm run typecheck` + `npm run pages:build` exit 0; verification in isolated headless Chrome 152 against a fresh `out/` (fragment matrix, modal menu at 390 px both themes, skip link on three shells, I5–I7 contrast light + dark, I8 fresh/persisted/toggle/cross-route) plus a 320–1440 + 200 % regression sweep. Q-009/Q-010 recorded local PASS; Q-008 records I8. Physical-device touch/keyboard, a screen-reader pass and browser-native Back scroll restoration remain NOT_RUN. Phase 02 stays `in_review`; full table in [the correction file](../phase-02-recheck-corrections.md).
+
+## Complete review handoff — 3 September 2026 (historical)
+
+Jakub reviewed H1 and the subsequent coalfamily tooltip correction and accepted the current appearance and behavior. The next assignment is the complete Phase 02 `/recheck`, as scoped in [plan.md](../plan.md), against `8f1db89f2e01dad80eb6678a5cbd0df0187b797a` including commit `68fdbcb` and every local correction/document. Review only; return the English report and stop before fixes or Phase 03. Phase status is recorded in plan.md.
+
+Read the implementation records below as history. Current content/quality, G1–G4/R1–R6 and H1 supersede earlier phone, horizontal-tab, header-trial and fixed-height expectations. H1's compact active-only height is accepted. The final tooltip correction requires visible hover/focus tooltips above the nav surface without covering the theme/login controls, while the full mobile menu stays above the entire header. General owner acceptance does not establish an unspecified physical-device matrix or actual provider delivery.
+
+## Completed correction — H1 (FunctionsBrowser compact height)
+
+Completed assignment: [phase-02-browser-height-correction.md](../phase-02-browser-height-correction.md). Narrow follow-up after G1–G4 / R1–R6 acceptance; all other behaviour preserved. The implementation-time evidence below predates the owner's subsequent acceptance recorded above.
+
+- [x] H1 (3 Sep 2026): `FunctionsBrowser.tsx` grid-stack removed — panel wrapper `flex-1 lg:grid` → `flex-1`; inactive panels → native `hidden` attribute + `hidden` class (`display:none` every width, one DOM copy, not focusable, not in layout — coalios `desktop-screen.njk` `[&[hidden]]:hidden`); main card `gap-8` + `mt-auto` CTA wrapper → `gap-10 lg:gap-12` (reference `~gap-10/12`) with the CTA `self-start` in normal flow. Result: wide-desktop outer frame ≈593 px (was ≈920 px), facts-to-CTA gap 40/48 px (was hundreds), void gone, per-tab natural height, identical main/metric widths, no overflow 320–1728 both themes, keyboard model intact. `typecheck` + `pages:build` pass. AC-H1.1–AC-H1.5 PASS; Q-007/Q-009 FAIL→PASS, Q-010/Q-015 PASS. Owner + Codex visual sign-off and physical-device NOT_RUN. Full table in the correction file.
+
+## Previous correction assignment — G1–G4, R1–R6 (navigation + responsiveness)
+
+Implement [phase-02-responsive-navigation-corrections.md](../phase-02-responsive-navigation-corrections.md). Supersedes F6 only for: no trial CTA in any header, theme control before the sole login CTA, new mobile-header/menu. All other F1–F6 behaviour preserved. Phase status stays in plan.md.
+
+- [x] G1 (3 Sep 2026): header `<li>` underline — `before:origin-left` removed → centre-out (coalios `header.njk`, default origin); footer + legal + footer-login links now use a ported `.link` class (centre-out 500 ms, replaces the instant `hover:underline`); `coalmarketing.cz` credit keeps its permanent underline. Reduced motion snaps both.
+- [x] G2 (3 Sep 2026): footer heading **Web → Navigace**; all links/destinations/company data/credit unchanged; 320 px reflow with no overflow, legal labels wrap in the card.
+- [x] G3 (3 Sep 2026): `Vyzkoušet na 14 dní zdarma` removed from every header branch (compact bar and mobile menu included). xl+ order: logo → nav → theme → primary `Přihlásit se`. Below xl: logo + theme + hamburger only. Mobile menu: 4 vertical nav links + `Přihlásit se` as the sole CTA. Fixed a latent bug — `.cta` sets its own `display`, so `hidden xl:inline-flex` on the login button was ignored (login was visible at every width); it is now wrapped in `<span class="hidden xl:inline-flex">`. Real per-width visibility verified.
+- [x] G4 (3 Sep 2026): nav `<ul>` gap `clamp(0.5rem,-0.21rem+1.79vw,1.5rem)`, item `<Link>` pad `clamp(0.375rem,-0.071rem+1.116vw,1rem)`, `h-20`, group gap `xl:gap-8`, theme↔login `xl:gap-4`. Top/scrolled/return states + 100 px threshold + `[data-nav-bar]` fragment clearance + stable spacer verified in both themes.
+- [x] R1 (3 Sep 2026): full-screen mobile menu ported from `header.njk` — `origin-top` `scale-y-0 → scale-y-100`, own logo/close row, vertical list, `overflow-y-auto`; `<header>` `inert` while open, body scroll lock, Escape closes + returns focus, accurate `aria-expanded`/`aria-controls`, link activation closes + navigates. Covers the header (`z-50` vs header `z-40`).
+- [x] R2 (3 Sep 2026): `FunctionsBrowser` horizontal swipe strip removed — tab list is `flex-col` + `aria-orientation="vertical"` at every width, all 5 labels visible, `scrollWidth == clientWidth`. Below lg: address (dots/spacer hidden), vertical list, then panel; active panel natural height (inactive `display:none` + `inert`). At lg+: grid-stacked → frame height 0 px stable across tabs (a `.cta`-style display bug on the panel toggle was fixed). Up/Down roving focus, Home/End, Enter/Space manual activation, Left/Right pass through. Metric/fact reflow at reference breakpoints; all values/labels/`Ilustrační údaj`/paths unchanged; no phone.
+- [x] R3 (3 Sep 2026): hero centred on 320/390 (eyebrow/heading/intro/CTA), CTAs stack centred with full labels; Capabilities + Industries `sm:grid-cols-2 xl:grid-cols-3` (1-col at 320/390); pricing/audience/FAQ/contact reflow verified; content-dependent heading alignment preserved.
+- [x] R4 (3 Sep 2026): `/gdpr` + `/cookies` 200 at 320 & 1440, no overflow, real `<h1>`, breadcrumb, exactly one empty `#waulterGdpr`/`#waulterCookies` in `.legal-content`, footer full-document links. Real provider population still a separate check.
+- [x] R5 (3 Sep 2026): `scrollWidth === clientWidth` at 320/390/768/1024/1280/1440/1728 both themes on `/`, `/gdpr`, `/cookies`; 200 % zoom (640 px layout) no overflow; reduced-motion rim stays; 0 page/hydration errors.
+- [x] R6 (3 Sep 2026): every G/R item traced to a named coalios source file; no coalios content/identity/routes/groups imported; no build dependency on the reference.
+- [x] `npm run typecheck` + `npm run pages:build` exit 0; real isolated headless Chrome 140 validation across 8 widths / both themes / 200 % zoom / reduced motion. Full table + limitations in the correction file. Phase 02 stays `in_review`.
+
+## Previous correction assignment — F1–F6
 
 Implement [phase-02-final-polish.md](../phase-02-final-polish.md), with [fourth-round evidence](../references/phase02-round4/README.md). The latest follow-up replaces the browser phone with two numerical cards per topic. Canonical content distinguishes illustrative values from approved counts. Phase status remains only in plan.md.
 
@@ -64,7 +110,7 @@ Local phase 02 implementation, asset preparation and verification are authorized
 - **AC-01:** Q-007 and Q-008 are evidenced for the shared visual system and both themes, with actual reference/implementation comparison where available.
 - **AC-02:** Q-009 and Q-010 pass for the homepage and shared chrome at the agreed sizes and keyboard/motion states.
 - **AC-03:** Q-011 and Q-012 pass for the revised homepage copy and monthly-only pricing.
-- **AC-04:** Q-003 and Q-013 pass for the actual phone and new contact portraits/data; missing portraits remain an explicit incomplete criterion.
+- **AC-04:** Q-003 and Q-013 pass for retained in-scope raster assets and the two supplied contact portraits/data. F1 removes the browser phone placement while preserving its original asset and repaired image pipeline; do not require reinstating that placement.
 - **AC-05:** Q-004, Q-006, Q-015 and Q-016 pass for affected navigation, shared-route behavior, media/effects, Quanda removal and preserved GTM/Waulter. E5 also requires Q-014 for the new pages’ basic metadata; full SEO is still phase 03.
 
 ## Applicable quality requirements

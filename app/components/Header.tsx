@@ -8,18 +8,18 @@ import {
   isPlainActivation,
   shouldSmoothScroll,
   smoothScrollToId,
+  scrollToTop,
 } from "../lib/smoothScroll";
 import ThemeToggle from "./theme/ThemeToggle";
 import CtaButton from "./ui/CtaButton";
 import { FamilyIcon } from "./icons/FamilyIcons";
-import { REGISTER_URL, LOGIN_URL } from "../lib/links";
+import { LOGIN_URL } from "../lib/links";
 
 type FamilyLink = {
   key: string;
   href: string;
   label: string;
   parent?: boolean;
-  /** brand hover/focus colour class */
   hover: string;
 };
 
@@ -43,13 +43,20 @@ const NAV = [
 // coalios nav.js toggles its scroll state at scrollTop >= 100.
 const SCROLL_THRESHOLD = 100;
 
+// Reference fluid values (coalios header.njk): nav list gap and link padding.
+const NAV_GAP = "gap-[clamp(0.5rem,-0.21rem+1.79vw,1.5rem)]";
+const NAV_LINK_PAD = "px-[clamp(0.375rem,-0.071rem+1.116vw,1rem)]";
+
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [mounted, setMounted] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const menuCloseRef = useRef<HTMLButtonElement>(null);
   const familyRef = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLDivElement>(null);
+  const wasOpenRef = useRef(false);
+  const restoreFocusRef = useRef(true);
   const pathname = usePathname();
   const isHome = pathname === "/";
 
@@ -101,23 +108,67 @@ export default function Header() {
     return () => cancelAnimationFrame(id);
   }, []);
 
-  const closeMenu = useCallback(() => {
-    // Move focus back to the toggle before the menu subtree becomes inert.
-    menuButtonRef.current?.focus();
+  // `restoreFocus` = true for Escape / the close control (return to the
+  // hamburger); false when a menu link handled its own destination focus.
+  const closeMenu = useCallback((restoreFocus = true) => {
+    restoreFocusRef.current = restoreFocus;
     setMenuOpen(false);
   }, []);
 
-  // Body scroll lock + Escape-to-close while the mobile menu is open.
+  // Focus management: into the menu's close control on open; back to the
+  // hamburger on an Escape/close-control dismissal only.
+  useEffect(() => {
+    if (menuOpen) {
+      wasOpenRef.current = true;
+      menuCloseRef.current?.focus();
+    } else if (wasOpenRef.current) {
+      wasOpenRef.current = false;
+      if (restoreFocusRef.current) menuButtonRef.current?.focus();
+      restoreFocusRef.current = true;
+    }
+  }, [menuOpen]);
+
+  // Modal mobile menu: body scroll lock, background inert (skip link + main +
+  // footer; the header is inert via its own prop), Escape close and a Tab focus
+  // wrap so forward/reverse Tab never leaves the visible menu.
   useEffect(() => {
     if (!menuOpen) return;
     const { overflow } = document.body.style;
     document.body.style.overflow = "hidden";
+
+    const menuEl = document.getElementById("mobile-menu");
+    const inertTargets = Array.from(
+      document.querySelectorAll<HTMLElement>("main, body > footer"),
+    ).filter((el) => !menuEl || !el.contains(menuEl));
+    for (const el of inertTargets) el.setAttribute("inert", "");
+
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") closeMenu();
+      if (e.key === "Escape") {
+        closeMenu();
+        return;
+      }
+      if (e.key !== "Tab") return;
+      const menu = document.getElementById("mobile-menu");
+      if (!menu) return;
+      const focusables = menu.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      );
+      if (focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      const active = document.activeElement;
+      if (e.shiftKey && (active === first || !menu.contains(active))) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && active === last) {
+        e.preventDefault();
+        first.focus();
+      }
     };
     document.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = overflow;
+      for (const el of inertTargets) el.removeAttribute("inert");
       document.removeEventListener("keydown", onKey);
     };
   }, [menuOpen, closeMenu]);
@@ -134,7 +185,12 @@ export default function Header() {
   const handleMobileFragment = (e: ReactMouseEvent<HTMLAnchorElement>, id: string) => {
     if (isHome && shouldSmoothScroll(e, id)) {
       e.preventDefault();
-      smoothScrollToId(id);
+      // Close first so the modal effect lifts `inert` from <main>; only then can
+      // the destination section take programmatic focus. `restoreFocus = false`
+      // keeps the focus effect from pulling focus back to the hamburger.
+      closeMenu(false);
+      setTimeout(() => smoothScrollToId(id), 0);
+      return;
     }
     closeMenu();
   };
@@ -142,7 +198,7 @@ export default function Header() {
   const handleLogo = (e: ReactMouseEvent<HTMLAnchorElement>) => {
     if (isHome && isPlainActivation(e)) {
       e.preventDefault();
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      scrollToTop();
     }
   };
 
@@ -150,13 +206,15 @@ export default function Header() {
     <>
       <a
         href="#main"
+        inert={menuOpen ? true : undefined}
         className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-bold focus:text-neutral-900 dark:focus:bg-neutral-900 dark:focus:text-white"
       >
         Přeskočit na hlavní obsah
       </a>
 
       <header
-        className="fixed inset-x-0 top-0 z-50 flex flex-col ease-in-out motion-reduce:!transition-none"
+        inert={menuOpen ? true : undefined}
+        className="fixed inset-x-0 top-0 z-40 flex flex-col ease-in-out motion-reduce:!transition-none"
         style={{
           transform: scrolled ? "translateY(calc(-1 * var(--family-block-h, 4rem)))" : undefined,
           transition: mounted ? "transform 500ms ease-in-out" : undefined,
@@ -167,7 +225,7 @@ export default function Header() {
         <div
           ref={familyRef}
           inert={scrolled ? true : undefined}
-          className={`px-4 pb-2 pt-3 duration-300 ease-in-out motion-reduce:!transition-none sm:px-6 ${
+          className={`relative z-20 px-4 pb-2 pt-3 duration-300 ease-in-out motion-reduce:!transition-none sm:px-6 ${
             mounted ? "transition-opacity" : ""
           } ${scrolled ? "opacity-0" : "opacity-100"}`}
         >
@@ -185,7 +243,7 @@ export default function Header() {
                     className={`block rounded p-1 transition-colors ${
                       item.parent
                         ? "text-coalsoftBrand"
-                        : `text-neutral-400 dark:text-neutral-500 ${item.hover}`
+                        : `text-neutral-500 ${item.hover}`
                     }`}
                   >
                     <span className="sr-only">
@@ -196,7 +254,7 @@ export default function Header() {
                   </a>
                   <span
                     aria-hidden="true"
-                    className="pointer-events-none absolute left-1/2 top-[calc(100%+0.4rem)] -translate-x-1/2 whitespace-nowrap rounded-full border border-neutral-700 bg-neutral-900 px-2.5 py-1 text-[0.7rem] leading-none text-neutral-100 opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100"
+                    className="pointer-events-none absolute left-1/2 top-[calc(100%+0.3rem)] z-50 -translate-x-1/2 whitespace-nowrap rounded-full border border-neutral-700 bg-neutral-900 px-2.5 py-0.5 text-[0.7rem] leading-none text-neutral-100 opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100"
                   >
                     {item.label}
                   </span>
@@ -226,7 +284,7 @@ export default function Header() {
           >
             <nav
               aria-label="Hlavní navigace"
-              className="flex h-[4.5rem] items-center justify-between gap-4 pl-6 pr-4 xl:h-20 xl:gap-6 xl:pl-8"
+              className="flex h-[4.5rem] items-center justify-between gap-4 pl-6 pr-4 xl:h-20 xl:gap-8 xl:pl-8"
             >
               <Link href="/" onClick={handleLogo} className="shrink-0" aria-label="coalshift — domů">
                 <img
@@ -247,20 +305,23 @@ export default function Header() {
                 />
               </Link>
 
-              {/* Desktop nav — Inter 16px, shown from xl (1280px) like the
-                  reference. Each <li> spans the full nav height; a 2px underline
-                  on the bar's bottom edge scales in on hover / keyboard focus.
-                  Homepage fragment links are never marked "current". */}
-              <ul className="hidden items-stretch gap-6 font-inter text-base font-medium xl:flex">
+              {/* Desktop nav — Inter 16px, shown from xl (1280px). Each <li>
+                  spans the full nav height; a 2px underline on the bar's bottom
+                  edge scales in from its centre on hover / keyboard focus
+                  (coalios header.njk — no origin-left). Fragment links are never
+                  marked "current". */}
+              <ul
+                className={`hidden items-stretch font-inter text-base font-medium xl:flex ${NAV_GAP}`}
+              >
                 {NAV.map((item) => (
                   <li
                     key={item.id}
-                    className="relative flex h-20 items-center before:absolute before:bottom-0 before:left-0 before:h-0.5 before:w-full before:origin-left before:scale-x-0 before:bg-black before:transition-transform before:duration-500 before:ease-in-out hover:before:scale-x-100 has-[a:focus-visible]:before:scale-x-100 dark:before:bg-white"
+                    className="relative flex h-20 items-center before:absolute before:bottom-0 before:left-0 before:h-0.5 before:w-full before:scale-x-0 before:bg-black before:transition-transform before:duration-500 before:ease-in-out hover:before:scale-x-100 has-[a:focus-visible]:before:scale-x-100 dark:before:bg-white"
                   >
                     <Link
                       href={fragmentHref(item.id)}
                       onClick={(e) => handleFragment(e, item.id)}
-                      className="flex h-full items-center text-neutral-700 transition-colors hover:text-coalsoft-700 dark:text-neutral-200 dark:hover:text-coalsoft-300"
+                      className={`flex h-full items-center text-neutral-700 transition-colors hover:text-coalsoft-700 dark:text-neutral-200 dark:hover:text-coalsoft-300 ${NAV_LINK_PAD}`}
                     >
                       {item.label}
                     </Link>
@@ -268,25 +329,21 @@ export default function Header() {
                 ))}
               </ul>
 
-              {/* Action order (F6): secondary trial → theme switch → primary
-                  login. Visible order and keyboard order agree. */}
-              <div className="flex items-center gap-2 sm:gap-3">
-                <CtaButton
-                  href={REGISTER_URL}
-                  target="_blank"
-                  label="Vyzkoušet na 14 dní zdarma"
-                  variant="secondary"
-                  size="md"
-                  className="hidden sm:inline-flex"
-                />
+              {/* Action cluster (G3): below xl only the theme control + hamburger;
+                  at xl+ theme control then the sole primary login CTA. No trial
+                  CTA in any header variant. */}
+              <div className="flex items-center gap-2 xl:gap-4">
                 <ThemeToggle />
-                <CtaButton
-                  href={LOGIN_URL}
-                  label="Přihlásit se"
-                  variant="primary"
-                  size="md"
-                  className="hidden sm:inline-flex"
-                />
+                {/* Wrapper toggles visibility — `.cta` sets its own display, so a
+                    `hidden` class on the button itself would be overridden. */}
+                <span className="hidden xl:inline-flex">
+                  <CtaButton
+                    href={LOGIN_URL}
+                    label="Přihlásit se"
+                    variant="primary"
+                    size="md"
+                  />
+                </span>
                 <button
                   ref={menuButtonRef}
                   type="button"
@@ -306,31 +363,75 @@ export default function Header() {
         </div>
       </header>
 
-      {/* Mobile menu */}
+      {/* Full-screen mobile menu — ports coalios header.njk: top-origin scale
+          transition, full-viewport surface, own logo/close row, vertical list,
+          internal scroll. Covers the (inert) header; login is the only CTA. */}
       <div
         id="mobile-menu"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Navigace"
         inert={!menuOpen}
-        className={`fixed inset-0 z-40 flex flex-col gap-8 overflow-y-auto bg-white px-6 pb-10 pt-[calc(var(--header-height,5rem)+2rem)] transition-opacity duration-200 xl:hidden dark:bg-black ${
-          menuOpen ? "opacity-100" : "pointer-events-none opacity-0"
+        className={`fixed inset-0 z-50 flex h-[100dvh] w-screen origin-top flex-col gap-10 overflow-y-auto bg-white px-6 py-6 transition-transform duration-300 ease-in-out motion-reduce:!transition-none xl:hidden dark:bg-black ${
+          menuOpen ? "scale-y-100" : "pointer-events-none scale-y-0"
         }`}
       >
-        <ul className="flex flex-col gap-1 font-lekton text-lg font-bold">
-          {NAV.map((item) => (
-            <li key={item.id}>
-              <Link
-                href={fragmentHref(item.id)}
-                onClick={(e) => handleMobileFragment(e, item.id)}
-                className="block rounded-lg px-2 py-3 text-neutral-800 hover:bg-neutral-100 dark:text-neutral-100 dark:hover:bg-neutral-900"
-              >
-                {item.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <div className="flex items-center justify-between">
+          <Link href="/" onClick={(e) => { handleLogo(e); closeMenu(); }} aria-label="coalshift — domů">
+            <img
+              src="/logo/coalshift_logo_long-dark-color.svg"
+              alt="coalshift"
+              width={400}
+              height={100}
+              className="block h-8 w-auto dark:hidden"
+              draggable={false}
+            />
+            <img
+              src="/logo/coalshift_logo_long-light-color.svg"
+              alt="coalshift"
+              width={400}
+              height={100}
+              className="hidden h-8 w-auto dark:block"
+              draggable={false}
+            />
+          </Link>
+          <button
+            ref={menuCloseRef}
+            type="button"
+            onClick={() => closeMenu()}
+            aria-label="Zavřít navigaci"
+            className="inline-flex size-10 items-center justify-center rounded-full border border-neutral-300 text-neutral-800 dark:border-neutral-700 dark:text-neutral-100"
+          >
+            <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <path d="M6 6l12 12M18 6L6 18" />
+            </svg>
+          </button>
+        </div>
 
-        <div className="flex flex-col gap-3">
-          <CtaButton href={LOGIN_URL} variant="primary" label="Přihlásit se" size="lg" onClick={closeMenu} />
-          <CtaButton href={REGISTER_URL} target="_blank" variant="secondary" label="Vyzkoušet na 14 dní zdarma" size="lg" onClick={closeMenu} />
+        <nav aria-label="Mobilní navigace">
+          <ul className="flex flex-col gap-1 font-lekton text-lg font-bold">
+            {NAV.map((item) => (
+              <li key={item.id}>
+                <Link
+                  href={fragmentHref(item.id)}
+                  onClick={(e) => handleMobileFragment(e, item.id)}
+                  className="block rounded-lg px-2 py-3 text-neutral-800 hover:bg-neutral-100 dark:text-neutral-100 dark:hover:bg-neutral-900"
+                >
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <div className="mt-auto">
+          <CtaButton
+            href={LOGIN_URL}
+            variant="primary"
+            label="Přihlásit se"
+            size="lg"
+            onClick={() => closeMenu(false)}
+          />
         </div>
       </div>
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useRef, useState, type KeyboardEvent } from "react";
+import { useId, useRef, useState, type KeyboardEvent } from "react";
 import Section, { SectionHeading } from "../ui/Section";
 import CtaButton from "../ui/CtaButton";
 import SpotlightGroup from "../ui/SpotlightGroup";
@@ -195,7 +195,7 @@ function MetricCard({ metric }: { metric: Metric }) {
           <span className="eyebrow shrink-0">{metric.badge}</span>
         </div>
         {metric.status === "illustrative" ? (
-          <span className="w-fit rounded-full bg-neutral-200 px-2 py-0.5 text-[0.65rem] font-bold uppercase tracking-wide text-neutral-500 dark:bg-neutral-700 dark:text-neutral-300">
+          <span className="w-fit rounded-full bg-neutral-200 px-2 py-0.5 text-[0.65rem] font-bold uppercase tracking-wide text-neutral-600 dark:bg-neutral-700 dark:text-neutral-300">
             Ilustrační údaj
           </span>
         ) : null}
@@ -207,37 +207,25 @@ function MetricCard({ metric }: { metric: Metric }) {
 
 export default function FunctionsBrowser() {
   const [active, setActive] = useState(0);
-  const [vertical, setVertical] = useState(true);
   const uid = useId();
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
-
-  // Tablist is vertical on lg+ (side rail) and horizontal below.
-  useEffect(() => {
-    const mq = window.matchMedia("(min-width: 1024px)");
-    const sync = () => setVertical(mq.matches);
-    sync();
-    mq.addEventListener("change", sync);
-    return () => mq.removeEventListener("change", sync);
-  }, []);
 
   const focusTab = (i: number) => {
     const n = (i + TABS.length) % TABS.length;
     tabRefs.current[n]?.focus();
   };
 
-  // WAI-ARIA APG manual-activation tabs. Roving focus follows the visual
-  // orientation: Up/Down for the vertical rail (lg+), Left/Right for the
-  // horizontal strip. The unused axis is left alone so, in horizontal mode,
-  // Up/Down still scroll the page. Home/End jump; Enter/Space or click select.
+  // WAI-ARIA APG manual-activation tabs. The tab list is a vertical column at
+  // every width (coalios desktop-screen.njk), so Up/Down always move roving
+  // focus; Left/Right are left to normal page behaviour. Home/End jump;
+  // Enter/Space or click select.
   const onKeyDown = (e: KeyboardEvent<HTMLButtonElement>, i: number) => {
-    const prevKey = vertical ? "ArrowUp" : "ArrowLeft";
-    const nextKey = vertical ? "ArrowDown" : "ArrowRight";
     switch (e.key) {
-      case nextKey:
+      case "ArrowDown":
         e.preventDefault();
         focusTab(i + 1);
         break;
-      case prevKey:
+      case "ArrowUp":
         e.preventDefault();
         focusTab(i - 1);
         break;
@@ -273,29 +261,32 @@ export default function FunctionsBrowser() {
             workspace fill via data-surface="workspace". */}
         <div className="glow-border glow-border--lg" data-surface="workspace">
           <div className="rounded-[calc(2rem-2px)] p-2">
-            {/* Top chrome strip */}
-            <div className="grid grid-cols-[1fr_minmax(0,25rem)_1fr] items-center gap-3 rounded-[1.75rem] bg-neutral-100 px-4 py-2.5 dark:bg-neutral-950">
-              <div className="flex gap-1.5" aria-hidden="true">
+            {/* Top chrome strip — the three decorative dots and the balancing
+                spacer are hidden below lg (coalios desktop-screen.njk); the
+                address is a centred full-width pill on a phone. */}
+            <div className="flex items-center justify-center gap-4 rounded-[1.75rem] bg-neutral-100 px-4 py-2.5 lg:justify-between dark:bg-neutral-950">
+              <div className="hidden gap-1.5 lg:flex" aria-hidden="true">
                 <span className="size-3 rounded-full bg-neutral-300 dark:bg-neutral-800" />
                 <span className="size-3 rounded-full bg-neutral-300 dark:bg-neutral-800" />
                 <span className="size-3 rounded-full bg-neutral-300 dark:bg-neutral-800" />
               </div>
               {/* Decorative address — illustrative path only, synced to the
                   selected tab. Not a link, real route or history entry. */}
-              <span className="w-full select-none truncate rounded-full border border-neutral-300 bg-neutral-200 px-4 py-1.5 text-center text-sm text-neutral-800 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-300">
+              <span className="w-full select-none truncate rounded-full border border-neutral-300 bg-neutral-200 px-4 py-1.5 text-center text-sm text-neutral-800 lg:max-w-[25rem] dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-300">
                 <span className="text-neutral-500 dark:text-neutral-400">{BROWSER_ORIGIN}</span>
                 {TABS[active].path}
               </span>
-              <span aria-hidden="true" />
+              <span aria-hidden="true" className="hidden w-12 lg:block" />
             </div>
 
-            {/* Window */}
-            <div className="flex flex-col gap-3 py-4 sm:px-2 lg:flex-row lg:gap-8 lg:py-6">
+            {/* Window — stacks below lg (address, then the vertical tab list,
+                then the selected panel); rail-left-of-panel at lg+. */}
+            <div className="flex flex-col gap-4 py-4 sm:px-2 lg:flex-row lg:gap-8 lg:py-6">
               <div
                 role="tablist"
-                aria-orientation={vertical ? "vertical" : "horizontal"}
+                aria-orientation="vertical"
                 aria-label="Přehled funkcí v praxi"
-                className="-mx-2 flex gap-2 overflow-x-auto px-2 pb-1 lg:mx-0 lg:w-64 lg:shrink-0 lg:flex-col lg:overflow-visible lg:px-0"
+                className="flex w-full flex-col gap-2 lg:w-64 lg:shrink-0"
               >
                 {TABS.map((tab, i) => {
                   const selected = i === active;
@@ -313,9 +304,9 @@ export default function FunctionsBrowser() {
                       tabIndex={selected ? 0 : -1}
                       onClick={() => setActive(i)}
                       onKeyDown={(e) => onKeyDown(e, i)}
-                      className={`flex shrink-0 items-center gap-4 whitespace-nowrap rounded-2xl border-2 px-6 py-3.5 text-left font-lekton text-lg font-bold transition-colors lg:whitespace-normal ${
+                      className={`flex w-full items-center gap-4 rounded-2xl border-2 px-5 py-3.5 text-left font-lekton text-lg font-bold transition-colors ${
                         selected
-                          ? "border-neutral-300 bg-neutral-100 text-neutral-900 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white"
+                          ? "border-coalsoft-700 bg-neutral-100 text-neutral-900 dark:border-coalsoft-400 dark:bg-neutral-800 dark:text-white"
                           : "border-transparent text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white"
                       }`}
                     >
@@ -326,11 +317,13 @@ export default function FunctionsBrowser() {
                 })}
               </div>
 
-              {/* Panels share one grid cell so the frame height and CTA position
-                  stay stable across selection (the tallest panel sets the
-                  height). Inactive panels are inert + visibility:hidden — one
-                  DOM copy each, excluded from pointer/keyboard/AT. */}
-              <div className="grid flex-1">
+              {/* Only the active panel is in layout at every width (coalios
+                  desktop-screen.njk uses the native `hidden` attribute +
+                  `[&[hidden]]:hidden`). Each tab keeps one semantic DOM copy;
+                  `hidden` removes inactive panels from sizing, focus and AT.
+                  The active panel sizes to its own content — no grid-stack, no
+                  tallest-hidden-panel row. */}
+              <div className="flex-1">
                 {TABS.map((tab, i) => {
                   const shown = i === active;
                   return (
@@ -340,13 +333,15 @@ export default function FunctionsBrowser() {
                       id={`${uid}-${tab.id}-panel`}
                       aria-labelledby={`${uid}-${tab.id}-tab`}
                       tabIndex={shown ? 0 : -1}
-                      inert={shown ? undefined : true}
-                      className={`col-start-1 row-start-1 flex flex-col gap-4 2xl:flex-row ${
-                        shown ? "visible" : "invisible"
-                      }`}
+                      hidden={!shown}
+                      className={`${
+                        shown ? "flex" : "hidden"
+                      } flex-col gap-4 2xl:flex-row`}
                     >
-                      {/* MAIN CONTENT */}
-                      <div className="flex flex-1 flex-col gap-8 rounded-3xl border-2 border-neutral-300 bg-neutral-100 p-6 sm:p-8 lg:p-10 dark:border-neutral-700 dark:bg-neutral-800">
+                      {/* MAIN CONTENT — content group, then the CTA in normal
+                          flow with the reference `~gap-10/12` rhythm (no
+                          `mt-auto` bottom pinning). */}
+                      <div className="flex flex-1 flex-col gap-10 rounded-3xl border-2 border-neutral-300 bg-neutral-100 p-6 sm:p-8 lg:gap-12 lg:p-10 dark:border-neutral-700 dark:bg-neutral-800">
                         <div className="flex flex-col gap-5">
                           <span className="eyebrow self-start">{tab.label}</span>
                           <h3 className="font-lekton text-2xl font-bold !leading-[1.15] text-neutral-900 sm:text-3xl dark:text-white">
@@ -380,8 +375,7 @@ export default function FunctionsBrowser() {
                           </SpotlightGroup>
                         </div>
 
-                        {/* CTA pinned near the main card's bottom edge. */}
-                        <div className="mt-auto">
+                        <div className="self-start">
                           <CtaButton
                             href={REGISTER_URL}
                             target="_blank"
@@ -393,8 +387,9 @@ export default function FunctionsBrowser() {
 
                       {/* SUPPORTING NUMERICAL CARDS — two per topic. Stacked on a
                           narrow phone, side by side below the main card on
-                          tablet, in a fixed right column on wide desktop. */}
-                      <ul className="grid grid-cols-1 gap-4 md:grid-cols-2 2xl:w-[19rem] 2xl:shrink-0 2xl:grid-cols-1">
+                          tablet, in the right rail where the full desktop row
+                          fits. */}
+                      <ul className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 2xl:max-w-sm 2xl:shrink-0 2xl:grid-cols-1">
                         {tab.metrics.map((m) => (
                           <MetricCard key={m.id} metric={m} />
                         ))}

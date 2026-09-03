@@ -52,10 +52,13 @@
 
 @layer base {
   html {
-    /* Keep native #fragment navigation clear of the floating header. The exact
-       header height is also written to --header-height by the Header component
-       and used by the JS smooth-scroll helper. */
-    scroll-padding-top: var(--header-height, 8.5rem);
+    /* The single fragment-clearance mechanism: native `#hash` navigation aligns
+       the target below the pinned nav bar with a small gap. `--header-height` is
+       the measured visible nav-bar height (~72–82px), published by the Header
+       component; the fallback matches that bar for the pre-hydration paint. The
+       JS smooth-scroll helper computes the same `nav-bar height + 8px` offset.
+       Section elements must NOT also carry `scroll-mt` — the two would stack. */
+    scroll-padding-top: calc(var(--header-height, 5rem) + 0.5rem);
     -webkit-text-size-adjust: 100%;
   }
 
@@ -112,6 +115,27 @@
   }
   .dark .panel {
     @apply border-neutral-800 bg-neutral-900;
+  }
+
+  /* Centre-out link underline (ports coalios `.link` in src/assets/css/input.css).
+     A full-width 1px pseudo at rest `scaleX(0)`; hover / keyboard focus expand it
+     symmetrically from the default centre origin over 500ms. `left:0` positions
+     the pseudo, it does not set the transform origin. Used by footer navigation
+     and legal links; the global reduced-motion rule snaps it without travel. */
+  .link {
+    @apply relative;
+  }
+  .link::before {
+    content: "";
+    @apply pointer-events-none absolute -bottom-0.5 left-0 h-px w-full scale-x-0 bg-neutral-900;
+    transition: transform 0.5s ease-in-out;
+  }
+  .dark .link::before {
+    @apply bg-white;
+  }
+  .link:hover::before,
+  .link:focus-visible::before {
+    transform: scaleX(1);
   }
 }
 

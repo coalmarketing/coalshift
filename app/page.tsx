@@ -1,5 +1,9 @@
+import type { Metadata } from "next";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import { metadataFor } from "./lib/seo";
+
+export const metadata: Metadata = metadataFor("/");
 import Hero from "./components/home/Hero";
 import Capabilities from "./components/home/Capabilities";
 import FunctionsBrowser from "./components/home/FunctionsBrowser";
@@ -12,7 +16,7 @@ export default function Home() {
   return (
     <>
       <Header />
-      <main id="main">
+      <main id="main" tabIndex={-1} className="outline-none">
         <Hero />
         <Capabilities />
         <FunctionsBrowser />
