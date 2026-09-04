@@ -14,9 +14,10 @@ export default function Pricing() {
       <div className="flex flex-col items-center gap-10">
         <SectionHeading id="pricing-heading" eyebrow="Ceník" title="Ceník" intro={PRICING_INTRO} />
 
-        {/* Shared reference border + pointer glow (F3). Each card keeps its
-            approved white/dark interior via data-surface="white"; the Lite card
-            keeps a permanent coalsoft ring on top of the shared rim. */}
+        {/* Shared reference border + pointer glow on the pricing cards. Each
+            card keeps its approved white/dark interior via data-surface="white";
+            the Lite card keeps a permanent coalsoft ring on top of the shared
+            rim. */}
         <SpotlightGroup
           as="ul"
           className="grid w-full gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5"

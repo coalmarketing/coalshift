@@ -1,8 +1,7 @@
 /**
- * Approved contact people (docs/content.md). Single source for the contact
- * section, the FAQ mention and any "domluvit roční tarif" link. The obsolete
- * Miroslav Adamec details must not appear anywhere in visible copy, labels or
- * metadata.
+ * Approved contact people (docs/content-and-seo.md). Single source for the
+ * contact section and the FAQ mention. The obsolete Miroslav Adamec details
+ * must not appear anywhere in visible copy, labels or metadata.
  */
 export type Contact = {
   id: string;

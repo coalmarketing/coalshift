@@ -246,7 +246,7 @@
   .dark .cta--secondary:hover .cta__disc, .dark .cta--secondary:focus-visible .cta__disc { @apply bg-neutral-900 text-white; }
 
   /* Distinct keyboard focus ring — survives overflow:hidden and the
-     decorative outline (design-reference.md line 67). */
+     decorative outline (see docs/design-system.md, CTA outline). */
   .cta:focus-visible {
     box-shadow: 0 0 0 4px theme('colors.coalsoft.400' / 55%);
   }
@@ -300,22 +300,22 @@
 
   /* Scoped surface overrides — beat the generic `.glow-border > *` neutral-100
      fill so the faux browser can reproduce the reference's layered surfaces
-     (F1) and pricing cards keep their approved white interior (F3). The
-     attribute selector raises specificity above `.glow-border > *`. */
+     and pricing cards keep their approved white interior. The attribute
+     selector raises specificity above `.glow-border > *`. */
   .glow-border[data-surface="white"] > * { background-color: #ffffff; }
   .dark .glow-border[data-surface="white"] > * { background-color: theme('colors.neutral.900'); }
   .glow-border[data-surface="workspace"] > * { background-color: theme('colors.neutral.200'); }
   .dark .glow-border[data-surface="workspace"] > * { background-color: theme('colors.neutral.900'); }
 
-  /* F5 — brighter, brand-adjacent icon accent for the light theme only. Scoped
-     to bare information-card icons, browser fact icons and the F2 plus; the
-     parent-brand / CTA #00B5E2 and dark-theme icons are untouched. */
+  /* Brighter, brand-adjacent icon accent for the light theme only. Scoped to
+     bare information-card icons, browser fact icons and the audience closing
+     plus; the parent-brand / CTA #00B5E2 and dark-theme icons are untouched. */
   .icon-accent { color: #009AC0; }
   .dark .icon-accent { color: theme('colors.coalsoft.400'); }
 
-  /* F4 — one reusable translucent highlighter behind the lower ~70% of the
-     brand word. Not a box/pill: a bottom-anchored band that leaves the top of
-     the lettering clear. Foreground colour and text metrics are unchanged. */
+  /* One reusable translucent highlighter behind the lower ~70% of the brand
+     word. Not a box/pill: a bottom-anchored band that leaves the top of the
+     lettering clear. Foreground colour and text metrics are unchanged. */
   .brand-word {
     background-image: linear-gradient(rgba(0, 181, 226, 0.3), rgba(0, 181, 226, 0.3));
     background-repeat: no-repeat;

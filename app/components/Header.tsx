@@ -329,7 +329,7 @@ export default function Header() {
                 ))}
               </ul>
 
-              {/* Action cluster (G3): below xl only the theme control + hamburger;
+              {/* Action cluster: below xl only the theme control + hamburger;
                   at xl+ theme control then the sole primary login CTA. No trial
                   CTA in any header variant. */}
               <div className="flex items-center gap-2 xl:gap-4">

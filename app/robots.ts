@@ -5,8 +5,9 @@ export const dynamic = "force-static";
 
 /**
  * Allow-all crawl policy + the production sitemap location. No `Disallow` for
- * the dead legacy routes — a crawler must be able to reach them to read their
- * `noindex` meta tag.
+ * the retained legacy routes: they 301 to `/` at the Cloudflare edge, and the
+ * redirect (not a crawl block) is what keeps them out of the index — a crawler
+ * still needs to fetch the path to see the 301.
  */
 export default function robots(): MetadataRoute.Robots {
   return {

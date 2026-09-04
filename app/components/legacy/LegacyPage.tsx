@@ -12,10 +12,13 @@ type PrimaryAction = {
 };
 
 /**
- * Shared shell for the three dead legacy routes (`/registrace`, `/wait-list`,
- * `/wait-list/thank-you`). They stay directly loadable but carry no promotional
- * sections and no form — a real H1, a lead, one primary action to the app and an
- * optional secondary link. Dark-safe: no legacy colour tokens, themed surfaces.
+ * Shared shell for the three retained-but-unavailable legacy routes
+ * (`/registrace`, `/wait-list`, `/wait-list/thank-you`). All six URL forms 301
+ * to `/` at the Cloudflare edge, so this body is not served in production; the
+ * source is kept only for possible future reactivation. If reactivated it
+ * renders a real H1, a lead, one primary action to the app and an optional
+ * secondary link — no promotional sections, no form. Dark-safe: no legacy
+ * colour tokens, themed surfaces.
  */
 export default function LegacyPage({
   title,

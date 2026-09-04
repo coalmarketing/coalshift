@@ -54,7 +54,7 @@ export default function Industries() {
           ))}
         </SpotlightGroup>
 
-        {/* F2 — centered closing line with a decorative outlined plus. No card,
+        {/* Centered closing line with a decorative outlined plus. No card,
             pill, border or CTA; the plus is not a keyboard stop. */}
         <div className="flex flex-col items-center gap-2 pt-1 text-center">
           <LineIcon

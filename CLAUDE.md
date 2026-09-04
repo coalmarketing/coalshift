@@ -2,4 +2,15 @@
 
 @docs/agent-instructions.md
 
-Read the current brief, plan, quality profile, and the phase named in your assignment before acting. This repository contains an existing Next.js website; preserve its approved routes and work on `redesign`. The adjacent `coalios` repository is an authorized read-only design reference.
+Read [docs/plan.md](docs/plan.md) (phase status + current handoff), the
+[quality profile](docs/quality.md), and the phase file named in your assignment
+before acting. For the current state of the code, read
+[architecture](docs/architecture.md), [design-system](docs/design-system.md),
+[content-and-seo](docs/content-and-seo.md) and [operations](docs/operations.md).
+
+This repository is an existing Next.js website; preserve its approved routes and
+work on `redesign`. `/Users/jakubtesarik/Programování/coalios` is an authorized
+read-only design reference (revision baseline in
+[design-system.md](docs/design-system.md)); never inspect or modify
+`coalios-manual`. `/Users/jakubtesarik/Programování/[[AI]]` is shared workflow
+material, not this application repository — do not modify it.

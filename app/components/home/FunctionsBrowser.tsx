@@ -14,7 +14,7 @@ type Fact = { text: string; icon: LineIconName };
  *  metadata / structured data / other sections. `confirmed` values are an
  *  approved count or composition from canonical product copy. */
 type Metric = {
-  /** Stable id from content.md — used for the later product-team replacement. */
+  /** Stable id from docs/content-and-seo.md — used for the later product-team replacement. */
   id: string;
   value: string;
   badge: string;

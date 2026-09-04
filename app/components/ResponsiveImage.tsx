@@ -1,17 +1,19 @@
 import registry from "../../image-registry.json";
 
 /**
- * Registry-driven responsive image for the two Sharp-generated raster assets.
+ * Registry-driven responsive image for the Sharp-generated raster assets (the
+ * two contact portraits).
  *
- * `next/image` cannot emit a truthful `srcset` on top of a static export where a
- * loader caps requested widths at the largest generated file — it labels every
+ * Why not `next/image`: on a static export it cannot emit a truthful `srcset` —
+ * a loader caps requested widths at the largest generated file and labels every
  * candidate with the width it *asked* for, not the width that was delivered.
  * This component reads image-registry.json and emits `w` descriptors that match
  * the actual generated WebP files, plus a layout-aligned `sizes`. It is a plain
  * presentational component (no hooks, no Node-only imports) and is safe in both
  * server and client components.
  *
- * SVGs, logos and every other image keep using `next/image` unchanged.
+ * `next/image` is not used anywhere in this app. SVGs and logos render as
+ * ordinary `<img>` elements and there is no runtime image optimizer.
  */
 
 type RegistryImage = {
@@ -29,7 +31,7 @@ const bySrc = new Map<string, RegistryImage>(
 );
 
 type ResponsiveImageProps = {
-  /** Registry key, e.g. "/mocup-coalshift.png". */
+  /** Registry key, e.g. "/img/martina-adamcova.png". */
   src: string;
   alt: string;
   /** Layout-aligned `sizes` describing the rendered slot. */

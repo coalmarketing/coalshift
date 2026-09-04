@@ -38,8 +38,8 @@ export default function Contact() {
         />
 
         {/* Round portrait above a separate contact card (ports tym-item.njk).
-            The phase-04 inline consultation calendar is added into this area;
-            no placeholder calendar is shown now. */}
+            The Calendly consultation calendar (Phase 05) is added into this
+            area; no placeholder calendar is shown now. */}
         <SpotlightGroup className="grid gap-x-6 gap-y-10 sm:grid-cols-2">
           {CONTACTS.map((c) => (
             <div key={c.id} className="flex flex-col gap-5">

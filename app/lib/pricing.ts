@@ -1,5 +1,5 @@
 /**
- * Canonical monthly pricing (docs/content.md). Single source so every layout
+ * Canonical monthly pricing (docs/content-and-seo.md). Single source so every layout
  * agrees. The owner removed annual pricing on 2 September 2026 — there is no
  * billing-period switch, no annual amount and no individual annual inquiry.
  * Plans differ only by employee count; no per-tier feature list, no
@@ -19,7 +19,7 @@ export type PricingPlan = {
   featured?: boolean;
 };
 
-/** Shown below every paid-tier button (outside it), per content.md D2. */
+/** Shown below every paid-tier button (outside it), per docs/content-and-seo.md. */
 export const PAID_TRIAL_HELPER = "Prvních 14 dní zdarma.";
 
 export const VAT_NOTE = "Všechny ceny jsou uvedeny bez DPH.";

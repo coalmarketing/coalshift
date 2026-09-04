@@ -7,7 +7,7 @@ import type { Metadata } from "next";
  * `app/sitemap.ts` / `app/robots.ts` read the same records — so "exactly four
  * sitemap URLs" and "no route inherits the homepage canonical" are decided in
  * one place. Titles and descriptions are verbatim from
- * `docs/content.md` §"Metadata copy and intent".
+ * `docs/content-and-seo.md` §"Metadata".
  */
 
 export const SITE_ORIGIN = "https://coalshift.cz";
@@ -25,10 +25,13 @@ export type RouteSeo = {
   /** Exact document title (used as `title.absolute` — never templated). */
   title: string;
   description: string;
-  /** Absolute self-canonical for indexable routes; `null` for the dead legacy
-   *  routes, which must not emit a public canonical. */
+  /** Absolute self-canonical for indexable routes; `null` for the retained
+   *  legacy routes, which must not emit a public canonical. */
   canonical: string | null;
-  /** `false` → emit `robots: noindex, follow` and no social metadata. */
+  /** `false` → emit `robots: noindex, follow` and no social metadata. This is
+   *  defense-in-depth on the retained legacy bodies (kept for possible
+   *  reactivation); in production those URLs 301 to `/` at the Cloudflare edge,
+   *  so the redirect — not this meta tag — is the live indexing mechanism. */
   indexable: boolean;
   /** Include in `sitemap.xml` (only the four public routes). */
   sitemap: boolean;
@@ -97,8 +100,9 @@ export const ROUTES: Record<RoutePath, RouteSeo> = {
 /**
  * Build the Next.js `Metadata` for a route:
  * - indexable → self-canonical + complete text-only Open Graph + Twitter
- *   `summary` (no image is created or referenced in this phase);
- * - dead legacy → `noindex, follow`, no canonical, no social metadata.
+ *   `summary` (no social-preview image is created or referenced);
+ * - retained legacy → `noindex, follow`, no canonical, no social metadata
+ *   (defense-in-depth; the live mechanism is the edge 301 to `/`).
  * `title.absolute` guarantees the string is never modified by a template.
  */
 export function metadataFor(path: RoutePath): Metadata {

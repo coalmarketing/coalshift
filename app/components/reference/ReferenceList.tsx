@@ -2,7 +2,7 @@ import Section from "../ui/Section";
 import SpotlightGroup from "../ui/SpotlightGroup";
 
 /**
- * The three existing attributed testimonials (docs/content.md §"References").
+ * The three existing attributed testimonials (docs/content-and-seo.md §"Testimonials").
  * Quotes, names and roles are preserved verbatim from the previous
  * `app/components/References.tsx`. Their provenance was not independently
  * verified in this work — do not present them as measured evidence.
