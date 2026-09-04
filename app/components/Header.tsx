@@ -435,13 +435,15 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Document-flow spacer — the full top-state header height, so scrolling
-          (which only transforms the fixed header) never reflows the page. */}
+      {/* Document-flow spacer for the fixed header's height. `overflow-anchor:
+          none` stops scroll anchoring from picking this empty div as its
+          anchor and drifting the page down on reload. */}
       <div
         aria-hidden="true"
         style={{
           height:
             "calc(var(--family-block-h, 4rem) + var(--header-height, 5rem))",
+          overflowAnchor: "none",
         }}
       />
     </>

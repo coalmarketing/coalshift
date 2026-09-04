@@ -5,6 +5,7 @@ import { metadataFor } from "./lib/seo";
 import Hero from "./components/home/Hero";
 import Capabilities from "./components/home/Capabilities";
 import FunctionsBrowser from "./components/home/FunctionsBrowser";
+import ProductGallery from "./components/home/ProductGallery";
 import Pricing from "./components/home/Pricing";
 import Industries from "./components/home/Industries";
 import Faq from "./components/home/Faq";
@@ -20,6 +21,7 @@ export default function Home() {
         <Hero />
         <Capabilities />
         <FunctionsBrowser />
+        <ProductGallery />
         <Pricing />
         <Industries />
         <Faq />

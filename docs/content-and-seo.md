@@ -51,8 +51,8 @@ testimonials, and never run a global text-node replacement.
   automatic renewal, cancellation terms, a trial-plan name or a post-trial charge
   without confirmed product terms.
 - Consultation actions use an honest contact action (**Kontaktovat tým** → the
-  contact section) until Phase 05. The Calendly booking action
-  (**Rezervovat konzultaci** + real event URL) arrives in Phase 05 only. Never
+  contact section) until Phase 06. The Calendly booking action
+  (**Rezervovat konzultaci** + real event URL) arrives in Phase 06 only. Never
   ship a fake URL or a disabled control presented as working booking.
 
 Source: `app/lib/links.ts` (`REGISTER_URL` = `https://app.coalshift.cz/register`,
@@ -127,6 +127,41 @@ other sections.
 Mock-browser address paths (plain display text, no hash, not navigable):
 `/smeny-a-ai`, `/lide-a-pozice`, `/nepritomnosti`, `/exporty`, `/statistiky`.
 The real page anchor stays `benefits`.
+
+## Product gallery (`app/components/home/ProductGallery.tsx`)
+
+Homepage section between `FunctionsBrowser` and `Pricing`. Copy source:
+`docs/Phases/05-product-gallery.md`.
+
+- Eyebrow: **Ukázka aplikace**
+- Heading: **Podívejte se, jak coalshift vypadá v praxi**
+- Intro: **Plánujte směny, kontrolujte obsazení a spravujte pozice i zaměstnance
+  v jednom přehledném prostředí. Prohlédněte si skutečné obrazovky aplikace, se
+  kterými budete pracovat každý den.**
+- CTA: **Prohlédnout cenové balíčky** → `#pricing` (guarded smooth-scroll).
+
+Three real application screenshots (all 2876×1376, TEST tenant, no real personal
+data), in this order — `alt` text is the accessible description:
+
+| Order | File | `alt` |
+| --- | --- | --- |
+| 1 | `public/img/product-gallery/coalshift-smeny.png` | Týdenní plán směn v aplikaci coalshift s přehledem pozic a obsazení. |
+| 2 | `public/img/product-gallery/coalshift-pozice.png` | Seznam pracovních pozic v aplikaci coalshift. |
+| 3 | `public/img/product-gallery/coalshift-zamestnanci.png` | Seznam zaměstnanců a pracovních údajů v aplikaci coalshift. |
+
+On narrow screens the order is: eyebrow/heading/text/CTA, then the screenshot
+stack, then the previous/next controls + counter. Activating the active
+screenshot itself opens the fullscreen dialog — its accessible name is
+**„Zobrazit obrázek {název} na celou obrazovku"** (e.g. „Zobrazit obrázek Směny
+na celou obrazovku"); there is no separate fullscreen button. Other control
+accessible names: **Předchozí obrázek**, **Další obrázek**, **Zavřít**. The
+`aria-live` announcement is **„{název} — obrázek {n} z 3"**. All three
+screenshots sit on screen at once as a moving stack — one straight in front, the
+other two as tilted cards above/left and below/right that glide between
+positions on navigation; the two non-active cards carry **empty `alt`** and
+`aria-hidden` (announced only via the front card and the live region).
+Screenshots are shown uncropped; do not retouch, crop or invent product screens. This is not an
+SEO surface — no metadata or structured data changes.
 
 ## Testimonials (`app/components/reference/ReferenceList.tsx`)
 

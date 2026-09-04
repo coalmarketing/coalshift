@@ -74,6 +74,39 @@
     @apply font-lekton;
   }
 
+  /* Custom cursors (ported from coalios). Order: default → text →
+     clickable, so a link/button's own descendants keep the pointer cursor
+     over the text cursor. Plain type selectors only, so any element's own
+     `cursor-*` utility (e.g. the gallery's `cursor-zoom-in`) still wins. */
+  @media (hover: hover) and (pointer: fine) {
+    body {
+      cursor: url('/cursors/default.svg'), auto;
+    }
+
+    span, p, h1, h2, h3, h4, h5, h6,
+    input[type='text'], input[type='tel'], input[type='email'], input[type='search'],
+    textarea {
+      cursor: url('/cursors/text.svg'), auto;
+    }
+
+    a,
+    a *,
+    button,
+    button *,
+    summary,
+    summary *,
+    select,
+    input[type='checkbox'] {
+      cursor: url('/cursors/pointer.svg'), auto;
+    }
+
+    /* aria-disabled (unlike `disabled`) stays clickable natively — remove
+       it from hit-testing so it shows no click affordance. */
+    button[aria-disabled='true'] {
+      pointer-events: none;
+    }
+  }
+
   /* Visible keyboard focus on every interactive element. */
   :focus-visible {
     outline: 2px solid theme('colors.coalsoft.700');
@@ -254,11 +287,9 @@
     box-shadow: 0 0 0 4px theme('colors.coalsoft.300' / 55%);
   }
 
-  /* ---------------------------------------------------------------- */
-  /* Layered border + pointer-following blue glow (coalios .border-  */
-  /* gradient / magic-bento, border-only, no ambient element).       */
-  /* ---------------------------------------------------------------- */
-  /* 2px inset padding (coalios benefits.njk `p-0.5`). The base layer is the
+  /* Layered border + pointer glow. Paired with `.spotlight-ambient` below —
+     together the full coalios `data-spotlight="both"` effect, coalshift blue.
+     2px inset padding (coalios benefits.njk `p-0.5`). The base layer is the
      reference `.border-gradient`: a neutral vertical gradient (lighter top,
      darker lower edge) that stays visible at rest for a subtle raised look.
      The pointer-following blue radial glow is an ADDITIONAL layer painted
@@ -334,6 +365,77 @@
   /* No pointer glow on coarse pointers or with reduced motion — the plain
      layered border remains. */
   .glow-border { --glow-intensity: 0 !important; }
+}
+
+/* Ambient spotlight (SpotlightGroup.tsx) — coalios `.global-spotlight` port:
+   a fixed, pointer-following circle sharing its distance/proximity math with
+   the `.glow-border` reaction. `pointer-events: none`; one per group instance,
+   created/removed by the component. Coalshift blue instead of orange. */
+.spotlight-ambient {
+  position: fixed;
+  z-index: 50;
+  border-radius: 9999px;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: screen;
+  background: radial-gradient(
+    circle,
+    rgba(0, 181, 226, 0.18) 0%,
+    rgba(0, 181, 226, 0.07) 40%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.dark .spotlight-ambient {
+  background: radial-gradient(
+    circle,
+    rgba(0, 181, 226, 0.28) 0%,
+    rgba(0, 181, 226, 0.1) 40%,
+    transparent 70%
+  );
+}
+@media (prefers-reduced-motion: reduce) {
+  /* Forces it off even if the preference changes after mount, overriding
+     any inline opacity SpotlightGroup already set. */
+  .spotlight-ambient { opacity: 0 !important; }
+}
+
+/* ---------------------------------------------------------------- */
+/* Product gallery. Lives outside @layer so the `.pg-*` classes      */
+/* survive Tailwind's component-layer purge.                         */
+/*                                                                  */
+/* Inline stack: three persistent cards, each keeping its own        */
+/* screenshot. Their transform (and z-index) is chosen from the      */
+/* active index — front / upper rear / lower rear — and only the     */
+/* transform is animated, so the actual cards glide between roles    */
+/* with no image swap. `next` cycles upper→front→lower→upper.        */
+/* ---------------------------------------------------------------- */
+.pg-card {
+  transition: transform 340ms cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+.pg-card--front { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); z-index: 20; }
+.pg-card--upper { transform: translate3d(-4%, -8%, 0) rotate(-3deg) scale(0.95); z-index: 10; }
+.pg-card--lower { transform: translate3d(4%, 12%, 0) rotate(3deg) scale(0.95); z-index: 10; }
+
+/* Fullscreen dialog — the accepted keyed slide-in (unchanged). */
+@keyframes pg-slide-next {
+  from { opacity: 0; transform: translateX(10px) scale(0.995); }
+  to   { opacity: 1; transform: translateX(0) scale(1); }
+}
+@keyframes pg-slide-prev {
+  from { opacity: 0; transform: translateX(-10px) scale(0.995); }
+  to   { opacity: 1; transform: translateX(0) scale(1); }
+}
+.pg-slide { animation-duration: 200ms; animation-timing-function: ease-out; animation-fill-mode: both; }
+.pg-slide-next { animation-name: pg-slide-next; }
+.pg-slide-prev { animation-name: pg-slide-prev; }
+
+@media (prefers-reduced-motion: reduce) {
+  /* Cards switch roles immediately; the fullscreen slide-in is off. */
+  .pg-card { transition: none; }
+  .pg-slide { animation: none !important; }
 }
 
 /* ---------------------------------------------------------------- */

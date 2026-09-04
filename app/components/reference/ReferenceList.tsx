@@ -72,7 +72,7 @@ export default function ReferenceList() {
               </div>
 
               <details className="group">
-                <summary className="flex cursor-pointer list-none flex-col items-start gap-2 [&::-webkit-details-marker]:hidden">
+                <summary className="flex list-none flex-col items-start gap-2 [&::-webkit-details-marker]:hidden">
                   <span className="line-clamp-3 text-sm leading-relaxed text-neutral-700 transition-all group-open:line-clamp-none dark:text-neutral-300">
                     „{t.quote}“
                   </span>

@@ -34,7 +34,7 @@ exact `Location` values, metadata and the sitemap set.
 
 | Path | File | Role |
 | --- | --- | --- |
-| `/` | `app/page.tsx` | Main marketing page (`Hero` → `Capabilities` → `FunctionsBrowser` → `Pricing` → `Industries` → `Faq` → `Contact`) |
+| `/` | `app/page.tsx` | Main marketing page (`Hero` → `Capabilities` → `FunctionsBrowser` → `ProductGallery` → `Pricing` → `Industries` → `Faq` → `Contact`) |
 | `/reference` | `app/reference/page.tsx` | Public testimonials subpage; linked in footer **Navigace** |
 | `/gdpr` | `app/gdpr/page.tsx` | GDPR policy shell (`<div id="waulterGdpr">`) |
 | `/cookies` | `app/cookies/page.tsx` | Cookies policy shell (`<div id="waulterCookies">`) |
@@ -108,7 +108,8 @@ app/
     Footer.tsx          two-column footer, Navigace (incl. Reference / GDPR / Cookies)
     LegalPage.tsx       /gdpr + /cookies shell (SubpageIntro + Waulter container)
     ResponsiveImage.tsx registry-driven <img> for Sharp-generated rasters
-    home/               Hero, Capabilities, FunctionsBrowser, Pricing, Industries, Faq, Contact
+    home/               Hero, Capabilities, FunctionsBrowser, ProductGallery, Pricing, Industries, Faq, Contact
+                        ProductGallery.tsx — client island: the 3 real app screenshots as a playful stack (one straight in front, one tilted above/left, one below/right). The three cards are persistent — rendered in stable order, each keyed to its screenshot; navigating only animates the CSS `transform` between roles (`.pg-card*`, ~340 ms), so the actual cards glide (next cycles upper→front→lower→upper, previous reverses) with no image swap; `prefers-reduced-motion` snaps. A single transparent `<button>` overlay at the front-card box is the one focus target / fullscreen trigger; the moving cards are never tab stops. prev/next + counter + touch swipe, wrapping, and an accessible fullscreen dialog with its own accepted slide-in (portaled to body, background inert); no carousel library, no transition timer
     legacy/LegacyPage.tsx        shared shell for the three retained legacy routes
     reference/ReferenceList.tsx  testimonial cards + <details> disclosure
     ui/                 CtaButton, Section, SubpageIntro, InfoCard, BrandWord, SpotlightGroup, FragmentCta
@@ -125,8 +126,11 @@ every rendered string.
 
 - `image-registry.json` records each Sharp-managed raster: `src` (registry key),
   `file` (source path), `name`, native `width`/`height`, and the derivative
-  `widths`. Two entries: `martina-adamcova`, `sarka-melisova` (both 1080×1080,
-  derivative widths 240/320/480/640).
+  `widths`. Five entries: `martina-adamcova`, `sarka-melisova` (both 1080×1080,
+  widths 240/320/480/640); and the three product-gallery screenshots
+  `product-gallery-{smeny,pozice,zamestnanci}` under
+  `public/img/product-gallery/` (all 2876×1376, widths
+  720/1080/1440/1920/2560/2876 — capped at the native width for fullscreen).
 - `scripts/generate-image-derivatives.mjs` (Sharp) writes WebP derivatives to
   `public/img/derivatives/` (git-ignored, idempotent). It throws on a missing
   source, a registry dimension that disagrees with the decoded source, an upscale
@@ -135,8 +139,11 @@ every rendered string.
   whose `w` descriptors match the actual generated files, plus a layout-aligned
   `sizes`. It throws if asked for an unregistered `src`. It is a plain
   presentational component (no hooks, no Node imports), safe in server and client
-  components. Only the two contact portraits use it; SVGs and logos are rendered
-  as ordinary `<img>` elements. `next/image` is not imported anywhere in the app,
+  components. Used by the two contact portraits (`fill`, lazy) and the product
+  gallery (all three inline screenshots = lazy + `sizes` for the ~half-width
+  slot, each requested once; fullscreen slide = `priority`). SVGs and logos are
+  rendered as ordinary `<img>` elements. `next/image` is not imported anywhere in
+  the app,
   so `next.config.ts` carries no `images` block and the static export ships no
   runtime image optimizer.
 - The generator runs from `dev`, `build`, `pages:build` and `typecheck` (see

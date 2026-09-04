@@ -29,8 +29,7 @@ do not independently authorize work.
    read-only and does not authorize installs, edits, artifact-writing builds,
    implementation, commits or deployment.
 2. Before an implementation assignment, verify branch, HEAD, working tree and
-   relevant remote state; record the actual review baseline and pre-existing
-   changes in [plan.md](plan.md). Work on `redesign`.
+   pre-existing changes. Work locally on `master`.
 3. Implement the approved phase and the routine technical details it needs. Do
    not silently change commercial terms, legal promises, route availability,
    phase structure or quality criteria.
@@ -50,23 +49,23 @@ do not independently authorize work.
 ## Commands
 
 See [operations.md](operations.md) for the full table, environment and ordering.
-Verified on the pinned Node `24.20.0` / npm `11.x`. Common gate:
-`npm ci` → `npm run typecheck` → `npm run pages:build` (→ `out/`) →
-`npm run preview` (serves an already-built `out/`). There is no `lint` or `test`
-script — do not add one, and do not run a blanket dependency updater.
+Verified on the pinned Node `24.20.0` / npm `11.x`. For ordinary UI work run
+`npm run typecheck` and `npm run pages:build`, then test the changed behavior
+locally. Use `npm ci` only when dependencies need installing or the dependency
+set changed. There is no `lint` or `test` script — do not add one, and do not run
+a blanket dependency updater.
 
 ## Git and deployment permissions
 
-- `redesign` tracks `origin/redesign`. `master` (GitHub default) and
-  `origin/cloudflare-deploy` (Cloudflare production branch) are kept as
-  fast-forwardable ancestors of `redesign` HEAD.
+- `master` is the GitHub default and Cloudflare production branch. It is the
+  sole intended long-lived development branch.
 - Commit, push, merge and deploy only when the current assignment explicitly
   authorizes that action; an authorization is per-assignment and is consumed when
   used. Never `git add -A` — stage explicit reviewed paths. Never force-push or
   destructively reset a release branch.
-- Publication to `redesign` can trigger a Cloudflare preview; publication to
-  `cloudflare-deploy` can update production. The release procedure, fast-forward
-  mechanics and rollback are in [operations.md](operations.md).
+- Test locally first. A push to `master` updates production and therefore requires
+  explicit authorization for that assignment. The concise release and rollback
+  procedure is in [operations.md](operations.md).
 - When a remote check awaits owner configuration or publication permission,
   finish independently useful local work and report the remote check as
   `BLOCKED`/`NOT_RUN`. Do not claim a preview exists or mark that criterion
@@ -97,20 +96,12 @@ For initialization, report repository/Git state, documents read, understanding o
 the goal, selected phase and its quality IDs, blockers and readiness. Do not
 modify files during a read-only step.
 
-For an implementation or correction report use the eight-item structure:
-
-1. Assignment and outcome: `COMPLETED_FOR_REVIEW`, `PARTIAL` or `BLOCKED`.
-2. Repository, branch, review baseline, relevant commits and all task changes
-   (including untracked files); separately identify pre-existing unrelated work.
-3. Behavior changed and the relevant files.
-4. Each acceptance criterion and quality ID with evidence and version/environment;
-   distinguish source, build, HTTP and interactive evidence.
-5. Exact checks run and their results; list unperformed checks and limitations
-   honestly.
-6. Deviations, remaining findings, missing owner inputs and decisions.
-7. Actual Git and deployment actions, or explicitly none; preview URL and source
-   commit only if verified.
-8. Recommended next action, without executing the next phase.
+Keep implementation and correction reports concise: at most eight bullets
+covering outcome, changed behavior/files, checks and results, any real limitation,
+Git/deployment actions and the single next step. Include a commit SHA or a longer
+inventory only when it is needed for the actual Git/release action or to explain
+a blocker. Do not repeat historical evidence, the full plan or unchanged quality
+requirements.
 
 Update [plan.md](plan.md) before returning an implementation report. Never hide a
 failed check, weaken an acceptance criterion to fit partial work, or describe

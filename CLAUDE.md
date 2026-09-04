@@ -9,7 +9,8 @@ before acting. For the current state of the code, read
 [content-and-seo](docs/content-and-seo.md) and [operations](docs/operations.md).
 
 This repository is an existing Next.js website; preserve its approved routes and
-work on `redesign`. `/Users/jakubtesarik/Programování/coalios` is an authorized
+work locally on `master`. A push to `master` deploys production and requires
+explicit authorization. `/Users/jakubtesarik/Programování/coalios` is an authorized
 read-only design reference (revision baseline in
 [design-system.md](docs/design-system.md)); never inspect or modify
 `coalios-manual`. `/Users/jakubtesarik/Programování/[[AI]]` is shared workflow

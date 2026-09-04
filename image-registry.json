@@ -17,6 +17,30 @@
       "width": 1080,
       "height": 1080,
       "widths": [240, 320, 480, 640]
+    },
+    {
+      "src": "/img/product-gallery/coalshift-smeny.png",
+      "file": "public/img/product-gallery/coalshift-smeny.png",
+      "name": "product-gallery-smeny",
+      "width": 2876,
+      "height": 1376,
+      "widths": [720, 1080, 1440, 1920, 2560, 2876]
+    },
+    {
+      "src": "/img/product-gallery/coalshift-pozice.png",
+      "file": "public/img/product-gallery/coalshift-pozice.png",
+      "name": "product-gallery-pozice",
+      "width": 2876,
+      "height": 1376,
+      "widths": [720, 1080, 1440, 1920, 2560, 2876]
+    },
+    {
+      "src": "/img/product-gallery/coalshift-zamestnanci.png",
+      "file": "public/img/product-gallery/coalshift-zamestnanci.png",
+      "name": "product-gallery-zamestnanci",
+      "width": 2876,
+      "height": 1376,
+      "widths": [720, 1080, 1440, 1920, 2560, 2876]
     }
   ]
 }

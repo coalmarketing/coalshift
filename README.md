@@ -48,11 +48,11 @@ static export ships no runtime image optimizer.
 | [`docs/operations.md`](docs/operations.md) | Verified environment, build chain, Cloudflare settings, Git release + rollback procedure, frozen-file SHA baselines |
 | [`docs/quality.md`](docs/quality.md) | Q-ID definitions, latest evidence, unresolved/deferred items |
 | [`docs/plan.md`](docs/plan.md) | Phase status table, current handoff, approved plan changes |
-| [`docs/Phases/`](docs/Phases/) | Active Phase 04 cleanup/release assignment; future Phase 05 integration scope |
+| [`docs/Phases/`](docs/Phases/) | Current Phase 05 product-gallery plan and future Phase 06 integration scope |
 
 ## Deployment
 
-Production is the `cloudflare-deploy` branch; preview work happens on `redesign`.
-Cloudflare Pages builds and deploys on push — not from this repository. The
-release sequence, branch fast-forward mechanics and rollback are in
+Production deploys from `master`. Changes are tested locally before an explicitly
+authorized push; Cloudflare Pages then builds and deploys automatically. The
+release and rollback procedure is in
 [`docs/operations.md`](docs/operations.md).

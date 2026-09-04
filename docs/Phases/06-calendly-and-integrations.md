@@ -1,8 +1,11 @@
-# 05 — Calendly and later integrations
+# 06 — Calendly and later integrations
 
 ## Objective and status
 
-Add the owner's chosen Calendly integration after the cleaned website is released in Phase 04. Jakub will define any additional integrations before this phase is prepared for implementation. This is the former Phase 04, renumbered by the owner's instruction on 3 September 2026; its general cleanup, final release checks, branch integration and production handover now belong to [Phase 04](04-cleanup-optimization-and-release.md).
+Add the owner's chosen Calendly integration after the product gallery. Jakub will
+define any additional integrations before this phase is prepared for
+implementation. This phase was moved from 05 to 06 when the gallery became the
+new Phase 05 on 4 September 2026.
 
 The sole phase status is in [plan.md](../plan.md). This phase remains planned and does not block publication of the accepted website without Calendly.
 
@@ -13,7 +16,9 @@ The sole phase status is in [plan.md](../plan.md). This phase remains planned an
 - Jakub's list of any additional integrations and their purpose. Do not invent an enquiry form, CRM, newsletter, analytics event plan or account setup.
 - Whether a real booking and its resulting notifications are explicitly authorized; link/embed inspection alone does not authorize a booking.
 
-Use the current repository instructions, plan and quality profile. After Phase 04 consolidation, read the architecture, design-system, content-and-SEO and operations documents rather than historical correction prompts.
+Use the current repository instructions, plan and quality profile. Read the
+architecture, design-system, content-and-SEO and operations documents rather than
+historical correction prompts.
 
 ## Proposed Calendly scope to finalize with the owner
 
@@ -26,6 +31,6 @@ Use the current repository instructions, plan and quality profile. After Phase 0
 
 ## Quality and completion
 
-Q-017 covers Calendly; Q-008, Q-009, Q-010, Q-013, Q-015 and Q-016 apply to affected theme/responsive/contact/loading/integration behavior. Q-004/Q-006/Q-014 apply only if link/route/metadata behavior is touched. Q-018 covers the updated handoff. Final acceptance criteria and verification are completed with the owner before `/replan`; no generic quality catalog adds work here.
+Q-017 covers Calendly; Q-008, Q-009, Q-010, Q-013, Q-015 and Q-016 apply to affected theme/responsive/contact/loading/integration behavior. Q-004/Q-006/Q-014 apply only if link/route/metadata behavior is touched. Q-018 covers the updated handoff. Final acceptance criteria and verification are completed with the owner before implementation; no generic quality catalog adds work here.
 
-Do not change pricing, trial terms, testimonials, legacy redirects, hosting architecture or accepted design without a new requirement. Complete only the eventually assigned Phase 05 scope, return its Phase Report in English and stop. Do not start another phase or perform unassigned external actions.
+Do not change pricing, trial terms, testimonials, legacy redirects, hosting architecture or accepted design without a new requirement. Complete only the eventually assigned Phase 06 scope, return its Phase Report in English and stop. Do not start another phase or perform unassigned external actions.
