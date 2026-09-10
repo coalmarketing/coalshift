@@ -1,7 +1,4 @@
-import CtaButton from "../ui/CtaButton";
 import FragmentCta from "../ui/FragmentCta";
-import BrandWord from "../ui/BrandWord";
-import { REGISTER_URL } from "../../lib/links";
 
 export default function Hero() {
   return (
@@ -12,7 +9,7 @@ export default function Hero() {
         className="pointer-events-none absolute inset-x-0 -top-24 -z-10 mx-auto h-[30rem] max-w-4xl rounded-full bg-coalsoft-400/20 blur-3xl dark:bg-coalsoft-500/20"
       />
       <div className="container-page flex flex-col items-center gap-6 py-16 text-center sm:py-24">
-        <span className="eyebrow">AI plánování směn</span>
+        <span className="eyebrow">Plánování směn v jednom systému</span>
 
         <h1 className="max-w-4xl text-balance text-4xl font-bold !leading-[1.1] text-neutral-900 sm:text-5xl lg:text-6xl dark:text-white">
           Směny pod kontrolou. Méně administrativy.
@@ -20,16 +17,11 @@ export default function Hero() {
 
         <p className="max-w-2xl text-lg text-neutral-700 sm:text-xl dark:text-neutral-300">
           Plánujte směny, spravujte nepřítomnosti a mějte přehled o svém týmu
-          v jedné aplikaci. <BrandWord /> vám s rozpisem pomůže pomocí AI.
+          v jedné aplikaci.
         </p>
 
         <div className="mt-2 flex flex-col items-center gap-3 sm:flex-row sm:items-center">
-          <CtaButton
-            href={REGISTER_URL}
-            target="_blank"
-            label="Vyzkoušet na 14 dní zdarma"
-            size="lg"
-          />
+          <FragmentCta targetId="pricing" label="Vyzkoušet bezplatnou variantu" variant="primary" size="lg" />
           <FragmentCta targetId="contact" label="Kontaktovat tým" variant="secondary" size="lg" />
         </div>
 

@@ -25,35 +25,46 @@ sentence flow without changing the offer.
 
 `app/components/ui/BrandWord.tsx` renders one accessible text node with a
 translucent coalsoft-blue highlighter behind the lower ~70% of the lettering (no
-box, pill, border or size change). It is applied to **only these five
+box, pill, border or size change). It is applied to **only these four
 placements** (the brand token to highlight is shown emphasised; surrounding Czech
 copy is quoted as rendered — this list records placement, not copy):
 
 | Placement | Rendered text |
 | --- | --- |
-| Hero lead | „…v jedné aplikaci. **coalshift** vám s rozpisem pomůže pomocí AI." |
 | Capabilities heading | „Co všechno **coalshift** zvládne" |
 | Industries heading | „Pro koho je **coalshift**" |
 | Contact heading | „Vyzkoušejte **coalshift** ve svém týmu" |
 | Contact intro | „Potřebujete poradit s výběrem tarifu nebo s používáním **coalshiftu**? Ozvěte se nám." |
 
+The Phase 06 hero lead no longer contains a `coalshift` token, so the former
+hero-lead placement is gone.
+
 Never use `BrandWord` for logos, nav/CTA labels, metadata, legal text or
 testimonials, and never run a global text-node replacement.
 
-## Trial and CTA wording
+## Offer and CTA wording
 
-- Trial is **14 dní**, everywhere (copy, metadata, accessible labels).
-- Default CTA: **Vyzkoušet na 14 dní zdarma** → registration.
-- Pricing exception: paid-tier button label **Vyzkoušet**, with **Prvních 14 dní
-  zdarma.** rendered *outside* the button (`PAID_TRIAL_HELPER`). Free-tier button
-  **Začít zdarma**, with no trial helper.
-- The Free plan and the time-limited trial are distinct. Do not add "bez karty",
-  automatic renewal, cancellation terms, a trial-plan name or a post-trial charge
-  without confirmed product terms.
+- The active offer is the **Free** plan for **0–5 zaměstnanců**. No 14-day trial
+  appears in active homepage copy, CTA helpers or homepage metadata. Do not add
+  "bez karty", automatic renewal, cancellation terms, a trial-plan name or a
+  post-trial charge without confirmed product terms.
+- The three pre-pricing offer CTAs — hero primary, every practical-browser panel,
+  and the contact-section offer box — read **Vyzkoušet bezplatnou variantu** and
+  scroll to `#pricing` through the existing guarded fragment behavior
+  (`FragmentCta` / `smoothScroll`). They do not link to registration directly.
+- Hero secondary CTA: **Kontaktovat tým** → `#contact`.
+- Pricing cards keep the existing registration destination: Free button
+  **Začít zdarma**, paid-tier buttons **Začít** (no trial helper, no reserved
+  helper row).
+- Header keeps **Přihlásit se** as its only CTA (`LOGIN_URL`). No trial or
+  registration CTA in any header variant.
 - Consultation actions use an honest contact action (**Kontaktovat tým** → the
-  contact section) until Phase 06. The Calendly booking action
-  (**Rezervovat konzultaci** + real event URL) arrives in Phase 06 only. Never
+  contact section) until Phase 07. The Calendly booking action
+  (**Rezervovat konzultaci** + real event URL) arrives in Phase 07 only. Never
   ship a fake URL or a disabled control presented as working booking.
+- Retained frozen legacy source (`/registrace`, `/wait-list`,
+  `/wait-list/thank-you`) still contains 14-day-trial wording; those URLs 301 to
+  `/` and are excluded from the active-copy trial check.
 
 Source: `app/lib/links.ts` (`REGISTER_URL` = `https://app.coalshift.cz/register`,
 `LOGIN_URL` = `https://app.coalshift.cz/login`, label **Přihlásit se**;
@@ -94,39 +105,40 @@ Footer legal block: `© 2026 coalsoft s.r.o. Všechna práva vyhrazena.` +
 the heart). coalsoft s.r.o. company name, both address lines, IČ and DIČ sit
 under the coalshift logo/brand copy in the footer brand column.
 
-## Homepage numerical cards (`FunctionsBrowser.tsx`)
+## Homepage practical browser (`FunctionsBrowser.tsx`)
 
-Exactly two cards per topic. Values, units, badges and status live in one data
-model in `app/components/home/FunctionsBrowser.tsx`. `illustrative` cards **must**
-display **Ilustrační údaj** (subtle but plainly readable, kept with the number on
-mobile and in screenshots). `confirmed` = an approved count/composition from
-canonical product copy, **not** an independently measured performance result.
+Section heading — eyebrow **V praxi**, title **Správa týmu a směn krok za
+krokem**, intro **Projděte si správu zaměstnanců, plánování směn, nepřítomnosti,
+exporty a zaměstnanecké přístupy.**
 
-| Topic / metric id | Value | Badge | Status |
-| --- | --- | --- | --- |
-| Směny a AI / planning-time | 50 % | Úspora času | illustrative |
-| Směny a AI / planning-month | 20 h | Měsíčně zpět | illustrative |
-| Lidé a pozice / team-place | 1 | Společné místo | confirmed |
-| Lidé a pozice / team-search | 40 % | Čas na hledání | illustrative |
-| Nepřítomnosti / absence-place | 1 | Přehled volna | confirmed |
-| Nepřítomnosti / absence-admin | 30 % | Méně administrativy | illustrative |
-| Exporty / export-formats | 3 | Formáty exportu | confirmed |
-| Exporty / export-time | 60 % | Úspora času | illustrative |
-| Statistiky / reporting-areas | 3 | Oblasti přehledu | confirmed |
-| Statistiky / reporting-time | 50 % | Čas na přehledy | illustrative |
+Five vertical tabs, in order, each with a heading, lead, three titled feature
+descriptions and exactly two numerical cards. Every value is an approved product
+count/composition from Phase 06 (`docs/Phases/06-content-and-product-messaging.md`)
+— **not** a measured performance result. No card shows **Ilustrační údaj**; there
+is no `illustrative` status and no percentage or savings claim anywhere in the
+section. The panel CTA on every tab is **Vyzkoušet bezplatnou variantu** →
+`#pricing`.
 
-**Six illustrative figures** (`planning-time` 50 %, `planning-month` 20 h,
-`team-search` 40 %, `absence-admin` 30 %, `export-time` 60 %, `reporting-time`
-50 %) are **not measured**. Jakub accepted the reviewed website for release with
-these labelled examples in place; that permits keeping the labelled examples, not
-describing them as measured results. Confirmed replacement values (with source,
-compared workflow, sample and period) remain an owner / product-team content
-follow-up. Do not put illustrative figures in metadata, JSON-LD, testimonials or
-other sections.
+| Tab | Metric id | Value | Badge | Note |
+| --- | --- | --- | --- | --- |
+| Pozice a zaměstnanci | positions-contracts | 3 | Typy smluv | HPP, DPP a DPČ |
+| Pozice a zaměstnanci | positions-adding | 3 | Způsoby přidání | Jednotlivě, CSV importem nebo e-mailovou pozvánkou |
+| Směny | shifts-modes | 3 | Režimy plánování | Týdenní rotace, krátký a dlouhý týden nebo freestyle |
+| Směny | shifts-rest | 11 h | Kontrola odpočinku | Upozornění na standardní minimální denní odpočinek |
+| Nepřítomnosti | absence-types | 5 | Druhy nepřítomnosti | Dovolená, nemoc, sick day, volno a pracovní volno |
+| Nepřítomnosti | absence-fund | 2 | Nastavení fondu | Globálně pro tým nebo individuálně |
+| Exporty a statistiky | exports-formats | 3 | Formáty exportu | Excel, CSV a XML |
+| Exporty a statistiky | exports-views | 3 | Pohledy na data | Podle pozice, zaměstnance a měsíce |
+| Zaměstnanecké přístupy | access-levels | 2 | Úrovně přístupu | Správce a zaměstnanec |
+| Zaměstnanecké přístupy | access-overviews | 3 | Osobní přehledy | Směny, nepřítomnosti a kolegové na stejné pozici |
+
+Copy for headings, leads and feature descriptions is verbatim from the Phase 06
+plan. The "copy nesmí slibovat úplnou právní shodu" line in that plan is an
+authoring constraint, not rendered text.
 
 Mock-browser address paths (plain display text, no hash, not navigable):
-`/smeny-a-ai`, `/lide-a-pozice`, `/nepritomnosti`, `/exporty`, `/statistiky`.
-The real page anchor stays `benefits`.
+`/pozice-a-zamestnanci`, `/smeny`, `/nepritomnosti`, `/exporty-a-statistiky`,
+`/zamestnanecke-pristupy`. The real page anchor stays `benefits`.
 
 ## Product gallery (`app/components/home/ProductGallery.tsx`)
 
@@ -194,7 +206,7 @@ savings.
 
 | Route | Title | Description |
 | --- | --- | --- |
-| `/` | `coalshift \| AI plánovač směn a docházky` | Plánujte směny s pomocí AI, spravujte nepřítomnosti a mějte přehled o svém týmu. Vyzkoušejte coalshift na 14 dní zdarma. |
+| `/` | `coalshift \| Plánování směn a docházky` | Plánujte směny, spravujte nepřítomnosti a mějte přehled o zaměstnancích. Tarif Free je zdarma až pro 5 zaměstnanců. |
 | `/reference` | `Reference \| coalshift` | Přečtěte si zkušenosti s plánováním směn v coalshiftu. |
 | `/gdpr` | `Zásady ochrany osobních údajů (GDPR) — coalshift` | Informace o zpracování osobních údajů na webu coalshift. |
 | `/cookies` | `Podmínky cookies — coalshift` | Informace o používání souborů cookies na webu coalshift. |
@@ -267,9 +279,12 @@ another company's policies. Real provider population is a production-domain chec
 
 ## Content limitations (carry forward)
 
-- The six `Ilustrační údaj` figures are illustrative, not measured.
+- Practical-browser numerical cards are approved product counts/compositions, not
+  independently measured performance results (Phase 06 removed the six labelled
+  illustrative figures).
 - Testimonial provenance is unverified (Michal Uhlíř "coalfamily"; Petr Svoboda
-  HR-integration + ROI sentences).
+  HR-integration + ROI sentences; the `/reference` quote mentions artificial
+  intelligence and is preserved verbatim).
 - Real Waulter policy population in `#waulterGdpr` / `#waulterCookies` is
   unverified off the production domain.
 

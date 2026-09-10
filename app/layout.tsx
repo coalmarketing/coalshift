@@ -12,9 +12,9 @@ export const viewport: Viewport = {
   ],
 };
 
-const HOME_TITLE = "coalshift | AI plánovač směn a docházky";
+const HOME_TITLE = "coalshift | Plánování směn a docházky";
 const HOME_DESC =
-  "Plánujte směny s pomocí AI, spravujte nepřítomnosti a mějte přehled o svém týmu. Vyzkoušejte coalshift na 14 dní zdarma.";
+  "Plánujte směny, spravujte nepřítomnosti a mějte přehled o zaměstnancích. Tarif Free je zdarma až pro 5 zaměstnanců.";
 
 /**
  * Layout metadata carries only `metadataBase` plus a plain title/description

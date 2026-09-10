@@ -6,19 +6,19 @@ import Section, { SectionHeading } from "../ui/Section";
 const ITEMS: { q: string; a: string }[] = [
   {
     q: "Jak mi coalshift pomůže s plánováním směn?",
-    a: "coalshift propojuje plánování směn, evidenci nepřítomností a přehled o zaměstnancích. AI vám pomůže připravit rozpis a kontrola pravidel upozorní na možné problémy v plánu.",
+    a: "coalshift propojuje plánování směn, evidenci nepřítomností a přehled o zaměstnancích. Pomůže vám připravit rozpis směn a kontrola pravidel upozorní na možné kolize s dostupností, nepřítomností a odpočinkem.",
   },
   {
     q: "Je coalshift vhodný i pro malý tým?",
-    a: "Ano. Tarif Free je určený pro 0 až 5 zaměstnanců. Pro větší týmy si vyberete tarif podle počtu zaměstnanců.",
+    a: "Ano. Tarif Free je zdarma pro 0 až 5 zaměstnanců. Pro větší týmy si vyberete tarif podle počtu zaměstnanců.",
   },
   {
     q: "Čím se jednotlivé tarify liší?",
     a: "Pouze počtem zaměstnanců. Funkce jsou stejné ve všech tarifech a uvedené ceny jsou bez DPH.",
   },
   {
-    q: "Mohu si coalshift nejdříve vyzkoušet?",
-    a: "Ano, coalshift si můžete vyzkoušet na 14 dní zdarma.",
+    q: "Upozorní mě coalshift na problémy v rozpisu?",
+    a: "Ano. Při plánování vás coalshift upozorní na kolize s nepřítomností, odpočinkem a nastaveným rozsahem pracovní doby. Nejde o záruku úplné právní shody.",
   },
   {
     q: "Na koho se mohu obrátit s nastavením nebo dotazem?",

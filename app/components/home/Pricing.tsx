@@ -1,12 +1,7 @@
 import Section, { SectionHeading } from "../ui/Section";
 import CtaButton from "../ui/CtaButton";
 import SpotlightGroup from "../ui/SpotlightGroup";
-import {
-  PRICING_PLANS,
-  PRICING_INTRO,
-  VAT_NOTE,
-  PAID_TRIAL_HELPER,
-} from "../../lib/pricing";
+import { PRICING_PLANS, PRICING_INTRO, VAT_NOTE } from "../../lib/pricing";
 
 export default function Pricing() {
   return (
@@ -52,7 +47,7 @@ export default function Pricing() {
                   </span>
                 </div>
 
-                <div className="mt-6 flex flex-col items-start gap-2">
+                <div className="mt-auto flex flex-col items-start pt-6">
                   <CtaButton
                     href={plan.cta.href}
                     target="_blank"
@@ -60,9 +55,6 @@ export default function Pricing() {
                     variant={plan.featured ? "primary" : "secondary"}
                     size="md"
                   />
-                  <p className="min-h-[1rem] text-xs text-neutral-500 dark:text-neutral-400">
-                    {plan.paid ? PAID_TRIAL_HELPER : " "}
-                  </p>
                 </div>
               </div>
             </li>

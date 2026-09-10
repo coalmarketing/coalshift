@@ -2,24 +2,21 @@
 
 import { useId, useRef, useState, type KeyboardEvent } from "react";
 import Section, { SectionHeading } from "../ui/Section";
-import CtaButton from "../ui/CtaButton";
+import FragmentCta from "../ui/FragmentCta";
 import SpotlightGroup from "../ui/SpotlightGroup";
 import LineIcon, { type LineIconName } from "../icons/LineIcon";
-import { REGISTER_URL } from "../../lib/links";
 
-type Fact = { text: string; icon: LineIconName };
+type Feature = { title: string; description: string; icon: LineIconName };
 
-/** One supporting numerical card. `illustrative` values show the "Ilustrační
- *  údaj" note and must never be treated as measured results or copied into
- *  metadata / structured data / other sections. `confirmed` values are an
- *  approved count or composition from canonical product copy. */
+/** One supporting numerical card. Every value is an approved product
+ *  count/composition from canonical product copy — not an independently
+ *  measured performance result — so no card carries an "illustrative" note. */
 type Metric = {
-  /** Stable id from docs/content-and-seo.md — used for the later product-team replacement. */
+  /** Stable id from docs/content-and-seo.md. Also the React key. */
   id: string;
   value: string;
   badge: string;
   note: string;
-  status: "illustrative" | "confirmed";
 };
 
 type Tab = {
@@ -30,66 +27,86 @@ type Tab = {
   path: string;
   heading: string;
   text: string;
-  facts: Fact[];
+  features: [Feature, Feature, Feature];
   metrics: [Metric, Metric];
 };
 
 const TABS: Tab[] = [
   {
-    id: "smeny-ai",
-    label: "Směny a AI",
-    icon: "ai",
-    path: "/smeny-a-ai",
-    heading: "Připravte rozpis a mějte přehled o obsazení",
-    text: "S pomocí AI navrhnete směny podle potřeb provozu a dostupnosti zaměstnanců. Při úpravách vidíte, kde někdo chybí, a coalshift vás upozorní na možné problémy s pracovní dobou a odpočinkem.",
-    facts: [
-      { text: "Návrh rozpisu s AI", icon: "ai" },
-      { text: "Přehled obsazení směn", icon: "coverage" },
-      { text: "Kontrola přestávek a odpočinku", icon: "rules" },
+    id: "pozice-a-zamestnanci",
+    label: "Pozice a zaměstnanci",
+    icon: "users",
+    path: "/pozice-a-zamestnanci",
+    heading: "Zaměstnanci a pozice přehledně na jednom místě",
+    text: "Vytvoříte pracovní pozice a přidáte zaměstnance s jejich úvazky, typem smlouvy a dostupností. coalshift tak získá podklady pro plánování směn.",
+    features: [
+      {
+        title: "Pracovní pozice",
+        description: "Barevně rozlišené pozice zpřehlední plánování a přiřazování směn.",
+        icon: "roles",
+      },
+      {
+        title: "Úvazky a dostupnost",
+        description: "U každého zaměstnance upravíte smlouvu, fond hodin, dovolenou i dostupnost podle dnů a hodin.",
+        icon: "availability",
+      },
+      {
+        title: "Rychlé přidání týmu",
+        description: "Zaměstnance přidáte jednotlivě, CSV importem nebo e-mailovou pozvánkou.",
+        icon: "users",
+      },
     ],
     metrics: [
       {
-        id: "planning-time",
-        value: "50 %",
-        badge: "Úspora času",
-        note: "Při přípravě rozpisu směn pro celý tým.",
-        status: "illustrative",
+        id: "positions-contracts",
+        value: "3",
+        badge: "Typy smluv",
+        note: "HPP, DPP a DPČ",
       },
       {
-        id: "planning-month",
-        value: "20 h",
-        badge: "Měsíčně zpět",
-        note: "Čas ušetřený při plánování a úpravách směn.",
-        status: "illustrative",
+        id: "positions-adding",
+        value: "3",
+        badge: "Způsoby přidání",
+        note: "Jednotlivě, CSV importem nebo e-mailovou pozvánkou",
       },
     ],
   },
   {
-    id: "lide-pozice",
-    label: "Lidé a pozice",
-    icon: "users",
-    path: "/lide-a-pozice",
-    heading: "Mějte údaje týmu po ruce při plánování",
-    text: "Úvazky a kontakty najdete v databázi zaměstnanců. Barevně odlišené pracovní role vám usnadní orientaci v rozpisu směn.",
-    facts: [
-      { text: "Databáze zaměstnanců", icon: "id" },
-      { text: "Úvazky a kontakty", icon: "users" },
-      { text: "Barevné rozlišení pozic", icon: "palette" },
+    id: "smeny",
+    label: "Směny",
+    icon: "calendar",
+    path: "/smeny",
+    heading: "Naplánujte směny rychle a s kontrolou pravidel",
+    text: "Nastavíte provoz a způsob plánování. coalshift vytvoří rozpis, navrhne obsazení a upozorní na možné kolize s dostupností, nepřítomností a odpočinkem.",
+    features: [
+      {
+        title: "Vytvoření a obsazení směn",
+        description: "Zvolíte režim plánování, vygenerujete směny a funkcí Přiřadit vše navrhnete obsazení podle dostupnosti.",
+        icon: "calendar",
+      },
+      {
+        title: "Přehled obsazení",
+        description: "Kalendář odliší obsazené směny od těch, kterým ještě někdo chybí.",
+        icon: "coverage",
+      },
+      {
+        title: "Kontrola pracovní doby",
+        description: "Aplikace upozorní na kolize s nepřítomností, odpočinkem a nastaveným rozsahem práce.",
+        icon: "rules",
+      },
     ],
     metrics: [
       {
-        id: "team-place",
-        value: "1",
-        badge: "Společné místo",
-        note: "Úvazky, kontakty a pracovní role v jedné aplikaci.",
-        status: "confirmed",
+        id: "shifts-modes",
+        value: "3",
+        badge: "Režimy plánování",
+        note: "Týdenní rotace, krátký a dlouhý týden nebo freestyle",
       },
       {
-        id: "team-search",
-        value: "40 %",
-        badge: "Čas na hledání",
-        note: "Úspora času při dohledávání údajů o zaměstnancích.",
-        status: "illustrative",
+        id: "shifts-rest",
+        value: "11 h",
+        badge: "Kontrola odpočinku",
+        note: "Upozornění na standardní minimální denní odpočinek",
       },
     ],
   },
@@ -98,85 +115,115 @@ const TABS: Tab[] = [
     label: "Nepřítomnosti",
     icon: "absence",
     path: "/nepritomnosti",
-    heading: "Zohledněte volno i změny v dostupnosti",
-    text: "Dovolené, nemoci a sick days evidujete na jednom místě. Žádosti o volno a přehled nepřítomností máte po ruce při úpravách plánu.",
-    facts: [
-      { text: "Dovolené a žádosti o volno", icon: "leave" },
-      { text: "Nemoci a sick days", icon: "sick" },
-      { text: "Přehled dostupnosti", icon: "availability" },
+    heading: "Dovolená, nemoc i volno na jednom místě",
+    text: "Zaměstnanec požádá o nepřítomnost, správce ji schválí a plán směn s ní automaticky počítá. Při ruční kolizi vás coalshift upozorní.",
+    features: [
+      {
+        title: "Samoobslužné žádosti",
+        description: "Zaměstnanci posílají žádosti o dovolenou, nemoc, sick day nebo volno ze svého přístupu.",
+        icon: "leave",
+      },
+      {
+        title: "Kontrola kolizí",
+        description: "Schválená nepřítomnost se promítne do plánování a ruční konflikt vyvolá upozornění.",
+        icon: "rules",
+      },
+      {
+        title: "Fond podle potřeby",
+        description: "Roční fond nastavíte společně nebo individuálně a evidovat lze i část dne.",
+        icon: "clock",
+      },
     ],
     metrics: [
       {
-        id: "absence-place",
-        value: "1",
-        badge: "Přehled volna",
-        note: "V jedné aplikaci evidujete dovolené, nemoci i žádosti o volno.",
-        status: "confirmed",
+        id: "absence-types",
+        value: "5",
+        badge: "Druhy nepřítomnosti",
+        note: "Dovolená, nemoc, sick day, volno a pracovní volno",
       },
       {
-        id: "absence-admin",
-        value: "30 %",
-        badge: "Méně administrativy",
-        note: "Úspora času při evidenci volna a změn dostupnosti týmu.",
-        status: "illustrative",
+        id: "absence-fund",
+        value: "2",
+        badge: "Nastavení fondu",
+        note: "Globálně pro tým nebo individuálně",
       },
     ],
   },
   {
-    id: "exporty",
-    label: "Exporty",
-    icon: "export",
-    path: "/exporty",
-    heading: "Připravte podklady pro další práci",
-    text: "Data z aplikace vyexportujete do Excelu, CSV nebo XML. Připravené podklady můžete odeslat e-mailem.",
-    facts: [
-      { text: "Excel", icon: "excel" },
-      { text: "CSV a XML", icon: "file" },
-      { text: "Odeslání e-mailem", icon: "mail" },
+    id: "exporty-a-statistiky",
+    label: "Exporty a statistiky",
+    icon: "chart",
+    path: "/exporty-a-statistiky",
+    heading: "Data a reporty bez ručního přepisování",
+    text: "Rozpisy a odpracované hodiny vyexportujete do běžných formátů, rozešlete zaměstnancům a využijete pro přehled o vytížení týmu.",
+    features: [
+      {
+        title: "Připravené exporty",
+        description: "Data získáte podle pozice, zaměstnance nebo měsíce.",
+        icon: "export",
+      },
+      {
+        title: "Rozpis e-mailem",
+        description: "Hotový rozpis odešlete zaměstnancům přímo z aplikace.",
+        icon: "mail",
+      },
+      {
+        title: "Vytížení týmu",
+        description: "Statistiky propojí docházku, odpracované hodiny a fond pracovní doby.",
+        icon: "chart",
+      },
     ],
     metrics: [
       {
-        id: "export-formats",
+        id: "exports-formats",
         value: "3",
         badge: "Formáty exportu",
-        note: "Podklady do Excelu, CSV a XML.",
-        status: "confirmed",
+        note: "Excel, CSV a XML",
       },
       {
-        id: "export-time",
-        value: "60 %",
-        badge: "Úspora času",
-        note: "Při přípravě a předání podkladů pro další práci.",
-        status: "illustrative",
+        id: "exports-views",
+        value: "3",
+        badge: "Pohledy na data",
+        note: "Podle pozice, zaměstnance a měsíce",
       },
     ],
   },
   {
-    id: "statistiky",
-    label: "Statistiky",
-    icon: "chart",
-    path: "/statistiky",
-    heading: "Získejte přehled o hodinách a nepřítomnostech",
-    text: "Sledujte odpracované hodiny, fond pracovní doby a nepřítomnosti v přehledných statistikách.",
-    facts: [
-      { text: "Odpracované hodiny", icon: "hours" },
-      { text: "Fond pracovní doby", icon: "clock" },
-      { text: "Přehled nepřítomností", icon: "chart" },
+    id: "zamestnanecke-pristupy",
+    label: "Zaměstnanecké přístupy",
+    icon: "id",
+    path: "/zamestnanecke-pristupy",
+    heading: "Každý vidí jen to, co potřebuje",
+    text: "Správce pracuje s celým provozem. Zaměstnanec vidí své směny a nepřítomnosti, může požádat o volno a domluvit se na výměně směny.",
+    features: [
+      {
+        title: "Přehled zaměstnance",
+        description: "Vlastní směny, nepřítomnosti a kolegové na stejné pozici jsou dostupní v jednom účtu.",
+        icon: "users",
+      },
+      {
+        title: "Ochrana citlivých údajů",
+        description: "Zaměstnanec nevidí mzdu ani typ smlouvy ostatních.",
+        icon: "rules",
+      },
+      {
+        title: "Kontrola správce",
+        description: "Správce nastavuje tým, schvaluje žádosti a řídí plán.",
+        icon: "id",
+      },
     ],
     metrics: [
       {
-        id: "reporting-areas",
-        value: "3",
-        badge: "Oblasti přehledu",
-        note: "Odpracované hodiny, fond pracovní doby a nepřítomnosti.",
-        status: "confirmed",
+        id: "access-levels",
+        value: "2",
+        badge: "Úrovně přístupu",
+        note: "Správce a zaměstnanec",
       },
       {
-        id: "reporting-time",
-        value: "50 %",
-        badge: "Čas na přehledy",
-        note: "Úspora času při přípravě přehledů pro vyhodnocení rozpisu.",
-        status: "illustrative",
+        id: "access-overviews",
+        value: "3",
+        badge: "Osobní přehledy",
+        note: "Směny, nepřítomnosti a kolegové na stejné pozici",
       },
     ],
   },
@@ -187,18 +234,11 @@ const BROWSER_ORIGIN = "https://coalshift.cz";
 function MetricCard({ metric }: { metric: Metric }) {
   return (
     <li className="flex flex-col justify-between gap-6 rounded-3xl border-2 border-neutral-300 bg-neutral-100 p-5 sm:p-6 dark:border-neutral-700 dark:bg-neutral-800">
-      <div className="flex flex-col gap-2">
-        <div className="flex items-start justify-between gap-3">
-          <span className="font-lekton text-3xl font-bold leading-none text-neutral-900 sm:text-4xl dark:text-white">
-            {metric.value}
-          </span>
-          <span className="eyebrow shrink-0">{metric.badge}</span>
-        </div>
-        {metric.status === "illustrative" ? (
-          <span className="w-fit rounded-full bg-neutral-200 px-2 py-0.5 text-[0.65rem] font-bold uppercase tracking-wide text-neutral-600 dark:bg-neutral-700 dark:text-neutral-300">
-            Ilustrační údaj
-          </span>
-        ) : null}
+      <div className="flex items-start justify-between gap-3">
+        <span className="font-lekton text-3xl font-bold leading-none text-neutral-900 sm:text-4xl dark:text-white">
+          {metric.value}
+        </span>
+        <span className="eyebrow shrink-0">{metric.badge}</span>
       </div>
       <p className="text-sm text-neutral-700 dark:text-neutral-300">{metric.note}</p>
     </li>
@@ -251,8 +291,8 @@ export default function FunctionsBrowser() {
         <SectionHeading
           id="browser-heading"
           eyebrow="V praxi"
-          title="Od návrhu směn po podklady pro další práci"
-          intro="Podívejte se, jak vám jednotlivé funkce pomohou při plánování a každodenních změnách."
+          title="Správa týmu a směn krok za krokem"
+          intro="Projděte si správu zaměstnanců, plánování směn, nepřítomnosti, exporty a zaměstnanecké přístupy."
         />
 
         {/* Faux-browser frame — ports coalios desktop-screen.njk. Decorative
@@ -355,20 +395,25 @@ export default function FunctionsBrowser() {
                             className="grid gap-2 sm:grid-cols-2"
                             radius={150}
                           >
-                            {tab.facts.map((f) => (
+                            {tab.features.map((f) => (
                               <div
-                                key={f.text}
+                                key={f.title}
                                 data-surface="white"
-                                className="glow-border glow-border--sm"
+                                className="glow-border glow-border--sm flex"
                               >
-                                <div className="flex items-center gap-3 px-4 py-3">
+                                <div className="flex h-full w-full gap-3 px-4 py-3">
                                   <LineIcon
                                     name={f.icon}
-                                    className="icon-accent size-5 shrink-0"
+                                    className="icon-accent mt-0.5 size-5 shrink-0"
                                   />
-                                  <span className="font-lekton text-sm font-bold text-neutral-900 dark:text-white">
-                                    {f.text}
-                                  </span>
+                                  <div className="flex flex-col gap-1">
+                                    <span className="font-lekton text-sm font-bold text-neutral-900 dark:text-white">
+                                      {f.title}
+                                    </span>
+                                    <span className="text-xs text-neutral-600 dark:text-neutral-400">
+                                      {f.description}
+                                    </span>
+                                  </div>
                                 </div>
                               </div>
                             ))}
@@ -376,10 +421,10 @@ export default function FunctionsBrowser() {
                         </div>
 
                         <div className="self-start">
-                          <CtaButton
-                            href={REGISTER_URL}
-                            target="_blank"
-                            label="Vyzkoušet na 14 dní zdarma"
+                          <FragmentCta
+                            targetId="pricing"
+                            label="Vyzkoušet bezplatnou variantu"
+                            variant="primary"
                             size="md"
                           />
                         </div>

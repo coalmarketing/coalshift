@@ -1,11 +1,11 @@
-# 06 — Calendly and later integrations
+# 07 — Calendly and later integrations
 
 ## Objective and status
 
-Add the owner's chosen Calendly integration after the product gallery. Jakub will
-define any additional integrations before this phase is prepared for
-implementation. This phase was moved from 05 to 06 when the gallery became the
-new Phase 05 on 4 September 2026.
+Add the owner's chosen Calendly integration after the content revision. Jakub
+will define any additional integrations before this phase is prepared for
+implementation. The phase moved to 07 when the product-copy and mobile-header
+revision became Phase 06 on 10 September 2026.
 
 The sole phase status is in [plan.md](../plan.md). This phase remains planned and does not block publication of the accepted website without Calendly.
 
@@ -33,4 +33,7 @@ historical correction prompts.
 
 Q-017 covers Calendly; Q-008, Q-009, Q-010, Q-013, Q-015 and Q-016 apply to affected theme/responsive/contact/loading/integration behavior. Q-004/Q-006/Q-014 apply only if link/route/metadata behavior is touched. Q-018 covers the updated handoff. Final acceptance criteria and verification are completed with the owner before implementation; no generic quality catalog adds work here.
 
-Do not change pricing, trial terms, testimonials, legacy redirects, hosting architecture or accepted design without a new requirement. Complete only the eventually assigned Phase 06 scope, return its Phase Report in English and stop. Do not start another phase or perform unassigned external actions.
+Do not change pricing, testimonials, legacy redirects, hosting architecture or
+accepted design without a new requirement. Complete only the eventually assigned
+Phase 07 scope, return its Phase Report in English and stop. Do not start another
+phase or perform unassigned external actions.

@@ -1,27 +1,21 @@
 import Section, { SectionHeading } from "../ui/Section";
 import ResponsiveImage from "../ResponsiveImage";
-import CtaButton from "../ui/CtaButton";
+import FragmentCta from "../ui/FragmentCta";
 import SpotlightGroup from "../ui/SpotlightGroup";
 import LineIcon from "../icons/LineIcon";
 import BrandWord from "../ui/BrandWord";
 import { CONTACTS } from "../../lib/contacts";
-import { REGISTER_URL } from "../../lib/links";
 
 export default function Contact() {
   return (
     <Section id="contact" labelledBy="contact-heading" className="bg-neutral-50 dark:bg-neutral-950">
       <div className="flex flex-col gap-12">
-        {/* Integrated final trial action — replaces the former detached closing CTA. */}
+        {/* Integrated final offer action — replaces the former detached closing CTA. */}
         <div className="flex flex-col items-start gap-4 rounded-3xl border border-coalsoft-500/40 bg-gradient-to-br from-coalsoft-50 to-white p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8 dark:from-coalsoft-950 dark:to-neutral-950">
           <p className="font-lekton text-xl font-bold text-neutral-900 dark:text-white">
             Vyzkoušejte <BrandWord /> ve svém týmu
           </p>
-          <CtaButton
-            href={REGISTER_URL}
-            target="_blank"
-            label="Vyzkoušet na 14 dní zdarma"
-            size="lg"
-          />
+          <FragmentCta targetId="pricing" label="Vyzkoušet bezplatnou variantu" variant="primary" size="lg" />
         </div>
 
         <SectionHeading

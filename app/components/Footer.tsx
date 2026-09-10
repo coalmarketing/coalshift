@@ -55,7 +55,7 @@ export default function Footer() {
               draggable={false}
             />
             <p className="max-w-sm text-sm text-neutral-700 dark:text-neutral-300">
-              Plánování směn a docházky s pomocí AI.
+              Plánování směn a docházky v jedné aplikaci.
             </p>
             <div className="mt-2 flex flex-col gap-2 text-sm text-neutral-700 dark:text-neutral-300">
               <span className="font-lekton text-sm font-bold text-neutral-900 dark:text-white">

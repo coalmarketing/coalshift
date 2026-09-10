@@ -13,14 +13,11 @@ export type PricingPlan = {
   employees: string;
   /** Monthly amount, or "Zdarma". */
   price: string;
-  /** true for paid tiers → show the "za měsíc, bez DPH" unit + the trial helper. */
+  /** true for paid tiers → show the "za měsíc, bez DPH" unit. */
   paid: boolean;
   cta: { label: string; href: string };
   featured?: boolean;
 };
-
-/** Shown below every paid-tier button (outside it), per docs/content-and-seo.md. */
-export const PAID_TRIAL_HELPER = "Prvních 14 dní zdarma.";
 
 export const VAT_NOTE = "Všechny ceny jsou uvedeny bez DPH.";
 
@@ -42,7 +39,7 @@ export const PRICING_PLANS: PricingPlan[] = [
     employees: "6–20 zaměstnanců",
     price: "1 130 Kč",
     paid: true,
-    cta: { label: "Vyzkoušet", href: REGISTER_URL },
+    cta: { label: "Začít", href: REGISTER_URL },
   },
   {
     id: "lite",
@@ -50,7 +47,7 @@ export const PRICING_PLANS: PricingPlan[] = [
     employees: "21–50 zaměstnanců",
     price: "2 600 Kč",
     paid: true,
-    cta: { label: "Vyzkoušet", href: REGISTER_URL },
+    cta: { label: "Začít", href: REGISTER_URL },
     featured: true,
   },
   {
@@ -59,7 +56,7 @@ export const PRICING_PLANS: PricingPlan[] = [
     employees: "51–80 zaměstnanců",
     price: "4 400 Kč",
     paid: true,
-    cta: { label: "Vyzkoušet", href: REGISTER_URL },
+    cta: { label: "Začít", href: REGISTER_URL },
   },
   {
     id: "pro",
@@ -67,6 +64,6 @@ export const PRICING_PLANS: PricingPlan[] = [
     employees: "81 a více zaměstnanců",
     price: "6 000 Kč",
     paid: true,
-    cta: { label: "Vyzkoušet", href: REGISTER_URL },
+    cta: { label: "Začít", href: REGISTER_URL },
   },
 ];

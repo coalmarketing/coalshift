@@ -39,9 +39,9 @@ export type RouteSeo = {
 
 export const ROUTES: Record<RoutePath, RouteSeo> = {
   "/": {
-    title: "coalshift | AI plánovač směn a docházky",
+    title: "coalshift | Plánování směn a docházky",
     description:
-      "Plánujte směny s pomocí AI, spravujte nepřítomnosti a mějte přehled o svém týmu. Vyzkoušejte coalshift na 14 dní zdarma.",
+      "Plánujte směny, spravujte nepřítomnosti a mějte přehled o zaměstnancích. Tarif Free je zdarma až pro 5 zaměstnanců.",
     // Next's metadata resolver returns the bare origin for the root path
     // (`resolveAbsoluteUrlWithPathname` → `result.origin` when pathname === "/"),
     // so the homepage canonical/og:url render as `https://coalshift.cz`. The

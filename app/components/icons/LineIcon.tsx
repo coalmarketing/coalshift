@@ -12,19 +12,13 @@ export type LineIconName =
   | "absence"
   | "export"
   | "chart"
-  | "ai"
   | "coverage"
   | "rules"
   | "id"
-  | "palette"
   | "leave"
-  | "sick"
   | "availability"
-  | "excel"
-  | "file"
   | "mail"
   | "clock"
-  | "hours"
   | "phone"
   | "social"
   | "health"
@@ -78,12 +72,6 @@ const P: Record<LineIconName, ReactNode> = {
       <path d="M7 15l3-4 3 3 5-7" />
     </>
   ),
-  ai: (
-    <>
-      <path d="M12 3l1.6 3.9L17.5 8l-3.9 1.6L12 13.5l-1.6-3.9L6.5 8l3.9-1.5z" />
-      <path d="M18 14l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z" />
-    </>
-  ),
   coverage: (
     <>
       <rect x="3" y="5" width="18" height="14" rx="2" />
@@ -104,14 +92,6 @@ const P: Record<LineIconName, ReactNode> = {
       <path d="M14 10h4M14 14h4" />
     </>
   ),
-  palette: (
-    <>
-      <path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.6-.9 1.6-1.6 0-.9-.7-1.4-.7-2.1 0-.8.6-1.3 1.4-1.3H16a5 5 0 0 0 5-5c0-4.4-4-8-9-8z" />
-      <circle cx="7.5" cy="10.5" r="1" />
-      <circle cx="12" cy="7.5" r="1" />
-      <circle cx="16.5" cy="10.5" r="1" />
-    </>
-  ),
   leave: (
     <>
       <path d="M3 21h18" />
@@ -119,29 +99,10 @@ const P: Record<LineIconName, ReactNode> = {
       <path d="M10 21v-5h4v5" />
     </>
   ),
-  sick: (
-    <>
-      <path d="M12 3a3 3 0 0 1 3 3v1h2a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-2v3a3 3 0 0 1-6 0v-3H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h2V6a3 3 0 0 1 3-3z" />
-    </>
-  ),
   availability: (
     <>
       <circle cx="12" cy="12" r="9" />
       <path d="M12 7v5l3 2" />
-    </>
-  ),
-  excel: (
-    <>
-      <rect x="3" y="4" width="18" height="16" rx="2" />
-      <path d="M3 9h18M9 4v16" />
-      <path d="M13 12l4 5M17 12l-4 5" />
-    </>
-  ),
-  file: (
-    <>
-      <path d="M14 3v5h5" />
-      <path d="M19 8v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7z" />
-      <path d="M9 13h6M9 17h6" />
     </>
   ),
   mail: (
@@ -154,13 +115,6 @@ const P: Record<LineIconName, ReactNode> = {
     <>
       <circle cx="12" cy="12" r="9" />
       <path d="M12 7v5l3 2" />
-    </>
-  ),
-  hours: (
-    <>
-      <circle cx="12" cy="12" r="9" />
-      <path d="M12 8v4l3 2" />
-      <path d="M12 3v2M12 19v2" />
     </>
   ),
   phone: (

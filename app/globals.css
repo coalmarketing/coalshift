@@ -51,14 +51,35 @@
 }
 
 @layer base {
+  :root {
+    /* Header geometry as CSS-owned layout metrics so the pre-hydration paint
+       matches what the Header component measures with `getBoundingClientRect()`
+       and republishes after mount. Identical values → the document-flow spacer
+       keeps one height across the load; nothing reflows for scroll anchoring to
+       amplify (the cause of the intermittent mobile top-of-page drift on
+       reload). `--family-block-h`: coalfamily strip block — pt-3 + h-11 + pb-2 =
+       64px at every width. `--header-height`: the nav-bar box — `h-[4.5rem]`
+       (mobile) / `xl:h-20` (5rem, from 1280px) plus its 1px top+bottom border
+       (transparent once pinned, but always in the box). */
+    --family-block-h: 4rem;
+    --header-height: calc(4.5rem + 2px);
+  }
+
+  @media (min-width: 1280px) {
+    :root {
+      --header-height: calc(5rem + 2px);
+    }
+  }
+
   html {
     /* The single fragment-clearance mechanism: native `#hash` navigation aligns
        the target below the pinned nav bar with a small gap. `--header-height` is
-       the measured visible nav-bar height (~72–82px), published by the Header
-       component; the fallback matches that bar for the pre-hydration paint. The
-       JS smooth-scroll helper computes the same `nav-bar height + 8px` offset.
-       Section elements must NOT also carry `scroll-mt` — the two would stack. */
-    scroll-padding-top: calc(var(--header-height, 5rem) + 0.5rem);
+       the measured visible nav-bar height, published by the Header component;
+       the `:root` default above matches that bar for the pre-hydration paint.
+       The JS smooth-scroll helper computes the same `nav-bar height + 8px`
+       offset. Section elements must NOT also carry `scroll-mt` — the two would
+       stack. */
+    scroll-padding-top: calc(var(--header-height, calc(4.5rem + 2px)) + 0.5rem);
     -webkit-text-size-adjust: 100%;
   }
 

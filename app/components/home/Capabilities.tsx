@@ -16,7 +16,7 @@ const ITEMS: InfoCardData[] = [
   },
   {
     title: "Směny",
-    text: "Připravte rozpis směn s pomocí AI a mějte přehled o jejich obsazení. Kontrola pravidel vás upozorní na možné problémy s pracovní dobou, přestávkami a odpočinkem.",
+    text: "Připravte rozpis směn a mějte přehled o jejich obsazení. Kontrola pravidel vás upozorní na možné problémy s pracovní dobou, přestávkami a odpočinkem.",
     icon: "calendar",
   },
   {

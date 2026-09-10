@@ -17,32 +17,28 @@ on `master`. Work is verified locally before an explicitly authorized push to
 | 03 | Pages and SEO | done | References page, four-route SEO and legacy redirects |
 | 04 | [Cleanup, optimization and release](Phases/04-cleanup-optimization-and-release.md) | done | Current documentation and purposeful code/assets released to production |
 | 05 | [Real product gallery](Phases/05-product-gallery.md) | done | Responsive gallery of three real application screenshots with fullscreen viewing |
-| 06 | [Calendly and later integrations](Phases/06-calendly-and-integrations.md) | planned | Owner-approved booking integration and any separately agreed additions |
+| 06 | [Product copy, theme preference and mobile header stability](Phases/06-content-and-product-messaging.md) | in_review | Free-tier positioning, product-accurate practical browser, system-first theme and stable mobile top load |
+| 07 | [Calendly and later integrations](Phases/07-calendly-and-integrations.md) | planned | Owner-approved booking integration and any separately agreed additions |
 
 Only Codex changes a phase to `done` after the owner accepts it.
 
 ## Quality mapping
 
-Requirements live in [quality.md](quality.md). Phase 05 applies Q-003, Q-004,
-Q-007–Q-011, Q-015, Q-018 and Q-019. Phase 06 applies Q-017 plus the existing
+Requirements live in [quality.md](quality.md). Phase 06 applies Q-002, Q-004,
+Q-007–Q-012, Q-014 and Q-018. Phase 07 applies Q-017 plus the existing
 requirements affected by its final scope.
 
-## Current handoff — Phase 05 accepted, release authorized
+## Current handoff — Phase 06 implemented, in_review
 
-- The owner accepted Phase 05 on 4 September 2026. The homepage now includes the
-  responsive three-screen product gallery documented in
-  [05-product-gallery.md](Phases/05-product-gallery.md), including the moving
-  stack, swipe, accessible fullscreen viewer and optimized image variants.
-- The same accepted release fixes header scroll drift on reload and ports the
-  Coalios custom cursors plus its coordinated ambient/card-border spotlight.
-- `npm run typecheck`, `npm run pages:build` and `git diff --check` pass. Detailed
-  current behavior and remaining physical-device checks are recorded in
-  [quality.md](quality.md).
-- The owner authorized one final commit and push of this complete working tree to
-  `master`. That push triggers the Cloudflare production deployment.
-
-## Phase 06 inputs still required
-
-- Approved Calendly booking URL, event and organizer.
-- Final placements and integration mode.
-- Any other integration the owner explicitly adds to that phase.
+- Phase 06 is implemented on local `master` (HEAD `86c00d4`, no commit/push/
+  deploy). Free-tier positioning, the five-topic product-accurate practical
+  browser with ten confirmed values, AI/trial removed from owner-authored
+  homepage copy and metadata, system-first theme bootstrap and the mobile
+  top-load/header geometry fix are in place.
+- `npm run typecheck`, `npm run pages:build` and `git diff --check` pass.
+  Evidence is in the Phase 06 implementation delta in [quality.md](quality.md).
+- Owner-assisted checks still open: physical iOS Safari/Chrome top-load/reload
+  and real 320/390/768/1440 CSS px rendering (harness fixed at 1728).
+- Next: owner review of the deployed-preview or local build; Codex records `done`
+  only on acceptance. Calendly stays deferred to
+  [Phase 07](Phases/07-calendly-and-integrations.md).

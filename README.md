@@ -48,7 +48,7 @@ static export ships no runtime image optimizer.
 | [`docs/operations.md`](docs/operations.md) | Verified environment, build chain, Cloudflare settings, Git release + rollback procedure, frozen-file SHA baselines |
 | [`docs/quality.md`](docs/quality.md) | Q-ID definitions, latest evidence, unresolved/deferred items |
 | [`docs/plan.md`](docs/plan.md) | Phase status table, current handoff, approved plan changes |
-| [`docs/Phases/`](docs/Phases/) | Current Phase 05 product-gallery plan and future Phase 06 integration scope |
+| [`docs/Phases/`](docs/Phases/) | Phase plans: current Phase 06 content revision and future Phase 07 integrations |
 
 ## Deployment
 
