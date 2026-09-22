@@ -41,6 +41,14 @@
       "width": 2876,
       "height": 1376,
       "widths": [720, 1080, 1440, 1920, 2560, 2876]
+    },
+    {
+      "src": "/img/product-video-poster.jpg",
+      "file": "public/img/product-video-poster.jpg",
+      "name": "product-video-poster",
+      "width": 1280,
+      "height": 720,
+      "widths": [480, 640, 960, 1280]
     }
   ]
 }

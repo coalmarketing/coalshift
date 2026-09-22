@@ -25,7 +25,7 @@ sentence flow without changing the offer.
 
 `app/components/ui/BrandWord.tsx` renders one accessible text node with a
 translucent coalsoft-blue highlighter behind the lower ~70% of the lettering (no
-box, pill, border or size change). It is applied to **only these four
+box, pill, border or size change). It is applied to **only these three
 placements** (the brand token to highlight is shown emphasised; surrounding Czech
 copy is quoted as rendered — this list records placement, not copy):
 
@@ -33,11 +33,13 @@ copy is quoted as rendered — this list records placement, not copy):
 | --- | --- |
 | Capabilities heading | „Co všechno **coalshift** zvládne" |
 | Industries heading | „Pro koho je **coalshift**" |
-| Contact heading | „Vyzkoušejte **coalshift** ve svém týmu" |
 | Contact intro | „Potřebujete poradit s výběrem tarifu nebo s používáním **coalshiftu**? Ozvěte se nám." |
 
 The Phase 06 hero lead no longer contains a `coalshift` token, so the former
-hero-lead placement is gone.
+hero-lead placement is gone. Phase 07 replaced the detached Free-plan offer box
+(former "Contact heading" placement, „Vyzkoušejte coalshift ve svém týmu") with
+the Microsoft Bookings consultation panel; that panel's own copy does not use
+`BrandWord`.
 
 Never use `BrandWord` for logos, nav/CTA labels, metadata, legal text or
 testimonials, and never run a global text-node replacement.
@@ -58,10 +60,14 @@ testimonials, and never run a global text-node replacement.
   helper row).
 - Header keeps **Přihlásit se** as its only CTA (`LOGIN_URL`). No trial or
   registration CTA in any header variant.
-- Consultation actions use an honest contact action (**Kontaktovat tým** → the
-  contact section) until Phase 07. The Calendly booking action
-  (**Rezervovat konzultaci** + real event URL) arrives in Phase 07 only. Never
-  ship a fake URL or a disabled control presented as working booking.
+- The redesigned contact section's consultation panel (right two-thirds on
+  desktop, first on mobile) offers **Rezervovat konzultaci**, which opens an
+  accessible dialog with a lazy Microsoft Bookings iframe using the
+  owner-approved public page
+  (`https://bookings.cloud.microsoft/book/coalshift@coalsoft.cz/?ismsaljsauthenabled`,
+  configured externally as **Pojďme probrat váš provoz**) plus an always-visible
+  **Otevřít rezervaci v novém okně** direct-link fallback. Never ship a fake URL
+  or a disabled control presented as working booking.
 - Retained frozen legacy source (`/registrace`, `/wait-list`,
   `/wait-list/thank-you`) still contains 14-day-trial wording; those URLs 301 to
   `/` and are excluded from the active-copy trial check.
@@ -99,6 +105,28 @@ not appear anywhere in visible copy, labels or metadata.
 | Phone | +420 728 918 562 (`tel:+420728918562`) | +420 702 244 296 (`tel:+420702244296`) |
 | Email | martina.adamcova@coalsoft.cz | sarka.melisova@coalsoft.cz |
 | Portrait | `public/img/martina-adamcova.png` (1080×1080) | `public/img/sarka-melisova.png` (1080×1080) |
+
+### Consultation panel (`Contact.tsx` + `BookingsDialog.tsx`)
+
+Desktop: personal contacts occupy the left one-third, the consultation panel the
+right two-thirds. Mobile: the consultation action comes first, personal contacts
+follow. Copy, verbatim (source: `docs/Phases/07-bookings-and-product-video.md`):
+
+- eyebrow: **Online konzultace**
+- heading: **Vyberte si termín, který vám vyhovuje**
+- body: **Společně projdeme váš provoz, způsob plánování směn a ukážeme, kde vám
+  může coalshift usnadnit každodenní práci.**
+- CTA: **Rezervovat konzultaci**
+- supporting line: **Online přes Microsoft Teams**
+
+Activating the CTA opens a first-party accessible dialog (focus trap, Escape,
+body scroll lock, background `inert`, focus restored to the CTA on close). The
+Bookings iframe is created only on open (never on page load) and titled
+„Rezervace online konzultace — Microsoft Bookings"; a permanent **Otevřít
+rezervaci v novém okně** link opens the same public URL directly, so the flow
+stays usable if the iframe is blocked or fails to load. A real booking sends
+invitations/emails and requires separate explicit owner authorization —
+rendering and keyboard/focus testing do not constitute one.
 
 Footer legal block: `© 2026 coalsoft s.r.o. Všechna práva vyhrazena.` +
 `Developed with 💜 by coalmarketing.cz` (link `https://coalmarketing.cz/`, keep
@@ -143,14 +171,39 @@ Mock-browser address paths (plain display text, no hash, not navigable):
 ## Product gallery (`app/components/home/ProductGallery.tsx`)
 
 Homepage section between `FunctionsBrowser` and `Pricing`. Copy source:
-`docs/Phases/05-product-gallery.md`.
+`docs/Phases/05-product-gallery.md` (screenshots) and
+`docs/Phases/07-bookings-and-product-video.md` (video + selector).
 
 - Eyebrow: **Ukázka aplikace**
 - Heading: **Podívejte se, jak coalshift vypadá v praxi**
-- Intro: **Plánujte směny, kontrolujte obsazení a spravujte pozice i zaměstnance
-  v jednom přehledném prostředí. Prohlédněte si skutečné obrazovky aplikace, se
-  kterými budete pracovat každý den.**
+- Intro (Phase 07 revision): **Pusťte si praktickou ukázku aplikace nebo si
+  projděte skutečné obrazovky, se kterými budete pracovat každý den.**
 - CTA: **Prohlédnout cenové balíčky** → `#pricing` (guarded smooth-scroll).
+
+### Video walkthrough (Phase 07)
+
+A two-option accessible selector (WAI-ARIA manual-activation tabs, horizontal
+Left/Right roving focus, Home/End, Enter/Space or click to select) switches the
+gallery column between:
+
+- **Video ukázka (13 min)** — default mode. Before playback, a first-party
+  click-to-play facade renders the owner-verified local poster (registry key
+  `/img/product-video-poster.jpg`, sourced from the verified 1280×720
+  `https://i.ytimg.com/vi/DgTN2nTfx_0/maxresdefault.jpg` and served through the
+  same Sharp/`ResponsiveImage` pipeline as every other raster). No request to
+  YouTube happens on page load. Activating play mounts a responsive
+  privacy-enhanced `https://www.youtube-nocookie.com/embed/DgTN2nTfx_0` iframe
+  (Czech `hl=cs`/`cc_lang_pref=cs`, native controls, fullscreen) titled **„Jak
+  funguje coalshift | Praktická ukázka aplikace"**; a permanent **Sledovat na
+  YouTube** link (`https://www.youtube.com/watch?v=DgTN2nTfx_0`) is always
+  offered alongside it. Switching to **Obrazovky aplikace** unmounts the player;
+  returning to Video mode always shows the facade again (no background
+  autoplay).
+- **Obrazovky aplikace** — the unchanged accepted three-card screenshot gallery
+  below.
+
+Source: `app/lib/links.ts` (`YOUTUBE_VIDEO_ID`, `YOUTUBE_URL`,
+`YOUTUBE_EMBED_URL`, `YOUTUBE_TITLE`, `YOUTUBE_POSTER_SRC`).
 
 Three real application screenshots (all 2876×1376, TEST tenant, no real personal
 data), in this order — `alt` text is the accessible description:
@@ -161,8 +214,9 @@ data), in this order — `alt` text is the accessible description:
 | 2 | `public/img/product-gallery/coalshift-pozice.png` | Seznam pracovních pozic v aplikaci coalshift. |
 | 3 | `public/img/product-gallery/coalshift-zamestnanci.png` | Seznam zaměstnanců a pracovních údajů v aplikaci coalshift. |
 
-On narrow screens the order is: eyebrow/heading/text/CTA, then the screenshot
-stack, then the previous/next controls + counter. Activating the active
+On narrow screens the order is: eyebrow/heading/text/selector/CTA, then the
+active mode's gallery column (video facade/player or screenshot stack), then —
+in screenshot mode — the previous/next controls + counter. Activating the active
 screenshot itself opens the fullscreen dialog — its accessible name is
 **„Zobrazit obrázek {název} na celou obrazovku"** (e.g. „Zobrazit obrázek Směny
 na celou obrazovku"); there is no separate fullscreen button. Other control

@@ -23,6 +23,12 @@
 # production
 /build
 
+# local source/conversion videos; production playback is hosted on YouTube.
+# Kept outside /public/ (not just gitignored) so the Next.js static export
+# (`output: "export"` copies the whole public/ tree verbatim, ignoring .git)
+# never picks it up into out/, even from an untracked local working tree.
+/video-source/
+
 # misc
 .DS_Store
 *.pem

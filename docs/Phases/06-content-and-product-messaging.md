@@ -8,8 +8,8 @@ tier and verified product capabilities, adds employee access to the practical
 browser, makes first-visit theme selection follow the system, and fixes the
 intermittent mobile top-of-page header shift.
 
-The sole phase status is in [plan.md](../plan.md). Phase 06 is implemented on
-local `master` and `in_review`. Calendly moved to Phase 07.
+The sole phase status is in [plan.md](../plan.md). Phase 06 is accepted and
+released on `master`. The external booking integration moved to Phase 07.
 
 ## Locked decisions
 
@@ -267,7 +267,7 @@ Test the five tabs, content, metrics, keyboard model and pricing anchors at 320,
 and homepage metadata for removed trial/AI claims, excluding the verbatim
 reference quote and unreachable frozen legacy source.
 
-## Implementation evidence — 10 September 2026 (in_review)
+## Implementation evidence — 10 September 2026 (accepted)
 
 Implemented on local `master` (HEAD `86c00d4`, no commit). Changed source:
 `Hero.tsx`, `Capabilities.tsx`, `FunctionsBrowser.tsx`, `Faq.tsx`, `Contact.tsx`,

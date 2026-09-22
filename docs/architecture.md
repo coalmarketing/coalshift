@@ -100,7 +100,9 @@ app/
     seo.ts              route/SEO single source (SITE_ORIGIN, ROUTES, metadataFor)
     pricing.ts          PRICING_PLANS, PAID_TRIAL_HELPER, VAT_NOTE, PRICING_INTRO
     contacts.ts         CONTACTS (Martina Adamcová, Šárka Melišová)
-    links.ts            REGISTER_URL, LOGIN_URL, SECTION (fragment ids)
+    links.ts            REGISTER_URL, LOGIN_URL, SECTION (fragment ids), BOOKINGS_URL,
+                         YOUTUBE_VIDEO_ID/YOUTUBE_URL/YOUTUBE_EMBED_URL/YOUTUBE_TITLE/
+                         YOUTUBE_POSTER_SRC (Phase 07)
     smoothScroll.ts     isPlainActivation / shouldSmoothScroll fragment-nav guard + offset
   sitemap.ts / robots.ts   derived from seo.ts
   components/
@@ -108,8 +110,9 @@ app/
     Footer.tsx          two-column footer, Navigace (incl. Reference / GDPR / Cookies)
     LegalPage.tsx       /gdpr + /cookies shell (SubpageIntro + Waulter container)
     ResponsiveImage.tsx registry-driven <img> for Sharp-generated rasters
-    home/               Hero, Capabilities, FunctionsBrowser, ProductGallery, Pricing, Industries, Faq, Contact
-                        ProductGallery.tsx — client island: the 3 real app screenshots as a playful stack (one straight in front, one tilted above/left, one below/right). The three cards are persistent — rendered in stable order, each keyed to its screenshot; navigating only animates the CSS `transform` between roles (`.pg-card*`, ~340 ms), so the actual cards glide (next cycles upper→front→lower→upper, previous reverses) with no image swap; `prefers-reduced-motion` snaps. A single transparent `<button>` overlay at the front-card box is the one focus target / fullscreen trigger; the moving cards are never tab stops. prev/next + counter + touch swipe, wrapping, and an accessible fullscreen dialog with its own accepted slide-in (portaled to body, background inert); no carousel library, no transition timer
+    home/               Hero, Capabilities, FunctionsBrowser, ProductGallery, Pricing, Industries, Faq, Contact, BookingsDialog
+                        ProductGallery.tsx — client island: a two-option accessible selector (WAI-ARIA manual-activation tabs, horizontal roving focus, decorative icons ported byte-for-byte from coalios `play_arrow.svg`/`devices.svg`) switches between the video walkthrough and the screenshot gallery, defaulting to video. Both mode panels are permanently mounted as two real `role="tabpanel"` elements (their own ids, `aria-labelledby` to the matching tab) stacked in one CSS-grid "media stage" (`col-start-1 row-start-1`) — the stage's height is the grid's natural max of both panels' content, so switching modes never shifts the section or the content below it; no JS height measurement. The inactive panel crossfades out (opacity + small translate, ~220ms, instant under `prefers-reduced-motion`) and is `aria-hidden` + `inert` + `pointer-events-none`, exposing no controls to keyboard/AT. Video mode renders a first-party click-to-play facade (local poster only, no YouTube contact before activation) that mounts a responsive `youtube-nocookie.com` iframe on play, plus a direct YouTube-link fallback; leaving Video mode unmounts the player (`playing` resets whenever `mode !== "video"`, and the panel is inert either way). Screenshot mode (unchanged from Phase 05): the 3 real app screenshots as a playful stack (one straight in front, one tilted above/left, one below/right). The three cards are persistent — rendered in stable order, each keyed to its screenshot; navigating only animates the CSS `transform` between roles (`.pg-card*`, ~340 ms), so the actual cards glide (next cycles upper→front→lower→upper, previous reverses) with no image swap; `prefers-reduced-motion` snaps. A single transparent `<button>` overlay at the front-card box is the one focus target / fullscreen trigger; the moving cards are never tab stops. prev/next + counter + touch swipe, wrapping, and an accessible fullscreen dialog with its own accepted slide-in (portaled to body, background inert); no carousel library, no transition timer
+                        BookingsDialog.tsx (Phase 07) — client island: the "Rezervovat konzultaci" CTA plus a lazy accessible dialog (focus trap, Escape, body scroll lock, background inert, focus restored on close — same contract as the gallery's fullscreen dialog) around a Microsoft Bookings iframe, created only on open, with a permanent direct-link fallback. Rendered by `Contact.tsx`, which lays out the left one-third personal contacts + right two-thirds consultation panel on desktop (the panel stretches to the contacts column's height), consultation first on mobile. Each contact is one cohesive `.glow-border` card (portrait + name/role/contact links inside a single inner surface wrapper); the consultation panel is likewise one `.glow-border--lg` card with exactly one inner surface (a restrained coalshift-blue radial-gradient wash, CTA anchored near the bottom via `mt-auto`) — `.glow-border > *` styles every direct child as its own rounded surface, so each card keeps exactly one direct child
     legacy/LegacyPage.tsx        shared shell for the three retained legacy routes
     reference/ReferenceList.tsx  testimonial cards + <details> disclosure
     ui/                 CtaButton, Section, SubpageIntro, InfoCard, BrandWord, SpotlightGroup, FragmentCta
@@ -126,11 +129,21 @@ every rendered string.
 
 - `image-registry.json` records each Sharp-managed raster: `src` (registry key),
   `file` (source path), `name`, native `width`/`height`, and the derivative
-  `widths`. Five entries: `martina-adamcova`, `sarka-melisova` (both 1080×1080,
-  widths 240/320/480/640); and the three product-gallery screenshots
+  `widths`. Six entries: `martina-adamcova`, `sarka-melisova` (both 1080×1080,
+  widths 240/320/480/640); the three product-gallery screenshots
   `product-gallery-{smeny,pozice,zamestnanci}` under
   `public/img/product-gallery/` (all 2876×1376, widths
-  720/1080/1440/1920/2560/2876 — capped at the native width for fullscreen).
+  720/1080/1440/1920/2560/2876 — capped at the native width for fullscreen); and
+  (Phase 07) `product-video-poster` (`public/img/product-video-poster.jpg`,
+  1280×720, widths 480/640/960/1280) — the verified YouTube thumbnail for the
+  video facade, stored locally so the site never contacts YouTube for the
+  poster.
+- The raw 340 MB source video (`coalshift_onboarding_original.mp4`) is kept
+  outside `public/` at `/video-source/` (gitignored) specifically because
+  `output: "export"` copies the entire `public/` tree verbatim from disk,
+  ignoring `.gitignore` — an untracked file under `public/` would still land in
+  `out/` on a local build. YouTube hosts the only deployed copy of the video;
+  no MP4/WebM enters `out/` or Git.
 - `scripts/generate-image-derivatives.mjs` (Sharp) writes WebP derivatives to
   `public/img/derivatives/` (git-ignored, idempotent). It throws on a missing
   source, a registry dimension that disagrees with the decoded source, an upscale

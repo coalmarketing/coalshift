@@ -6,6 +6,7 @@ import {
   useId,
   useRef,
   useState,
+  type KeyboardEvent as ReactKeyboardEvent,
   type PointerEvent as ReactPointerEvent,
   type RefObject,
 } from "react";
@@ -13,6 +14,7 @@ import { createPortal } from "react-dom";
 import Section, { SectionHeading } from "../ui/Section";
 import FragmentCta from "../ui/FragmentCta";
 import ResponsiveImage from "../ResponsiveImage";
+import { YOUTUBE_EMBED_URL, YOUTUBE_POSTER_SRC, YOUTUBE_TITLE, YOUTUBE_URL } from "../../lib/links";
 
 /**
  * Homepage product gallery — three real application screenshots.
@@ -73,10 +75,18 @@ const SLIDES: Slide[] = [
 
 const HEADING = "Podívejte se, jak coalshift vypadá v praxi";
 const INTRO =
-  "Plánujte směny, kontrolujte obsazení a spravujte pozice i zaměstnance v jednom přehledném prostředí. Prohlédněte si skutečné obrazovky aplikace, se kterými budete pracovat každý den.";
+  "Pusťte si praktickou ukázku aplikace nebo si projděte skutečné obrazovky, se kterými budete pracovat každý den.";
 
 const INLINE_SIZES = "(min-width: 1280px) 45vw, 92vw";
 const FULLSCREEN_SIZES = "95vw";
+
+type Mode = "video" | "screens";
+
+const MODE_LABEL: Record<Mode, string> = {
+  video: "Video ukázka (13 min)",
+  screens: "Obrazovky aplikace",
+};
+const MODE_ORDER: Mode[] = ["video", "screens"];
 
 /** min horizontal travel (px) that counts as a swipe */
 const SWIPE_THRESHOLD = 48;
@@ -200,6 +210,180 @@ function CloseIcon({ className }: { className: string }) {
         strokeLinejoin="round"
       />
     </svg>
+  );
+}
+
+function PlayIcon({ className }: { className: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M8 5v14l11-7z" />
+    </svg>
+  );
+}
+
+/**
+ * Decorative selector-label icons, ported byte-for-byte (path + viewBox) from
+ * the authorized read-only coalios reference — `currentColor` fill, no icon
+ * package/webfont/runtime request:
+ * coalios/src/assets/svgs/video/play_arrow.svg and
+ * coalios/src/assets/svgs/kariera/devices.svg (its hardcoded orange fill
+ * dropped in favor of `currentColor`).
+ */
+function PlayArrowGlyph({ className }: { className: string }) {
+  return (
+    <svg className={className} viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true">
+      <path d="M320-200v-560l440 280-440 280Zm80-280Zm0 134 210-134-210-134v268Z" />
+    </svg>
+  );
+}
+
+function DevicesGlyph({ className }: { className: string }) {
+  return (
+    <svg className={className} viewBox="0 -960 960 960" fill="currentColor" aria-hidden="true">
+      <path d="M480-540ZM80-160v-80h400v80H80Zm120-120q-33 0-56.5-23.5T120-360v-360q0-33 23.5-56.5T200-800h560q33 0 56.5 23.5T840-720H200v360h280v80H200Zm600 40v-320H640v320h160Zm-180 80q-25 0-42.5-17.5T560-220v-360q0-25 17.5-42.5T620-640h200q25 0 42.5 17.5T880-580v360q0 25-17.5 42.5T820-160H620Zm100-300q13 0 21.5-9t8.5-21q0-13-8.5-21.5T720-520q-12 0-21 8.5t-9 21.5q0 12 9 21t21 9Zm0 60Z" />
+    </svg>
+  );
+}
+
+/**
+ * Two-option accessible selector between the video walkthrough and the
+ * screenshot gallery (WAI-ARIA manual-activation tabs pattern, same model as
+ * `FunctionsBrowser`'s tablist but horizontal: Left/Right roving focus,
+ * Home/End jump, Enter/Space or click select).
+ */
+function ModeTabs({
+  mode,
+  onChange,
+  uid,
+}: {
+  mode: Mode;
+  onChange: (m: Mode) => void;
+  uid: string;
+}) {
+  const refs = useRef<(HTMLButtonElement | null)[]>([]);
+
+  const focusTab = (i: number) => {
+    const n = (i + MODE_ORDER.length) % MODE_ORDER.length;
+    refs.current[n]?.focus();
+  };
+
+  const onKeyDown = (e: ReactKeyboardEvent<HTMLButtonElement>, i: number) => {
+    switch (e.key) {
+      case "ArrowRight":
+        e.preventDefault();
+        focusTab(i + 1);
+        break;
+      case "ArrowLeft":
+        e.preventDefault();
+        focusTab(i - 1);
+        break;
+      case "Home":
+        e.preventDefault();
+        focusTab(0);
+        break;
+      case "End":
+        e.preventDefault();
+        focusTab(MODE_ORDER.length - 1);
+        break;
+      case "Enter":
+      case " ":
+        e.preventDefault();
+        onChange(MODE_ORDER[i]);
+        break;
+    }
+  };
+
+  return (
+    <div role="tablist" aria-label="Zobrazení ukázky aplikace" className="inline-flex flex-wrap gap-2">
+      {MODE_ORDER.map((m, i) => {
+        const selected = mode === m;
+        return (
+          <button
+            key={m}
+            ref={(el) => {
+              refs.current[i] = el;
+            }}
+            type="button"
+            role="tab"
+            id={`${uid}-${m}-tab`}
+            aria-controls={`${uid}-${m}-panel`}
+            aria-selected={selected}
+            tabIndex={selected ? 0 : -1}
+            onClick={() => onChange(m)}
+            onKeyDown={(e) => onKeyDown(e, i)}
+            className={`inline-flex items-center gap-2 rounded-full border-2 px-5 py-2.5 text-sm font-bold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-coalsoft-500 ${
+              selected
+                ? "border-coalsoft-500 bg-coalsoft-500 text-black"
+                : "border-neutral-300 bg-white text-neutral-700 hover:border-coalsoft-500 hover:text-coalsoft-700 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-300 dark:hover:border-coalsoft-400 dark:hover:text-coalsoft-300"
+            }`}
+          >
+            {m === "video" ? (
+              <PlayArrowGlyph className="size-4 shrink-0" />
+            ) : (
+              <DevicesGlyph className="size-4 shrink-0" />
+            )}
+            {MODE_LABEL[m]}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+/**
+ * Video mode — a first-party click-to-play facade over the locally stored,
+ * owner-verified YouTube thumbnail (no YouTube contact before activation).
+ * On play it mounts a responsive privacy-enhanced `youtube-nocookie.com`
+ * iframe; a direct YouTube link is always offered alongside it.
+ */
+function VideoPanel({ playing, onPlay }: { playing: boolean; onPlay: () => void }) {
+  return (
+    <div className="flex flex-col gap-4">
+      <div
+        className="glow-border glow-border--lg shadow-sm ring-1 ring-black/5 dark:shadow-none dark:ring-white/10"
+        data-surface="white"
+      >
+        <div className="aspect-[16/9] overflow-hidden rounded-[calc(2rem-2px)]">
+          {playing ? (
+            <iframe
+              src={YOUTUBE_EMBED_URL}
+              title={YOUTUBE_TITLE}
+              className="h-full w-full"
+              loading="lazy"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+            />
+          ) : (
+            <button
+              type="button"
+              onClick={onPlay}
+              aria-label={`Přehrát video: ${YOUTUBE_TITLE}`}
+              className="group relative block h-full w-full cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-coalsoft-500"
+            >
+              <ResponsiveImage
+                src={YOUTUBE_POSTER_SRC}
+                alt=""
+                sizes={INLINE_SIZES}
+                className="block h-full w-full object-cover"
+              />
+              <span className="absolute inset-0 flex items-center justify-center bg-black/25 transition-colors group-hover:bg-black/35">
+                <span className="inline-flex size-16 items-center justify-center rounded-full bg-white/90 text-neutral-900 shadow-lg transition-transform group-hover:scale-105 sm:size-20">
+                  <PlayIcon className="size-7 translate-x-0.5 sm:size-9" />
+                </span>
+              </span>
+            </button>
+          )}
+        </div>
+      </div>
+      <a
+        href={YOUTUBE_URL}
+        target="_blank"
+        rel="noopener"
+        className="link self-start text-sm font-bold text-coalsoft-700 dark:text-coalsoft-300"
+      >
+        Sledovat na YouTube
+      </a>
+    </div>
   );
 }
 
@@ -375,9 +559,19 @@ export default function ProductGallery() {
   const [active, setActive] = useState(0);
   const [direction, setDirection] = useState<1 | -1>(1);
   const [fullscreen, setFullscreen] = useState(false);
+  const [mode, setMode] = useState<Mode>("video");
+  const [playing, setPlaying] = useState(false);
 
   const openerRef = useRef<HTMLButtonElement>(null);
   const dialogLabelId = useId();
+  const tabsUid = useId();
+
+  /** Switching away from Video mode unmounts the player — it never keeps
+   *  playing in the background and always restarts from the facade. */
+  const changeMode = useCallback((m: Mode) => {
+    setMode(m);
+    if (m !== "video") setPlaying(false);
+  }, []);
 
   /** Move by one slide (wrapping). `dir` = 1 forward, -1 backward. */
   const step = useCallback((dir: 1 | -1) => {
@@ -404,37 +598,78 @@ export default function ProductGallery() {
       <div className="flex flex-col gap-10 xl:flex-row xl:items-start xl:gap-16 2xl:gap-24">
         {/* GALLERY column — left on wide screens; on narrow it follows the text. */}
         <div className="order-2 flex flex-col gap-5 xl:order-1 xl:basis-1/2">
-          {/* Playful three-card stack. The padding reserves room for the
-              tilted upper (top) and lower (bottom) cards so a rotated corner
-              never causes page-level horizontal overflow, and the controls
-              still sit clear below the whole stack. */}
-          <div className="relative isolate px-8 pb-14 pt-12 sm:px-10 sm:pb-16 sm:pt-14">
-            {/* Persistent cards in stable order — each keeps its own screenshot;
-                only its role (front / upper / lower) changes and animates. */}
-            {SLIDES.map((s, i) => (
-              <StackCard key={s.src} slide={s} role={roleFor(i, active)} />
-            ))}
+          {/* Single-cell overlap grid ("media stage"): both mode panels stay
+              permanently mounted, occupy the same grid cell (`col-start-1
+              row-start-1`), and the stage's row height is the CSS grid auto
+              max of both panels' natural content height — no JS measurement,
+              no fixed pixel height, no layout shift when switching modes.
+              The inactive panel crossfades out (opacity + small translate,
+              ~220ms, instant under prefers-reduced-motion) and is
+              aria-hidden + inert + pointer-events-none, so it exposes no
+              links/buttons/fullscreen triggers to keyboard or AT. */}
+          <div className="grid">
+            <div
+              id={`${tabsUid}-video-panel`}
+              role="tabpanel"
+              aria-labelledby={`${tabsUid}-video-tab`}
+              aria-hidden={mode !== "video"}
+              inert={mode !== "video" ? true : undefined}
+              className={`col-start-1 row-start-1 transition-[opacity,transform] duration-[220ms] ease-out motion-reduce:transition-none ${
+                mode === "video"
+                  ? "pointer-events-auto opacity-100 translate-y-0"
+                  : "pointer-events-none opacity-0 translate-y-1"
+              }`}
+            >
+              <VideoPanel playing={playing} onPlay={() => setPlaying(true)} />
+            </div>
 
-            {/* Transparent overlay at the front-card box: the single stable
-                focus target + fullscreen trigger + swipe surface. It also gives
-                the padded wrapper its height (front card aspect ratio). The
-                moving cards never take focus. */}
-            <button
-              ref={openerRef}
-              type="button"
-              onClick={openFullscreen}
-              aria-label={`Zobrazit obrázek ${slide.name} na celou obrazovku`}
-              {...swipe.handlers}
-              className="relative z-30 block aspect-[2876/1376] w-full cursor-zoom-in select-none rounded-[2rem] border-0 bg-transparent p-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-coalsoft-500"
-            />
+            <div
+              id={`${tabsUid}-screens-panel`}
+              role="tabpanel"
+              aria-labelledby={`${tabsUid}-screens-tab`}
+              aria-hidden={mode !== "screens"}
+              inert={mode !== "screens" ? true : undefined}
+              className={`col-start-1 row-start-1 flex flex-col gap-5 transition-[opacity,transform] duration-[220ms] ease-out motion-reduce:transition-none ${
+                mode === "screens"
+                  ? "pointer-events-auto opacity-100 translate-y-0"
+                  : "pointer-events-none opacity-0 translate-y-1"
+              }`}
+            >
+              {/* Playful three-card stack. The padding reserves room for the
+                  tilted upper (top) and lower (bottom) cards so a rotated
+                  corner never causes page-level horizontal overflow, and the
+                  controls still sit clear below the whole stack. */}
+              <div className="relative isolate px-8 pb-14 pt-12 sm:px-10 sm:pb-16 sm:pt-14">
+                {/* Persistent cards in stable order — each keeps its own
+                    screenshot; only its role (front / upper / lower)
+                    changes and animates. */}
+                {SLIDES.map((s, i) => (
+                  <StackCard key={s.src} slide={s} role={roleFor(i, active)} />
+                ))}
+
+                {/* Transparent overlay at the front-card box: the single
+                    stable focus target + fullscreen trigger + swipe
+                    surface. It also gives the padded wrapper its height
+                    (front card aspect ratio). The moving cards never take
+                    focus. */}
+                <button
+                  ref={openerRef}
+                  type="button"
+                  onClick={openFullscreen}
+                  aria-label={`Zobrazit obrázek ${slide.name} na celou obrazovku`}
+                  {...swipe.handlers}
+                  className="relative z-30 block aspect-[2876/1376] w-full cursor-zoom-in select-none rounded-[2rem] border-0 bg-transparent p-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-coalsoft-500"
+                />
+              </div>
+
+              <Controls active={active} onPrev={() => step(-1)} onNext={() => step(1)} />
+
+              {/* Announce the active slide; decorative layers stay silent. */}
+              <p className="sr-only" aria-live="polite">
+                {slide.name} — obrázek {active + 1} z {SLIDES.length}
+              </p>
+            </div>
           </div>
-
-          <Controls active={active} onPrev={() => step(-1)} onNext={() => step(1)} />
-
-          {/* Announce the active slide; decorative layers stay silent. */}
-          <p className="sr-only" aria-live="polite">
-            {slide.name} — obrázek {active + 1} z {SLIDES.length}
-          </p>
         </div>
 
         {/* TEXT + CTA — right on wide screens; first on narrow screens. */}
@@ -446,6 +681,7 @@ export default function ProductGallery() {
             intro={INTRO}
             center={false}
           />
+          <ModeTabs mode={mode} onChange={changeMode} uid={tabsUid} />
           <FragmentCta
             targetId="pricing"
             label="Prohlédnout cenové balíčky"
