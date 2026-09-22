@@ -1,8 +1,8 @@
 # Coalshift
 
-Read [docs/agent-instructions.md](docs/agent-instructions.md) before working in this repository. The sole phase status and current handoff are in [docs/plan.md](docs/plan.md); the quality requirements are in [docs/quality.md](docs/quality.md). For the current state of the codebase see [docs/architecture.md](docs/architecture.md), [docs/design-system.md](docs/design-system.md), [docs/content-and-seo.md](docs/content-and-seo.md) and [docs/operations.md](docs/operations.md).
+Read [docs/agent-instructions.md](docs/agent-instructions.md) before working in this repository. The quality requirements are in [docs/quality.md](docs/quality.md). For the current state of the codebase see [docs/architecture.md](docs/architecture.md), [docs/design-system.md](docs/design-system.md), [docs/content-and-seo.md](docs/content-and-seo.md) and [docs/operations.md](docs/operations.md).
 
-Work only on the single task or phase assigned in the current prompt. Website copy is Czech with consistent vykání; implementation reports and handoff prompts are English. Preserve GTM `GTM-NQDZKVLF`, the Waulter loader + `waulterGdpr`/`waulterCookies` containers, the owner-managed cookie system, the current routes/redirects and accepted design/content. Do not start subsequent phases automatically, and do not commit, push or deploy without an explicit assignment that authorizes it.
+Work only on the single task assigned in the current prompt. Website copy is Czech with consistent vykání; implementation reports are English. Preserve GTM `GTM-NQDZKVLF`, the Waulter loader + the `[data-waulter-document]` containers on `/gdpr`/`/cookies`, the owner-managed cookie system, the current routes/redirects and accepted design/content. Do not start unrelated follow-up work automatically, and do not commit, push or deploy without an explicit assignment that authorizes it.
 
 <!-- BEGIN:nextjs-agent-rules -->
 

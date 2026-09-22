@@ -35,11 +35,8 @@ copy is quoted as rendered — this list records placement, not copy):
 | Industries heading | „Pro koho je **coalshift**" |
 | Contact intro | „Potřebujete poradit s výběrem tarifu nebo s používáním **coalshiftu**? Ozvěte se nám." |
 
-The Phase 06 hero lead no longer contains a `coalshift` token, so the former
-hero-lead placement is gone. Phase 07 replaced the detached Free-plan offer box
-(former "Contact heading" placement, „Vyzkoušejte coalshift ve svém týmu") with
-the Microsoft Bookings consultation panel; that panel's own copy does not use
-`BrandWord`.
+The hero lead does not contain a `coalshift` token. The consultation panel's
+own copy does not use `BrandWord`.
 
 Never use `BrandWord` for logos, nav/CTA labels, metadata, legal text or
 testimonials, and never run a global text-node replacement.
@@ -68,10 +65,6 @@ testimonials, and never run a global text-node replacement.
   configured externally as **Pojďme probrat váš provoz**) plus an always-visible
   **Otevřít rezervaci v novém okně** direct-link fallback. Never ship a fake URL
   or a disabled control presented as working booking.
-- Retained frozen legacy source (`/registrace`, `/wait-list`,
-  `/wait-list/thank-you`) still contains 14-day-trial wording; those URLs 301 to
-  `/` and are excluded from the active-copy trial check.
-
 Source: `app/lib/links.ts` (`REGISTER_URL` = `https://app.coalshift.cz/register`,
 `LOGIN_URL` = `https://app.coalshift.cz/login`, label **Přihlásit se**;
 `SECTION` fragment ids), `app/lib/pricing.ts`.
@@ -110,7 +103,7 @@ not appear anywhere in visible copy, labels or metadata.
 
 Desktop: personal contacts occupy the left one-third, the consultation panel the
 right two-thirds. Mobile: the consultation action comes first, personal contacts
-follow. Copy, verbatim (source: `docs/Phases/07-bookings-and-product-video.md`):
+follow. Copy, verbatim:
 
 - eyebrow: **Online konzultace**
 - heading: **Vyberte si termín, který vám vyhovuje**
@@ -140,12 +133,11 @@ krokem**, intro **Projděte si správu zaměstnanců, plánování směn, nepř�
 exporty a zaměstnanecké přístupy.**
 
 Five vertical tabs, in order, each with a heading, lead, three titled feature
-descriptions and exactly two numerical cards. Every value is an approved product
-count/composition from Phase 06 (`docs/Phases/06-content-and-product-messaging.md`)
-— **not** a measured performance result. No card shows **Ilustrační údaj**; there
-is no `illustrative` status and no percentage or savings claim anywhere in the
-section. The panel CTA on every tab is **Vyzkoušet bezplatnou variantu** →
-`#pricing`.
+descriptions and exactly two numerical cards. Every value is an approved
+product count/composition — **not** a measured performance result. No card
+shows **Ilustrační údaj**; there is no `illustrative` status and no
+percentage or savings claim anywhere in the section. The panel CTA on every
+tab is **Vyzkoušet bezplatnou variantu** → `#pricing`.
 
 | Tab | Metric id | Value | Badge | Note |
 | --- | --- | --- | --- | --- |
@@ -160,9 +152,7 @@ section. The panel CTA on every tab is **Vyzkoušet bezplatnou variantu** →
 | Zaměstnanecké přístupy | access-levels | 2 | Úrovně přístupu | Správce a zaměstnanec |
 | Zaměstnanecké přístupy | access-overviews | 3 | Osobní přehledy | Směny, nepřítomnosti a kolegové na stejné pozici |
 
-Copy for headings, leads and feature descriptions is verbatim from the Phase 06
-plan. The "copy nesmí slibovat úplnou právní shodu" line in that plan is an
-authoring constraint, not rendered text.
+Copy must never imply full legal-compliance certification.
 
 Mock-browser address paths (plain display text, no hash, not navigable):
 `/pozice-a-zamestnanci`, `/smeny`, `/nepritomnosti`, `/exporty-a-statistiky`,
@@ -170,17 +160,15 @@ Mock-browser address paths (plain display text, no hash, not navigable):
 
 ## Product gallery (`app/components/home/ProductGallery.tsx`)
 
-Homepage section between `FunctionsBrowser` and `Pricing`. Copy source:
-`docs/Phases/05-product-gallery.md` (screenshots) and
-`docs/Phases/07-bookings-and-product-video.md` (video + selector).
+Homepage section between `FunctionsBrowser` and `Pricing`.
 
 - Eyebrow: **Ukázka aplikace**
 - Heading: **Podívejte se, jak coalshift vypadá v praxi**
-- Intro (Phase 07 revision): **Pusťte si praktickou ukázku aplikace nebo si
+- Intro: **Pusťte si praktickou ukázku aplikace nebo si
   projděte skutečné obrazovky, se kterými budete pracovat každý den.**
 - CTA: **Prohlédnout cenové balíčky** → `#pricing` (guarded smooth-scroll).
 
-### Video walkthrough (Phase 07)
+### Video walkthrough
 
 A two-option accessible selector (WAI-ARIA manual-activation tabs, horizontal
 Left/Right roving focus, Home/End, Enter/Space or click to select) switches the
@@ -238,9 +226,9 @@ Michal Uhlíř (coalfamily), Jana Novotná (HR Manager), Petr Svoboda (Provozní
 **Provenance was not independently verified.** Michal Uhlíř's "coalfamily" role
 is an in-family voice; Petr Svoboda's quote contains "Integrace s naším
 stávajícím HR systémem proběhla hladce" and "Návratnost investice byla téměř
-okamžitá". Jakub's Phase 03 acceptance authorized publication of this reviewed
-content; it did **not** establish independent provenance. Do not describe these
-as newly verified evidence or promote their claims into general product promises.
+okamžitá". The owner authorized publication of this reviewed content; that did
+**not** establish independent provenance. Do not describe these as newly
+verified evidence or promote their claims into general product promises.
 
 ## §79 break/rest wording
 
@@ -264,20 +252,12 @@ savings.
 | `/reference` | `Reference \| coalshift` | Přečtěte si zkušenosti s plánováním směn v coalshiftu. |
 | `/gdpr` | `Zásady ochrany osobních údajů (GDPR) — coalshift` | Informace o zpracování osobních údajů na webu coalshift. |
 | `/cookies` | `Podmínky cookies — coalshift` | Informace o používání souborů cookies na webu coalshift. |
-| `/registrace` | `Vyzkoušejte coalshift na 14 dní zdarma` | Přejděte k registraci do aplikace coalshift a vyzkoušejte si plánování směn na 14 dní zdarma. |
-| `/wait-list` | `Začněte s coalshiftem` | Zjednodušte si plánování směn. Přejděte do aplikace a vyzkoušejte coalshift na 14 dní zdarma. |
-| `/wait-list/thank-you` | `Děkujeme za zájem \| coalshift` | Pokračujte do aplikace coalshift nebo se vraťte na úvodní stránku. |
 
-The three legacy rows describe retained source only; public requests are
-intercepted by 301 (below), so that body metadata is defense-in-depth, not the
-indexing mechanism.
-
-Indexable routes (`/`, `/reference`, `/gdpr`, `/cookies`) emit a production
-self-canonical + text-only Open Graph (`type=website`, `locale=cs_CZ`,
-`siteName=coalshift`, `url`, `title`, `description`) + Twitter `card=summary`.
-**No social-preview image** is created or referenced. Legacy routes emit
-`<meta name="robots" content="noindex, follow">`, no canonical, no `og:*`.
-No JSON-LD anywhere. Production origin `https://coalshift.cz`. The homepage
+All four routes emit a production self-canonical + text-only Open Graph
+(`type=website`, `locale=cs_CZ`, `siteName=coalshift`, `url`, `title`,
+`description`) + Twitter `card=summary`. **No social-preview image** is
+created or referenced. No JSON-LD anywhere. Production origin
+`https://coalshift.cz`. The homepage
 canonical / `og:url` / sitemap `<loc>` render as the bare origin (see
 [architecture.md](architecture.md)).
 
@@ -287,14 +267,15 @@ canonical / `og:url` / sitemap `<loc>` render as the bare origin (see
 `changefreq` / `priority`.
 
 `/robots.txt` (`app/robots.ts`): `User-Agent: *` / `Allow: /` /
-`Sitemap: https://coalshift.cz/sitemap.xml`. **No `Disallow`** — the redirect,
-not a crawl block, is what makes the legacy families non-indexable, and crawlers
-stay able to fetch the 301.
+`Sitemap: https://coalshift.cz/sitemap.xml`. **No `Disallow`** — the retired
+route families have no source and no generated page; `public/_redirects` 301s
+them at the Cloudflare edge before any page is served.
 
 ## Route and redirect matrix — exact `Location` values
 
-Redirects live in `public/_redirects` (Cloudflare parses them at the edge; a
-static redirect wins over a generated `.html` asset). All eight rules, verbatim:
+Redirects live in `public/_redirects`, parsed by Cloudflare at the edge
+independently of the Next.js source — no route file exists for the legacy
+paths below. All eight rules, verbatim:
 
 ```
 /zdravotnici /#industries 301
@@ -324,23 +305,20 @@ to `/zdravotnici`.
 
 `/gdpr` and `/cookies` render the shared `LegalPage` shell (`SubpageIntro`: real
 `<h1>` = footer label, `Domů → title` breadcrumb, blue radial wash) with exactly
-one initially-empty container each — `<div id="waulterGdpr">` / `<div
-id="waulterCookies">` — inside a `.legal-content` wrapper that themes injected
-headings/lists/tables/links. `suppressHydrationWarning` keeps React from
-rewriting injected HTML. Do not author substitute legal paragraphs or copy
-another company's policies. Real provider population is a production-domain check
-(see Q-016).
+one initially-empty container each — `<div data-waulter-document="AG0774">` /
+`<div data-waulter-document="AG0775">` — inside a `.legal-content` wrapper that
+themes injected headings/lists/tables/links. `suppressHydrationWarning` keeps
+React from rewriting injected HTML. Do not author substitute legal paragraphs
+or copy another company's policies. Real provider population is a
+production-domain check (see Q-016 in [quality.md](quality.md)).
 
-## Content limitations (carry forward)
+## Content limitations
 
-- Practical-browser numerical cards are approved product counts/compositions, not
-  independently measured performance results (Phase 06 removed the six labelled
-  illustrative figures).
+- Practical-browser numerical cards are approved product counts/compositions,
+  not independently measured performance results.
 - Testimonial provenance is unverified (Michal Uhlíř "coalfamily"; Petr Svoboda
   HR-integration + ROI sentences; the `/reference` quote mentions artificial
   intelligence and is preserved verbatim).
-- Real Waulter policy population in `#waulterGdpr` / `#waulterCookies` is
-  unverified off the production domain.
-
-Acceptance and publication authorization do not convert any of these into
-factual verification.
+- Real Waulter policy population in the `data-waulter-document` containers has
+  only ever been confirmed on the production domain — verify there, not from a
+  local build, after any change to the legal pages.

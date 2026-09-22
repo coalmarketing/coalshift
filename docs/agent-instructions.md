@@ -2,11 +2,12 @@
 
 ## Read and locate
 
-Before acting, read the applicable root instructions, [plan.md](plan.md) (phase
-status + current handoff), the [quality profile](quality.md), and the exact phase
-file named in your assignment. For the current codebase read
-[architecture.md](architecture.md), [design-system.md](design-system.md),
-[content-and-seo.md](content-and-seo.md) and [operations.md](operations.md).
+Before acting, read the applicable root instructions and the current-state
+docs: [architecture.md](architecture.md), [design-system.md](design-system.md),
+[content-and-seo.md](content-and-seo.md), [operations.md](operations.md) and
+the [quality profile](quality.md). There is no separate phase-file or plan
+document — the assigned task is described directly in the prompt, and these
+docs are the sole source of current system state.
 
 The working repository is `/Users/jakubtesarik/Programování/coalshift`, remote
 `https://github.com/coalmarketing/coalshift.git`. Run Git, build and validation
@@ -25,26 +26,26 @@ do not independently authorize work.
 
 ## Execution contract
 
-1. Perform only the currently assigned step. Initialization / planning review is
-   read-only and does not authorize installs, edits, artifact-writing builds,
+1. Perform only the currently assigned task. A read-only initialization or
+   review step does not authorize installs, edits, artifact-writing builds,
    implementation, commits or deployment.
 2. Before an implementation assignment, verify branch, HEAD, working tree and
    pre-existing changes. Work locally on `master`.
-3. Implement the approved phase and the routine technical details it needs. Do
-   not silently change commercial terms, legal promises, route availability,
-   phase structure or quality criteria.
-4. Follow the quality IDs assigned to the phase. Record evidence as `PASS`,
-   `FAIL`, `NOT_RUN` or `BLOCKED` with tested version and environment. Source
-   inspection cannot substitute for an interactive check, and condensing prose
-   never upgrades a `NOT_RUN`/`BLOCKED` result to `PASS`.
-5. Update the phase checklist, applicable quality evidence and [plan.md](plan.md).
-   Mark completed implementation `in_review`; only Codex records `done` after the
-   owner accepts.
-6. Stop and return the report in English. Do not start another phase
-   automatically. Website copy stays Czech with consistent vykání.
-7. Report a reusable learning candidate only with a concrete observation, cause,
-   evidence and applicability; Codex evaluates it. Do not modify shared `[[AI]]`
-   guidance during project work.
+3. Implement exactly what was assigned and the routine technical details it
+   needs. Do not silently change commercial terms, legal promises, route
+   availability or the quality bar in [quality.md](quality.md).
+4. Follow the quality requirements relevant to the change. Record evidence as
+   `PASS`, `FAIL`, `NOT_RUN` or `BLOCKED` with the tested version and
+   environment. Source inspection cannot substitute for an interactive check,
+   and condensing prose never upgrades a `NOT_RUN`/`BLOCKED` result to `PASS`.
+5. Update [quality.md](quality.md) and any other current-state doc the change
+   affects. Do not create a new report, audit or history document — edit the
+   existing docs in place to describe the system as it now stands.
+6. Stop and return the report in English. Do not start unrelated follow-up
+   work automatically. Website copy stays Czech with consistent vykání.
+7. Report a reusable learning candidate only with a concrete observation,
+   cause, evidence and applicability; Codex evaluates it. Do not modify
+   shared `[[AI]]` guidance during project work.
 
 ## Commands
 
@@ -75,34 +76,30 @@ a blanket dependency updater.
 
 ## Preservation and scope
 
-Preserve GTM `GTM-NQDZKVLF`, the Waulter loader + `waulterGdpr`/`waulterCookies`
-containers + `suppressHydrationWarning`, the owner-managed cookie system, and
-Quanda's continued absence (Quanda is not Waulter — do not add a second consent
-loader or change GTM). Preserve the four public routes, all six legacy 301s to
-`/`, both `/zdravotnici` 301s to `/#industries`, the four-URL sitemap, the
-accepted design/content/offer/prices/contacts, image quality, and the
-responsive/accessibility/error-handling behavior.
+Preserve GTM `GTM-NQDZKVLF`, the Waulter loader + the `[data-waulter-document]`
+containers on `/gdpr` and `/cookies` + `suppressHydrationWarning`, the
+owner-managed cookie system, and Quanda's continued absence (Quanda is not
+Waulter — do not add a second consent loader or change GTM). Preserve the
+four public routes, all six legacy 301s to `/`, both `/zdravotnici` 301s to
+`/#industries`, the four-URL sitemap, the accepted design/content/offer/
+prices/contacts, image quality, and the responsive/accessibility/
+error-handling behavior.
 
-The three legacy route bodies (`/registrace`, `/wait-list`,
-`/wait-list/thank-you`) are byte-frozen retained source (SHA baselines in
-[operations.md](operations.md)); `LegacyPage.tsx` accepts comment-text
-corrections only. No new CMS, enquiry-form service, application backend,
-newsletter, analytics plan or hosting migration is in scope. Never invent
-portraits, customer quotes, product screenshots, booking URLs or contact details.
+No new CMS, enquiry-form service, application backend, newsletter, analytics
+plan or hosting migration is in scope. Never invent portraits, customer
+quotes, product screenshots, booking URLs or contact details.
 
 ## Reports
 
-For initialization, report repository/Git state, documents read, understanding of
-the goal, selected phase and its quality IDs, blockers and readiness. Do not
-modify files during a read-only step.
+For initialization, report repository/Git state, documents read, understanding
+of the goal, blockers and readiness. Do not modify files during a read-only step.
 
 Keep implementation and correction reports concise: at most eight bullets
 covering outcome, changed behavior/files, checks and results, any real limitation,
 Git/deployment actions and the single next step. Include a commit SHA or a longer
 inventory only when it is needed for the actual Git/release action or to explain
-a blocker. Do not repeat historical evidence, the full plan or unchanged quality
-requirements.
+a blocker. Do not repeat unchanged quality requirements.
 
-Update [plan.md](plan.md) before returning an implementation report. Never hide a
-failed check, weaken an acceptance criterion to fit partial work, or describe
-owner acceptance as automatic.
+Update [quality.md](quality.md) before returning an implementation report. Never
+hide a failed check, weaken an acceptance criterion to fit partial work, or
+describe owner acceptance as automatic.

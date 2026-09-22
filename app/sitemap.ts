@@ -10,6 +10,6 @@ export const dynamic = "force-static";
  */
 export default function sitemap(): MetadataRoute.Sitemap {
   return Object.values(ROUTES)
-    .filter((route) => route.sitemap && route.canonical)
-    .map((route) => ({ url: route.canonical as string }));
+    .filter((route) => route.sitemap)
+    .map((route) => ({ url: route.canonical }));
 }

@@ -21,7 +21,6 @@ redistribution with software/websites. Full licence text:
 <https://openfontlicense.org/open-font-license-official-text/>.
 
 The subsetted WOFF2 builds originate from the google-webfonts-helper project
-(`gwfh.mranftl.com`); the `v20` / `v21` markers are its font-version tags. The
-pre-redesign `.ttf` copies under `public/fonts/inter/` and `public/fonts/lekton/`
-were removed in phase 02 — they were no longer referenced by the stylesheet and
-only added weight to the static export.
+(`gwfh.mranftl.com`); the `v20` / `v21` markers are its font-version tags. Only
+these WOFF2 files are referenced by the stylesheet; do not add back unused
+`.ttf` copies.

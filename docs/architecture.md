@@ -27,40 +27,20 @@ only) and `trailingSlash: false` (every canonical, sitemap entry and internal
 
 ## Routes
 
-Seven route files exist; four are public and indexable, three are retained but
-unavailable (every request 301s to `/` at the Cloudflare edge). See
-[content-and-seo.md](content-and-seo.md) for the full route/redirect matrix with
-exact `Location` values, metadata and the sitemap set.
+Four route files exist, all public and indexable. `public/_redirects` 301s
+six retired legacy URL forms and both `/zdravotnici` forms at the Cloudflare
+edge; no route source exists for them. See [content-and-seo.md](content-and-seo.md)
+for the full redirect matrix with exact `Location` values.
 
 | Path | File | Role |
 | --- | --- | --- |
 | `/` | `app/page.tsx` | Main marketing page (`Hero` → `Capabilities` → `FunctionsBrowser` → `ProductGallery` → `Pricing` → `Industries` → `Faq` → `Contact`) |
 | `/reference` | `app/reference/page.tsx` | Public testimonials subpage; linked in footer **Navigace** |
-| `/gdpr` | `app/gdpr/page.tsx` | GDPR policy shell (`<div id="waulterGdpr">`) |
-| `/cookies` | `app/cookies/page.tsx` | Cookies policy shell (`<div id="waulterCookies">`) |
-| `/registrace` | `app/registrace/page.tsx` | Retained legacy source — 301 to `/` |
-| `/wait-list` | `app/wait-list/page.tsx` | Retained legacy source — 301 to `/` |
-| `/wait-list/thank-you` | `app/wait-list/thank-you/page.tsx` | Retained legacy source — 301 to `/` |
+| `/gdpr` | `app/gdpr/page.tsx` | GDPR policy shell (`<div data-waulter-document="AG0774">`) |
+| `/cookies` | `app/cookies/page.tsx` | Cookies policy shell (`<div data-waulter-document="AG0775">`) |
 
 `/zdravotnici` and `/zdravotnici/` 301 to `/#industries` (the retired healthcare
 page; healthcare stays a plain audience label on the homepage).
-
-### Retained legacy source — reactivation implications
-
-`/registrace`, `/wait-list` and `/wait-list/thank-you` render through
-`app/components/legacy/LegacyPage.tsx` (which imports `CtaButton`, not the removed
-`Button`). Their route bodies are kept in source control for possible future
-reactivation but are **not served in production**: `public/_redirects` intercepts
-all six URL forms (with and without trailing slash) with HTTP 301 to `/`, and a
-static redirect wins over the still-generated `.html` asset. The retained
-`noindex, follow` metadata on those routes is defense-in-depth / source history,
-not the live indexing mechanism.
-
-Freeze state: the three route bodies are byte-frozen (SHA-256 baselines in
-[operations.md](operations.md)). `LegacyPage.tsx` may receive comment-text
-corrections only. If a legacy route is ever reactivated, remove its
-`public/_redirects` line, restore an indexable `metadataFor()` entry in
-`app/lib/seo.ts`, and re-add its internal links and sitemap entry.
 
 ## Route/SEO data ownership
 
@@ -68,19 +48,17 @@ corrections only. If a legacy route is ever reactivated, remove its
 intent:
 
 - `SITE_ORIGIN` — `https://coalshift.cz`.
-- `ROUTES` — one `RouteSeo` record per path (`title`, `description`, `canonical`,
-  `indexable`, `sitemap`).
-- `metadataFor(path)` — builds the Next `Metadata`: indexable routes get a
-  `title.absolute`, self-canonical, text-only Open Graph and Twitter `summary`
-  (no image); non-indexable routes get `robots: { index: false, follow: true }`
-  and no canonical/social metadata.
+- `ROUTES` — one `RouteSeo` record per path (`title`, `description`,
+  `canonical`, `sitemap`).
+- `metadataFor(path)` — builds the Next `Metadata`: `title.absolute`,
+  self-canonical, text-only Open Graph and Twitter `summary` (no image).
 
 `app/sitemap.ts` and `app/robots.ts` derive from `seo.ts` (both
 `export const dynamic = "force-static"`, a no-op under export). The sitemap emits
-exactly the routes where `sitemap && canonical` is true. `app/robots.ts` is
-allow-all with a `Sitemap:` line and no `Disallow`. `app/layout.tsx` sets only
-`metadataBase` + a plain title/description fallback (used by the built-in 404) —
-nothing there is inherited as a per-route canonical or social card.
+every route with `sitemap: true`. `app/robots.ts` is allow-all with a
+`Sitemap:` line and no `Disallow`. `app/layout.tsx` sets only `metadataBase` +
+a plain title/description fallback (used by the built-in 404) — nothing there
+is inherited as a per-route canonical or social card.
 
 The homepage canonical / `og:url` / sitemap `<loc>` render as the bare origin
 `https://coalshift.cz` (Next's metadata resolver returns `result.origin` for the
@@ -102,18 +80,17 @@ app/
     contacts.ts         CONTACTS (Martina Adamcová, Šárka Melišová)
     links.ts            REGISTER_URL, LOGIN_URL, SECTION (fragment ids), BOOKINGS_URL,
                          YOUTUBE_VIDEO_ID/YOUTUBE_URL/YOUTUBE_EMBED_URL/YOUTUBE_TITLE/
-                         YOUTUBE_POSTER_SRC (Phase 07)
+                         YOUTUBE_POSTER_SRC
     smoothScroll.ts     isPlainActivation / shouldSmoothScroll fragment-nav guard + offset
   sitemap.ts / robots.ts   derived from seo.ts
   components/
     Header.tsx          floating→pinned nav, coalfamily strip, modal mobile menu
     Footer.tsx          two-column footer, Navigace (incl. Reference / GDPR / Cookies)
-    LegalPage.tsx       /gdpr + /cookies shell (SubpageIntro + Waulter container)
+    LegalPage.tsx       /gdpr + /cookies shell (SubpageIntro + [data-waulter-document] container)
     ResponsiveImage.tsx registry-driven <img> for Sharp-generated rasters
     home/               Hero, Capabilities, FunctionsBrowser, ProductGallery, Pricing, Industries, Faq, Contact, BookingsDialog
-                        ProductGallery.tsx — client island: a two-option accessible selector (WAI-ARIA manual-activation tabs, horizontal roving focus, decorative icons ported byte-for-byte from coalios `play_arrow.svg`/`devices.svg`) switches between the video walkthrough and the screenshot gallery, defaulting to video. Both mode panels are permanently mounted as two real `role="tabpanel"` elements (their own ids, `aria-labelledby` to the matching tab) stacked in one CSS-grid "media stage" (`col-start-1 row-start-1`) — the stage's height is the grid's natural max of both panels' content, so switching modes never shifts the section or the content below it; no JS height measurement. The inactive panel crossfades out (opacity + small translate, ~220ms, instant under `prefers-reduced-motion`) and is `aria-hidden` + `inert` + `pointer-events-none`, exposing no controls to keyboard/AT. Video mode renders a first-party click-to-play facade (local poster only, no YouTube contact before activation) that mounts a responsive `youtube-nocookie.com` iframe on play, plus a direct YouTube-link fallback; leaving Video mode unmounts the player (`playing` resets whenever `mode !== "video"`, and the panel is inert either way). Screenshot mode (unchanged from Phase 05): the 3 real app screenshots as a playful stack (one straight in front, one tilted above/left, one below/right). The three cards are persistent — rendered in stable order, each keyed to its screenshot; navigating only animates the CSS `transform` between roles (`.pg-card*`, ~340 ms), so the actual cards glide (next cycles upper→front→lower→upper, previous reverses) with no image swap; `prefers-reduced-motion` snaps. A single transparent `<button>` overlay at the front-card box is the one focus target / fullscreen trigger; the moving cards are never tab stops. prev/next + counter + touch swipe, wrapping, and an accessible fullscreen dialog with its own accepted slide-in (portaled to body, background inert); no carousel library, no transition timer
-                        BookingsDialog.tsx (Phase 07) — client island: the "Rezervovat konzultaci" CTA plus a lazy accessible dialog (focus trap, Escape, body scroll lock, background inert, focus restored on close — same contract as the gallery's fullscreen dialog) around a Microsoft Bookings iframe, created only on open, with a permanent direct-link fallback. Rendered by `Contact.tsx`, which lays out the left one-third personal contacts + right two-thirds consultation panel on desktop (the panel stretches to the contacts column's height), consultation first on mobile. Each contact is one cohesive `.glow-border` card (portrait + name/role/contact links inside a single inner surface wrapper); the consultation panel is likewise one `.glow-border--lg` card with exactly one inner surface (a restrained coalshift-blue radial-gradient wash, CTA anchored near the bottom via `mt-auto`) — `.glow-border > *` styles every direct child as its own rounded surface, so each card keeps exactly one direct child
-    legacy/LegacyPage.tsx        shared shell for the three retained legacy routes
+                        ProductGallery.tsx — client island: a two-option accessible selector (WAI-ARIA manual-activation tabs, horizontal roving focus, decorative icons ported byte-for-byte from coalios `play_arrow.svg`/`devices.svg`) switches between the video walkthrough and the screenshot gallery, defaulting to video. Both mode panels are permanently mounted as two real `role="tabpanel"` elements (their own ids, `aria-labelledby` to the matching tab) stacked in one CSS-grid "media stage" (`col-start-1 row-start-1`) — the stage's height is the grid's natural max of both panels' content, so switching modes never shifts the section or the content below it; no JS height measurement. The inactive panel crossfades out (opacity + small translate, ~220ms, instant under `prefers-reduced-motion`) and is `aria-hidden` + `inert` + `pointer-events-none`, exposing no controls to keyboard/AT. Video mode renders a first-party click-to-play facade (local poster only, no YouTube contact before activation) that mounts a responsive `youtube-nocookie.com` iframe on play, plus a direct YouTube-link fallback; leaving Video mode unmounts the player (`playing` resets whenever `mode !== "video"`, and the panel is inert either way). Screenshot mode: the 3 real app screenshots as a playful stack (one straight in front, one tilted above/left, one below/right). The three cards are persistent — rendered in stable order, each keyed to its screenshot; navigating only animates the CSS `transform` between roles (`.pg-card*`, ~340 ms), so the actual cards glide (next cycles upper→front→lower→upper, previous reverses) with no image swap; `prefers-reduced-motion` snaps. A single transparent `<button>` overlay at the front-card box is the one focus target / fullscreen trigger; the moving cards are never tab stops. prev/next + counter + touch swipe, wrapping, and an accessible fullscreen dialog with its own accepted slide-in (portaled to body, background inert); no carousel library, no transition timer
+                        BookingsDialog.tsx — client island: the "Rezervovat konzultaci" CTA plus a lazy accessible dialog (focus trap, Escape, body scroll lock, background inert, focus restored on close — same contract as the gallery's fullscreen dialog) around a Microsoft Bookings iframe, created only on open, with a permanent direct-link fallback. Rendered by `Contact.tsx`, which lays out the left one-third personal contacts + right two-thirds consultation panel on desktop (the panel stretches to the contacts column's height), consultation first on mobile. Each contact is one cohesive `.glow-border` card (portrait + name/role/contact links inside a single inner surface wrapper); the consultation panel is likewise one `.glow-border--lg` card with exactly one inner surface (a restrained coalshift-blue radial-gradient wash, CTA anchored near the bottom via `mt-auto`) — `.glow-border > *` styles every direct child as its own rounded surface, so each card keeps exactly one direct child
     reference/ReferenceList.tsx  testimonial cards + <details> disclosure
     ui/                 CtaButton, Section, SubpageIntro, InfoCard, BrandWord, SpotlightGroup, FragmentCta
     theme/              ThemeToggle, themeScript (render-blocking bootstrap)
@@ -134,7 +111,7 @@ every rendered string.
   `product-gallery-{smeny,pozice,zamestnanci}` under
   `public/img/product-gallery/` (all 2876×1376, widths
   720/1080/1440/1920/2560/2876 — capped at the native width for fullscreen); and
-  (Phase 07) `product-video-poster` (`public/img/product-video-poster.jpg`,
+  `product-video-poster` (`public/img/product-video-poster.jpg`,
   1280×720, widths 480/640/960/1280) — the verified YouTube thumbnail for the
   video facade, stored locally so the site never contacts YouTube for the
   poster.
@@ -167,11 +144,13 @@ every rendered string.
 
 GTM container `GTM-NQDZKVLF` is loaded from `app/layout.tsx` (inline script +
 `<noscript>` iframe) and is owner-managed. The GTM container injects the Waulter
-loader (`https://cdn.waulter.cz/sdk.js`); Waulter populates the `#waulterGdpr` /
-`#waulterCookies` containers with policy HTML on the production domain. The legal
-shells server-render the empty container with `suppressHydrationWarning` so React
-never overwrites injected content, and footer links to `/gdpr` / `/cookies` are
-full-document `<a href>` so the provider initialises normally.
+loader (`https://cdn.waulter.cz/sdk.js`); Waulter populates the
+`[data-waulter-document="AG0774"]` / `[data-waulter-document="AG0775"]`
+containers on `/gdpr` / `/cookies` with policy HTML on the production domain.
+The legal shells server-render the empty container with
+`suppressHydrationWarning` so React never overwrites injected content, and
+footer links to `/gdpr` / `/cookies` are full-document `<a href>` so the
+provider initialises normally.
 
 Quanda was removed at the owner's explicit request and must stay absent. Do not
 add a second consent loader, change GTM, or run a cookie audit. Waulter is not

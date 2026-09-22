@@ -42,13 +42,11 @@ static export ships no runtime image optimizer.
 | File | Contents |
 | --- | --- |
 | [`AGENTS.md`](AGENTS.md) / [`CLAUDE.md`](CLAUDE.md) / [`docs/agent-instructions.md`](docs/agent-instructions.md) | Entry points, execution contract, git/deploy permissions, preservation list |
-| [`docs/architecture.md`](docs/architecture.md) | Static Next.js architecture, routes, route/SEO data ownership, image-pipeline design, retained legacy source |
+| [`docs/architecture.md`](docs/architecture.md) | Static Next.js architecture, routes, route/SEO data ownership, image-pipeline design |
 | [`docs/design-system.md`](docs/design-system.md) | coalshift identity/tokens, coalios provenance + ported-pattern mapping + source dimensions, primitives, themes, accessibility rules |
-| [`docs/content-and-seo.md`](docs/content-and-seo.md) | Content voice/spelling/trial rules, commercial + contact facts, numerical-card values, testimonial caveat, metadata table, route/redirect matrix |
-| [`docs/operations.md`](docs/operations.md) | Verified environment, build chain, Cloudflare settings, Git release + rollback procedure, frozen-file SHA baselines |
-| [`docs/quality.md`](docs/quality.md) | Q-ID definitions, latest evidence, unresolved/deferred items |
-| [`docs/plan.md`](docs/plan.md) | Phase status table, current handoff, approved plan changes |
-| [`docs/Phases/`](docs/Phases/) | Phase plans: current Phase 06 content revision and future Phase 07 integrations |
+| [`docs/content-and-seo.md`](docs/content-and-seo.md) | Content voice/spelling rules, commercial + contact facts, numerical-card values, testimonial caveat, metadata table, route/redirect matrix |
+| [`docs/operations.md`](docs/operations.md) | Verified environment, build chain, Cloudflare settings, Git release + rollback procedure |
+| [`docs/quality.md`](docs/quality.md) | Q-ID requirements, current status, known limitations |
 
 ## Deployment
 

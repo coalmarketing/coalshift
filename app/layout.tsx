@@ -19,8 +19,8 @@ const HOME_DESC =
 /**
  * Layout metadata carries only `metadataBase` plus a plain title/description
  * fallback (used by routes with no own metadata, e.g. the built-in 404). Every
- * content route owns its canonical, Open Graph and Twitter via `app/lib/seo.ts`
- * (Phase 03) — nothing here is inherited as a per-route canonical or social card.
+ * content route owns its canonical, Open Graph and Twitter via `app/lib/seo.ts` —
+ * nothing here is inherited as a per-route canonical or social card.
  */
 export const metadata: Metadata = {
   metadataBase: new URL("https://coalshift.cz"),

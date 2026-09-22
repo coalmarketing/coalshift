@@ -5,8 +5,8 @@ import SubpageIntro from "./ui/SubpageIntro";
 type Props = {
   /** Visible H1 and the current-page breadcrumb label. */
   title: string;
-  /** Exact provider container id — filled by the existing Waulter integration. */
-  containerId: "waulterGdpr" | "waulterCookies";
+  /** Exact Waulter document id for this page's `data-waulter-document` container. */
+  documentId: "AG0774" | "AG0775";
 };
 
 /**
@@ -17,7 +17,7 @@ type Props = {
  * Server component with static markup: React never re-renders or rewrites the
  * injected policy HTML on theme changes.
  */
-export default function LegalPage({ title, containerId }: Props) {
+export default function LegalPage({ title, documentId }: Props) {
   return (
     <>
       <Header />
@@ -29,7 +29,7 @@ export default function LegalPage({ title, containerId }: Props) {
         <section className="px-4 py-14 sm:px-6 sm:py-20">
           <div className="container-page">
             <div className="legal-content mx-auto max-w-4xl">
-              <div id={containerId} suppressHydrationWarning />
+              <div data-waulter-document={documentId} suppressHydrationWarning />
             </div>
           </div>
         </section>

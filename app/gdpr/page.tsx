@@ -8,5 +8,5 @@ const TITLE = "Zásady ochrany osobních údajů (GDPR)";
 export const metadata: Metadata = metadataFor("/gdpr");
 
 export default function GdprPage() {
-  return <LegalPage title={TITLE} containerId="waulterGdpr" />;
+  return <LegalPage title={TITLE} documentId="AG0774" />;
 }

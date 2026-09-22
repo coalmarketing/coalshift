@@ -78,8 +78,7 @@ export default function Contact() {
           </div>
 
           {/* Consultation panel — one unified glow-border card (single inner
-              surface), Microsoft Bookings CTA
-              (docs/Phases/07-bookings-and-product-video.md). Stretches to the
+              surface) with a Microsoft Bookings CTA. Stretches to the
               contacts column's height on `xl`; the CTA + supporting line stay
               anchored near the bottom via `mt-auto`, and a restrained
               coalshift-blue radial wash (decorative, no separate DOM node to

@@ -60,24 +60,9 @@ published history.
 
 ## Preserved production behavior
 
-- GTM container `GTM-NQDZKVLF` and the Waulter-provided GDPR/cookies content.
+- GTM container `GTM-NQDZKVLF`, owner-managed via Google Tag Manager.
+- The Waulter-provided GDPR/cookies content, owner-managed via the Waulter SDK.
 - Four public indexable routes and the redirects recorded in
   [content-and-seo.md](content-and-seo.md).
 - The separate registration and login destinations in `app/lib/links.ts`.
 - Static export with `output: "export"` and `trailingSlash: false`.
-
-## Frozen legacy source
-
-The unavailable legacy route bodies remain in Git for possible reactivation and
-must not be changed as part of unrelated website work.
-
-| File | SHA-256 |
-| --- | --- |
-| `app/registrace/page.tsx` | `2328da7e6ea3c9b33004543f31ca7cded1a03a610ca4c8cc26fb687e3c2a2d51` |
-| `app/wait-list/page.tsx` | `27b00163d0043fa028bf8ec87b49c97e4ec90866b5dba66e788d9d3e60d04ddb` |
-| `app/wait-list/thank-you/page.tsx` | `363fa58d2cb3c54a16dfe7543210328af6cd2af0def41f664ba154915eb7a4c5` |
-| `app/components/legacy/LegacyPage.tsx` | `d374b9a088f20aea806eea49ec2fc339f633fa5969f0892b3140978ed91cb6b5` |
-
-Historical design/review material remains recoverable from Git history at
-`68fdbcbd2562f73db91a683315d259c4fca4ef04`; the accepted cleanup/release is
-`bd4aa1e6b36dece928abfac198a09c2dc795af60`.

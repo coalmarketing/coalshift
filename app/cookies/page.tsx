@@ -8,5 +8,5 @@ const TITLE = "Podmínky cookies";
 export const metadata: Metadata = metadataFor("/cookies");
 
 export default function CookiesPage() {
-  return <LegalPage title={TITLE} containerId="waulterCookies" />;
+  return <LegalPage title={TITLE} documentId="AG0775" />;
 }

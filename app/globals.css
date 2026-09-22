@@ -461,8 +461,8 @@
 
 /* ---------------------------------------------------------------- */
 /* Legal pages — readable wrapper for HTML injected by the Waulter  */
-/* provider into #waulterGdpr / #waulterCookies. No typography      */
-/* plugin is installed, so the element rules are written by hand.   */
+/* provider into the [data-waulter-document] containers. No         */
+/* typography plugin is installed, so the rules are written by hand.*/
 /* Lives outside @layer so the descendant selectors targeting       */
 /* provider markup are never purged.                                */
 /* ---------------------------------------------------------------- */
