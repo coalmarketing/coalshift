@@ -159,14 +159,9 @@ GTM/Waulter integration and do not claim a new consent audit.
 None. The Bookings URL, YouTube ID, copy, layout and interaction choices are
 approved.
 
-## Completion protocol
+## Status
 
-Complete only Phase 07 and mark it ready for owner review, not accepted. Update
-current-state documentation rather than appending implementation history. Do not
-commit, push or deploy without explicit permission. Return an English Phase
-Report of no more than six bullets and stop.
-
-Accepted by the owner (Jakub) and released to `master`. The Microsoft Bookings
-iframe was verified rendering correctly on the production HTTPS origin
-(`https://coalshift.cz`); its earlier non-render on `localhost` during local
+Accepted by the owner (Jakub) and released on `master`; live on
+`https://coalshift.cz`. The Microsoft Bookings iframe renders correctly on the
+production HTTPS origin; its earlier non-render on `localhost` during local
 testing was environment-specific, not a product defect.

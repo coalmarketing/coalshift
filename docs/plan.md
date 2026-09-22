@@ -30,42 +30,16 @@ GTM/Waulter integration.
 
 ## Current handoff — Phase 07 accepted and released
 
-- Implemented locally on `master` (no commit/push/deploy) per the phase file:
-  centralized `BOOKINGS_URL`/`YOUTUBE_*` constants in `app/lib/links.ts`;
-  redesigned `Contact.tsx` (1/3 personal contacts + 2/3 consultation panel
-  desktop, consultation first on mobile, each contact and the consultation
-  panel a single cohesive `.glow-border` card — a single inner surface
-  wrapper, not multiple direct children — with a new lazy accessible
-  `BookingsDialog.tsx`); extended `ProductGallery.tsx` with a Video
-  ukázka/Obrazovky aplikace selector (coalios-ported icons) defaulting to a
-  click-to-play local facade that mounts a `youtube-nocookie.com` iframe only
-  on activation, both modes sharing one CSS-grid overlap media stage so
-  switching never shifts the section, preserving the accepted screenshot
-  gallery unchanged.
-- The verified 1280×720 YouTube thumbnail is stored locally
-  (`public/img/product-video-poster.jpg`, registry key
-  `product-video-poster`) and served through the existing Sharp/
-  `ResponsiveImage` pipeline; the site never contacts YouTube before user
-  activation.
-- Found and fixed two real defects during implementation. `output: "export"`
-  copies the whole `public/` tree from disk regardless of `.gitignore`, so the
-  340 MB untracked source video was landing in local `out/` even though it was
-  gitignored. Moved it outside `public/` to `/video-source/` (also gitignored)
-  so it can never enter the static export; confirmed `out/` and `git status`
-  now contain no MP4/WebM. Separately, an owner visual review found the
-  consultation panel and contact cards reading as detached white slabs — the
-  cause was `.glow-border > *` styling every direct child as its own rounded
-  surface; fixed by giving every card exactly one inner surface wrapper, and
-  the product-gallery mode switch was rebuilt on a stable-height CSS grid so
-  it no longer moves the Pricing section below it.
-- `npm run typecheck` and `npm run pages:build` both exit 0 (Node 24.20.0 / npm
-  11.19.0); `git diff --check` clean. Local browser verification covered both
-  themes, the Bookings dialog's open/close/Escape/focus-trap/repeated-cycle
-  behavior with its direct-link fallback, the video facade → play →
-  `youtube-nocookie.com` playback path, mode-selector keyboard semantics
-  (manual-activation tabs), and screenshot-gallery regression (navigation +
-  fullscreen unaffected). The Bookings iframe did not render on `localhost` in
-  local testing (direct-link fallback confirmed working regardless); this was
-  environment-specific — the owner verified the iframe renders correctly on
-  the production HTTPS origin (`https://coalshift.cz`) after release.
-- Accepted by the owner; released to `master` and live on `https://coalshift.cz`.
+- Phase 07 is accepted by the owner, released on `master` and deployed to
+  production: `https://coalshift.cz` serves the redesigned contact section
+  (1/3 personal contacts + 2/3 Microsoft Bookings consultation panel,
+  consultation-first on mobile) and the product-showcase Video
+  ukázka/Obrazovky aplikace selector (click-to-play local facade, no YouTube
+  contact before activation).
+- Production-verified: the video facade plays through
+  `youtube-nocookie.com`, the screenshot gallery is unaffected, and the
+  Microsoft Bookings iframe renders correctly on the production HTTPS origin
+  (its earlier non-render on `localhost` during local testing was
+  environment-specific, not a product defect).
+- Evidence, quality-gate results and carry-forward limitations are recorded in
+  [quality.md](quality.md)'s Phase 07 delta.
