@@ -8,9 +8,12 @@ type Variant = "primary" | "secondary";
 type Size = "md" | "lg";
 
 type Shared = {
-  /** Visible label. Also the single accessible name (the animated duplicate
-   *  label and arrows are decorative and hidden from assistive tech). */
+  /** Visible label. Also the default accessible name (the animated duplicate
+   *  label and arrows are decorative and hidden from assistive tech), unless
+   *  `accessibleLabel` overrides it — e.g. to add a "(otevře se v novém
+   *  okně)" warning without changing the visible text. */
   label: string;
+  accessibleLabel?: string;
   variant?: Variant;
   size?: Size;
   className?: string;
@@ -54,17 +57,19 @@ function Inner({ label }: { label: string }) {
 
 export default function CtaButton({
   label,
+  accessibleLabel,
   variant = "primary",
   size = "md",
   className = "",
   ...props
 }: CtaButtonProps) {
   const classes = `cta cta--${variant} cta--${size} motion-reduce:[&_*]:!transition-none ${className}`.trim();
+  const ariaLabel = accessibleLabel ?? label;
 
   if (props.href === undefined) {
     const { type = "button", ...rest } = props as ButtonElementProps;
     return (
-      <button type={type} className={classes} aria-label={label} {...rest}>
+      <button type={type} className={classes} aria-label={ariaLabel} {...rest}>
         <Inner label={label} />
       </button>
     );
@@ -75,14 +80,14 @@ export default function CtaButton({
 
   if (href.startsWith("/")) {
     return (
-      <Link href={href} className={classes} aria-label={label} target={target} rel={resolvedRel} {...rest}>
+      <Link href={href} className={classes} aria-label={ariaLabel} target={target} rel={resolvedRel} {...rest}>
         <Inner label={label} />
       </Link>
     );
   }
 
   return (
-    <a href={href} className={classes} aria-label={label} target={target} rel={resolvedRel} {...rest}>
+    <a href={href} className={classes} aria-label={ariaLabel} target={target} rel={resolvedRel} {...rest}>
       <Inner label={label} />
     </a>
   );

@@ -57,6 +57,11 @@ testimonials, and never run a global text-node replacement.
   helper row).
 - Header keeps **Přihlásit se** as its only CTA (`LOGIN_URL`). No trial or
   registration CTA in any header variant.
+- Every `LOGIN_URL`/`REGISTER_URL` entry point (desktop and mobile-menu header
+  login, footer login, all five pricing registration CTAs) opens
+  `app.coalshift.cz` in a new tab: `target="_blank"` with `rel` including
+  `noopener`, visible label unchanged, accessible name appended with
+  **(otevře se v novém okně)** (`CtaButton`'s `accessibleLabel` prop).
 - The redesigned contact section's consultation panel (right two-thirds on
   desktop, first on mobile) offers **Rezervovat konzultaci**, which opens an
   accessible dialog with a lazy Microsoft Bookings iframe using the

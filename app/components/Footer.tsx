@@ -89,7 +89,13 @@ export default function Footer() {
                 </li>
               ))}
               <li>
-                <Link href={LOGIN_URL} className={LINK_CLASS}>
+                <Link
+                  href={LOGIN_URL}
+                  target="_blank"
+                  rel="noopener"
+                  aria-label="Přihlásit se (otevře se v novém okně)"
+                  className={LINK_CLASS}
+                >
                   Přihlásit se
                 </Link>
               </li>

@@ -339,7 +339,9 @@ export default function Header() {
                 <span className="hidden xl:inline-flex">
                   <CtaButton
                     href={LOGIN_URL}
+                    target="_blank"
                     label="Přihlásit se"
+                    accessibleLabel="Přihlásit se (otevře se v novém okně)"
                     variant="primary"
                     size="md"
                   />
@@ -427,8 +429,10 @@ export default function Header() {
         <div className="mt-auto">
           <CtaButton
             href={LOGIN_URL}
+            target="_blank"
             variant="primary"
             label="Přihlásit se"
+            accessibleLabel="Přihlásit se (otevře se v novém okně)"
             size="lg"
             onClick={() => closeMenu(false)}
           />

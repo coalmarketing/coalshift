@@ -52,6 +52,7 @@ export default function Pricing() {
                     href={plan.cta.href}
                     target="_blank"
                     label={plan.cta.label}
+                    accessibleLabel={`${plan.cta.label} (otevře se v novém okně)`}
                     variant={plan.featured ? "primary" : "secondary"}
                     size="md"
                   />
