@@ -190,8 +190,35 @@ gallery column between:
 - **Obrazovky aplikace** — the unchanged accepted three-card screenshot gallery
   below.
 
-Source: `app/lib/links.ts` (`YOUTUBE_VIDEO_ID`, `YOUTUBE_URL`,
-`YOUTUBE_EMBED_URL`, `YOUTUBE_TITLE`, `YOUTUBE_POSTER_SRC`).
+Source: `app/lib/links.ts` (`YOUTUBE_VIDEO_ID`, `YOUTUBE_URL`, `YOUTUBE_TITLE`,
+`YOUTUBE_POSTER_SRC`, `buildYoutubeEmbedUrl`).
+
+#### Playback analytics
+
+Only after Play, the mounted iframe gains `enablejsapi=1` and the real runtime
+`origin` (production/localhost/preview each pass their own), and the YouTube
+IFrame Player API (`https://www.youtube.com/iframe_api`) is loaded on demand —
+never before activation, never more than once. A `coalshift_video` event is
+pushed to `window.dataLayer` (GTM's own container, unchanged):
+
+```
+{
+  event: "coalshift_video",
+  video_title: YOUTUBE_TITLE,
+  video_url: YOUTUBE_URL,
+  video_percent: 0 | 25 | 50 | 75 | 100,
+  video_status: "start" | "progress" | "complete",
+  video_provider: "youtube",
+}
+```
+
+`start` (percent 0) fires once per player instance on the first real `PLAYING`
+state; `progress` fires once each at 25/50/75%; `complete` (percent 100) fires
+on `ENDED`. Pausing/resuming never re-fires `start`; seeking past a threshold
+never retroactively fires it. Leaving Video mode and playing again later is a
+new player instance and may emit a new `start`. This is a first-party custom
+event only — it is not GTM's own `gtm.video` event, and no request is sent to
+GA4 or any analytics endpoint directly from application code.
 
 Three real application screenshots (all 2876×1376, TEST tenant, no real personal
 data), in this order — `alt` text is the accessible description:

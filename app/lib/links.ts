@@ -22,10 +22,29 @@ export const BOOKINGS_URL =
  */
 export const YOUTUBE_VIDEO_ID = "DgTN2nTfx_0";
 export const YOUTUBE_URL = `https://www.youtube.com/watch?v=${YOUTUBE_VIDEO_ID}`;
-export const YOUTUBE_EMBED_URL = `https://www.youtube-nocookie.com/embed/${YOUTUBE_VIDEO_ID}?autoplay=1&hl=cs&cc_lang_pref=cs&rel=0`;
 export const YOUTUBE_TITLE = "Jak funguje coalshift | Praktická ukázka aplikace";
 /** image-registry.json key for the locally stored, verified YouTube thumbnail. */
 export const YOUTUBE_POSTER_SRC = "/img/product-video-poster.jpg";
+
+/**
+ * Builds the privacy-enhanced embed URL for the mounted (post-activation)
+ * player. `enablejsapi=1` plus a real `origin` are required for the YouTube
+ * IFrame Player API to control this exact iframe and authorize its postMessage
+ * channel; `origin` must be the actual runtime host (production, localhost or
+ * a Cloudflare preview each pass their own `window.location.origin`), not a
+ * hardcoded value — `URLSearchParams` handles the encoding.
+ */
+export function buildYoutubeEmbedUrl(origin: string): string {
+  const params = new URLSearchParams({
+    autoplay: "1",
+    hl: "cs",
+    cc_lang_pref: "cs",
+    rel: "0",
+    enablejsapi: "1",
+    origin,
+  });
+  return `https://www.youtube-nocookie.com/embed/${YOUTUBE_VIDEO_ID}?${params.toString()}`;
+}
 
 /** Homepage in-page section ids (fragment targets). */
 export const SECTION = {

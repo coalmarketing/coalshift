@@ -14,7 +14,9 @@ import { createPortal } from "react-dom";
 import Section, { SectionHeading } from "../ui/Section";
 import FragmentCta from "../ui/FragmentCta";
 import ResponsiveImage from "../ResponsiveImage";
-import { YOUTUBE_EMBED_URL, YOUTUBE_POSTER_SRC, YOUTUBE_TITLE, YOUTUBE_URL } from "../../lib/links";
+import { buildYoutubeEmbedUrl, YOUTUBE_POSTER_SRC, YOUTUBE_TITLE, YOUTUBE_URL } from "../../lib/links";
+import { pushDataLayerEvent } from "../../lib/dataLayer";
+import { loadYoutubeIframeApi, type YTPlayer } from "../../lib/youtubeIframeApi";
 
 /**
  * Homepage product gallery — three real application screenshots.
@@ -79,6 +81,18 @@ const INTRO =
 
 const INLINE_SIZES = "(min-width: 1280px) 45vw, 92vw";
 const FULLSCREEN_SIZES = "95vw";
+
+/** How often (ms) the analytics hook polls `getCurrentTime()` while playing. */
+const PROGRESS_POLL_MS = 1000;
+/**
+ * A poll-to-poll jump larger than this many percentage points is treated as a
+ * seek, not natural playback progression — any threshold it jumps past is
+ * skipped rather than retroactively fired (matching GTM's documented YouTube
+ * trigger behavior: seeking past a mark does not claim it as watched). At a
+ * 1s poll cadence, normal playback advances well under 1 point per tick even
+ * for a short video, so this leaves a wide margin against false positives.
+ */
+const SEEK_JUMP_THRESHOLD_PERCENT = 3;
 
 type Mode = "video" | "screens";
 
@@ -331,12 +345,142 @@ function ModeTabs({
 }
 
 /**
+ * Tracks real YouTube playback state for the currently mounted player and
+ * pushes the `coalshift_video` dataLayer contract. Owns exactly one YT.Player
+ * instance and one polling interval per activation; both are torn down the
+ * moment `active` goes false (mode change or unmount) or the effect re-runs,
+ * so nothing ever keeps polling or listening behind the screenshot panel.
+ *
+ * The YouTube IFrame API script and `YT.Player` are only requested once
+ * `active` is true (i.e. after the user has clicked Play) — never earlier.
+ * A failure anywhere in this hook (script load, API error) is caught and
+ * silently ignored: the iframe already plays via its own `autoplay` URL
+ * param regardless of whether analytics ever attaches.
+ */
+function useYoutubePlaybackAnalytics(iframeRef: RefObject<HTMLIFrameElement | null>, active: boolean) {
+  useEffect(() => {
+    if (!active) return;
+
+    let cancelled = false;
+    let player: YTPlayer | null = null;
+    let pollId: number | null = null;
+    let started = false;
+    let lastPercent: number | null = null;
+    const firedThresholds = new Set<25 | 50 | 75 | 100>();
+
+    const emit = (percent: 0 | 25 | 50 | 75 | 100, status: "start" | "progress" | "complete") => {
+      pushDataLayerEvent({
+        event: "coalshift_video",
+        video_title: YOUTUBE_TITLE,
+        video_url: YOUTUBE_URL,
+        video_percent: percent,
+        video_status: status,
+        video_provider: "youtube",
+      });
+    };
+
+    // Guarded by `started` so it's safe to call from both the state-change
+    // callback and the poll — whichever observes the first real PLAYING state
+    // wins, and the other becomes a no-op. This matters because the IFrame API
+    // can attach *after* an already-autoplaying iframe has already entered
+    // PLAYING, in which case onStateChange never fires for it and only the
+    // poll ever sees PLAYING.
+    const emitStartOnce = () => {
+      if (started) return;
+      started = true;
+      emit(0, "start");
+    };
+
+    const poll = () => {
+      if (!player || !window.YT) return;
+      try {
+        if (player.getPlayerState() !== window.YT.PlayerState.PLAYING) return;
+        emitStartOnce();
+        const duration = player.getDuration();
+        if (!duration) return;
+        const percent = Math.min(100, (player.getCurrentTime() / duration) * 100);
+        if (lastPercent === null) {
+          // First valid sample for this instance. It may already be well past
+          // 0% — a fast seek before this first poll, or (as above) the API
+          // attaching after playback had already progressed — so consume
+          // every threshold already behind it without emitting: analytics
+          // never actually observed that stretch of the video.
+          lastPercent = percent;
+          for (const threshold of [25, 50, 75] as const) {
+            if (percent >= threshold) firedThresholds.add(threshold);
+          }
+          return;
+        }
+        const isSeekForward = percent - lastPercent > SEEK_JUMP_THRESHOLD_PERCENT;
+        lastPercent = percent;
+        if (isSeekForward) {
+          // A forward seek skips ahead of natural playback. Every threshold it
+          // jumps past is consumed — permanently, for this player instance —
+          // without emitting, so a later poll can never fire it retroactively.
+          // Thresholds are only ever added here, never removed, so a later
+          // backward seek cannot re-arm one already consumed this way.
+          for (const threshold of [25, 50, 75] as const) {
+            if (percent >= threshold) firedThresholds.add(threshold);
+          }
+          return;
+        }
+        for (const threshold of [25, 50, 75] as const) {
+          if (percent >= threshold && !firedThresholds.has(threshold)) {
+            firedThresholds.add(threshold);
+            emit(threshold, "progress");
+          }
+        }
+      } catch {
+        // A transient IFrame API error never blocks playback — just skip this tick.
+      }
+    };
+
+    loadYoutubeIframeApi()
+      .then((YT) => {
+        if (cancelled || !iframeRef.current) return;
+        player = new YT.Player(iframeRef.current, {
+          events: {
+            onStateChange: (e) => {
+              if (e.data === YT.PlayerState.PLAYING) {
+                emitStartOnce();
+              } else if (e.data === YT.PlayerState.ENDED && !firedThresholds.has(100)) {
+                firedThresholds.add(100);
+                emit(100, "complete");
+              }
+            },
+          },
+        });
+        pollId = window.setInterval(poll, PROGRESS_POLL_MS);
+      })
+      .catch(() => {
+        // API unavailable (network/blocked) — playback continues via the iframe's own autoplay.
+      });
+
+    return () => {
+      cancelled = true;
+      if (pollId !== null) window.clearInterval(pollId);
+      try {
+        player?.destroy();
+      } catch {
+        // Already-removed iframe — nothing left to clean up.
+      }
+      player = null;
+    };
+  }, [active, iframeRef]);
+}
+
+/**
  * Video mode — a first-party click-to-play facade over the locally stored,
  * owner-verified YouTube thumbnail (no YouTube contact before activation).
  * On play it mounts a responsive privacy-enhanced `youtube-nocookie.com`
- * iframe; a direct YouTube link is always offered alongside it.
+ * iframe (with `enablejsapi=1` + the real runtime origin, so the IFrame API
+ * can attach to this exact element without reloading it) and attaches
+ * playback analytics; a direct YouTube link is always offered alongside it.
  */
 function VideoPanel({ playing, onPlay }: { playing: boolean; onPlay: () => void }) {
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  useYoutubePlaybackAnalytics(iframeRef, playing);
+
   return (
     <div className="flex flex-col gap-4">
       <div
@@ -346,7 +490,8 @@ function VideoPanel({ playing, onPlay }: { playing: boolean; onPlay: () => void 
         <div className="aspect-[16/9] overflow-hidden rounded-[calc(2rem-2px)]">
           {playing ? (
             <iframe
-              src={YOUTUBE_EMBED_URL}
+              ref={iframeRef}
+              src={buildYoutubeEmbedUrl(window.location.origin)}
               title={YOUTUBE_TITLE}
               className="h-full w-full"
               loading="lazy"
